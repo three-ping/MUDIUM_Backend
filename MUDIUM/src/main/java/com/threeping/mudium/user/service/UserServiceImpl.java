@@ -9,6 +9,7 @@ import com.threeping.mudium.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -47,6 +48,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDTO registUser(RequestRegistUserVO newUser) {
         UserEntity existingUser = userRepository.findByUserIdentifier("NORMAL_"+newUser.getUserAuthId());
+        /* 설명. ModelMapper는 경우에 따라 자의적인 판단으로 필드끼리 매핑하는 경우가 있어 정확히 일치되게 매칭하려면 strict 설정해야됨 */
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+
         if(existingUser != null){
             throw new CommonException(ErrorCode.EXIST_USER_ID);
         }
@@ -73,12 +78,13 @@ public class UserServiceImpl implements UserService {
                 .profileImage(defaultProfileImageUrl)
                 .userIdentifier("NORMAL_" + newUser.getUserAuthId())
                 .build();
-
+        log.info("newUserDTO: {}", newUserDTO);
         UserEntity userEntity = modelMapper.map(newUserDTO, UserEntity.class);
+        log.info("userEntity: {}", userEntity);
         userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(newUser.getPassword()));
         userEntity.setUserRole(UserRole.ROLE_MEMBER);
         UserEntity savedUserEntity = userRepository.save(userEntity);
-
+        log.info("savedUserEntity: {}", savedUserEntity);
 
         return modelMapper.map(savedUserEntity, UserDTO.class);
     }

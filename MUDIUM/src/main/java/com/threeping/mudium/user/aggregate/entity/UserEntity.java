@@ -58,7 +58,7 @@ public class UserEntity {
 
     @PrePersist
     public void prePersist() {
-        this.userIdentifier = this.signupPath + "_" + this.email;
+        this.userIdentifier = this.signupPath + "_" + this.userAuthId;
     }
 
     public void deactivateUser() {

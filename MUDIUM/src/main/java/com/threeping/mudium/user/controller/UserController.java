@@ -36,11 +36,5 @@ public class UserController {
 
         return ResponseDTO.ok(responseUser);
     }
-//    @PostMapping("/users")
-//    public ResponseDTO<?> registNormalUser(@RequestBody RequestRegistUserVO newUser){
-//        UserDTO userDTO = modelMapper.map(newUser, UserDTO.class);
-//
-//
-//
-//    }
+
 }
