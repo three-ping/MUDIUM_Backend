@@ -8,29 +8,26 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Entity
-public class MusicalInfo {
+@Entity(name = "TBL_MUSICAL_INFO")
+public class Musical {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "musical_id")
+    @Column(name = "musical_info_id")
     private Long musicalId;
 
     @Column(name = "musical_name")
     private String title;
 
-    @Column(name = "musical_averagescope")
-    private double averageScope;
+    @Column(name = "rating")
+    private String rating;
 
-    @Column(name = "musical_grade")
-    private String grade;
-
-    @Column(name = "musical_reviewvideo")
+    @Column(name = "review_video")
     private String reviewVideo;
 
-    @Column(name = "musical_poster")
+    @Column(name = "image_url")
     private String poster;
 
-    @Column(name = "musical_viewcount")
+    @Column(name = "view_count")
     private int viewCount;
 }

@@ -55,7 +55,8 @@ public enum ErrorCode {
             , "이메일 인증이 안된 이메일입니다. 이메일 인증을 완료해주세요."),
 
     //500
-    INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다");
+    INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다"),
+    JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;
