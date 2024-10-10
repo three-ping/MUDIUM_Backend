@@ -52,20 +52,6 @@ public enum ErrorCode {
 
     //404
     NOT_FOUND_USER(40401, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
-    NOT_FOUND_STUDY_GROUP(40402, HttpStatus.NOT_FOUND, "스터디 그룹이 존재하지 않습니다."),
-    NOT_FOUND_RECRUITMENT_BOARD(40403, HttpStatus.NOT_FOUND, "모집 게시판이 존재하지 않습니다."),
-    NOT_FOUND_RECRUITMENT_BOARD_COMMENT(40404, HttpStatus.NOT_FOUND, "모집 게시판 댓글이 존재하지 않습니다."),
-    NOT_FOUND_RECRUITMENT_BOARD_REPLY(40405, HttpStatus.NOT_FOUND, "모집 게시판 답글이 존재하지 않습니다."),
-    NOT_FOUND_STUDY_GROUP_MEMBER(40406, HttpStatus.NOT_FOUND, "스터디 그룹 멤버가 존재하지 않습니다."),
-    NOT_FOUND_STUDY_GROUP_BOARD(40407, HttpStatus.NOT_FOUND,    "스터디 그룹 게시판이 존재하지 않습니다."),
-    NOT_FOUND_STUDY_GROUP_BOARD_COMMENT(40408, HttpStatus.NOT_FOUND, "스터디 그룹 게시판 댓글이 존재하지 않습니다."),
-    NOT_FOUND_STUDY_GROUP_BOARD_REPLY(40409, HttpStatus.NOT_FOUND, "스터디 그룹 게시판 답글이 존재하지 않습니다."),
-    NOT_FOUND_STUDY_SCHEDULE(40410, HttpStatus.NOT_FOUND, "스터디 일정이 존재하지 않습니다."),
-    NOT_FOUND_STUDY_SCHEDULE_PARTICIPANT(40411, HttpStatus.NOT_FOUND, "스터디 일정 참가자가 존재하지 않습니다."),
-    NOT_FOUND_PROBLEM(40412, HttpStatus.NOT_FOUND, "문제가 존재하지 않습니다."),
-    NOT_FOUND_CHOICE(40413, HttpStatus.NOT_FOUND, "문제 선택지가 존재하지 않습니다."),
-    NOT_FOUND_SUBMITTED_ANSWER(40414, HttpStatus.NOT_FOUND, "제출된 답변이 존재하지 않습니다."),
-    NOT_FOUND_STUDY_GROUP_NOTICE(40415, HttpStatus.NOT_FOUND, "스터디 그룹 공지가 존재하지 않습니다."),
     EMAIL_VERIFICATION_REQUIRED(40416, HttpStatus.BAD_REQUEST
             , "이메일 인증이 안된 이메일입니다. 이메일 인증을 완료해주세요."),
     NOT_FOUND_USER_ID(40417, HttpStatus.NOT_FOUND, "아이디를 잘못 입력하셨습니다."),

@@ -3,21 +3,25 @@ package com.threeping.mudium.user.service;
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.user.aggregate.dto.UserDTO;
-import com.threeping.mudium.user.aggregate.entity.UserEntity;
+import com.threeping.mudium.user.aggregate.entity.*;
 import com.threeping.mudium.user.aggregate.vo.RequestRegistUserVO;
 import com.threeping.mudium.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -40,15 +44,47 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO registUser(RequestRegistUserVO newUser) {
         UserEntity existingUser = userRepository.findByUserIdentifier("NORMAL_"+newUser.getUserAuthId());
         if(existingUser != null){
             throw new CommonException(ErrorCode.EXIST_USER_ID);
         }
-        return null;
+
+        if(newUser.getNickname() == null){
+            throw new CommonException(ErrorCode.INVALID_INPUT_VALUE);
+        }
+        Optional<UserEntity> existingUserWithSameNickname = userRepository.findByNickname(newUser.getNickname());
+        if(existingUserWithSameNickname.isPresent()){
+            throw new CommonException(ErrorCode.DUPLICATE_NICKNAME_EXISTS);
+        }
+
+        String defaultProfileImageUrl = "";
+
+        UserDTO newUserDTO = UserDTO.builder()
+                .userAuthId(newUser.getUserAuthId())
+                .userName(newUser.getUserName())
+                .email(newUser.getEmail())
+                .signupPath(SignupPath.NORMAL)
+                .createdAt(LocalDateTime.now().withNano(0))
+                .acceptStatus(AcceptStatus.Y)
+                .userStatus(ActiveStatus.ACTIVE)
+                .nickname(newUser.getNickname())
+                .profileImage(defaultProfileImageUrl)
+                .userIdentifier("NORMAL_" + newUser.getUserAuthId())
+                .build();
+
+        UserEntity userEntity = modelMapper.map(newUserDTO, UserEntity.class);
+        userEntity.setEncryptedPwd(bCryptPasswordEncoder.encode(newUser.getPassword()));
+        userEntity.setUserRole(UserRole.ROLE_MEMBER);
+        UserEntity savedUserEntity = userRepository.save(userEntity);
+
+
+        return modelMapper.map(savedUserEntity, UserDTO.class);
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String userIdentifier) throws UsernameNotFoundException{
 
         UserEntity loginUser = userRepository.findByUserIdentifier(userIdentifier);
@@ -62,8 +98,16 @@ public class UserServiceImpl implements UserService {
         }
 
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        return new User(loginUser.getUserAuthId(), encryptedPwd, true, true, true, true, grantedAuthorities);
+        return new User(loginUser.getUserAuthId()
+                , encryptedPwd
+                , true
+                , true
+                , true
+                , true
+                , grantedAuthorities);
     }
 
 

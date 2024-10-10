@@ -64,6 +64,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 BadCredentialsException로 잡고, 이를 AuthenticationFailureHandler에서
                 처리한다. 이를 커스텀하게 해서 응답값을 json으로 하면 된다.
          */
+
+    /* 설명. 로그인 시도 시 동작하는 기능(POST /login 요청 시) */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
