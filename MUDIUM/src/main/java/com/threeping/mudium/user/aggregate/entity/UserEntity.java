@@ -53,6 +53,9 @@ public class UserEntity {
     @Column(name = "signup_path", length = 255)
     private SignupPath signupPath;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", length = 255)
+    private UserRole userRole;
     @Column(name = "user_identifier", nullable = false, unique = true, length = 511)
     private String userIdentifier;
 
