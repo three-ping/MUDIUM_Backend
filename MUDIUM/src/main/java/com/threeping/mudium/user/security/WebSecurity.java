@@ -59,7 +59,6 @@ WebSecurity {
                                 .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PATCH")).hasRole("MEMBER")
                                 .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PUT")).hasRole("MEMBER")
                                 .requestMatchers(new AntPathRequestMatcher("/api/users/**", "DELETE")).hasRole("MEMBER")
-
                                 .anyRequest().authenticated()
                 )
                 /* 설명. authenticationManager 등록(UserDetails를 상속받는 Service 계층 + BCrypt 암호화) */
@@ -72,7 +71,7 @@ WebSecurity {
                 .addFilterBefore(new JwtFilter(userService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
-        return http.build();
+                return http.build();
     }
 
     /* 설명. 인증(Authentication)용 메소드(인증 필터 반환) */

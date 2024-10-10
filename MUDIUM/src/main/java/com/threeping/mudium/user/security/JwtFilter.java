@@ -59,12 +59,12 @@ public class JwtFilter extends OncePerRequestFilter {
                 ResponseDTO<Object> errorResponse = ResponseDTO.fail(ex);
                 ObjectMapper objectMapper = new ObjectMapper();
                 String jsonResponse = objectMapper.writeValueAsString(errorResponse);
-
+                log.info("try-catch clause");
                 response.getWriter().write(jsonResponse);
                 return;
             }
         }
-
+        /* 설명. 위의 if문으로 인증된 Authentication 객체가 principal 객체로 관리되지 않는다면 다음 필터 실행 */
         filterChain.doFilter(request, response);
     }
 }
