@@ -1,0 +1,38 @@
+package com.threeping.mudium.guidebook.entity;
+
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.sql.Timestamp;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Entity
+@Table(name = "TBL_RECOMMENDED_MUSICAL")
+public class RecommendedMusical {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "recommended_musical_id", nullable = false)
+    private Long recommandedId;
+
+    @Column(name = "title", nullable = false, length = 1023)
+    private String musicalTitle;
+
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+    private String musicalDescription;
+
+    @Column(name = "created_at", nullable = false)
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private Timestamp updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity userId;
+}
