@@ -1,5 +1,6 @@
 package com.threeping.mudium.user.controller;
 
+import com.threeping.mudium.user.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -10,10 +11,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final Environment env;
     private final ModelMapper modelMapper;
+    private final UserService userService;
+
     @Autowired
-    public UserController(Environment env, ModelMapper modelMapper) {
+    public UserController(Environment env, ModelMapper modelMapper, UserService userService) {
         this.env = env;
         this.modelMapper = modelMapper;
+        this.userService = userService;
     }
     @GetMapping("/health")
     public String healthCheck(){

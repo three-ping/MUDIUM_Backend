@@ -32,6 +32,9 @@ public class UserEntity {
     @Column(name = "email", length = 255)
     private String email;
 
+    @Column(name="user_auth_id", nullable = false, length=255)
+    private String userAuthId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 255)
     private ActiveStatus userStatus = ActiveStatus.ACTIVE;

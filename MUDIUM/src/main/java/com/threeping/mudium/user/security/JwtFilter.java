@@ -1,6 +1,9 @@
 package com.threeping.mudium.user.security;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.threeping.mudium.common.ResponseDTO;
+import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.user.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -41,13 +44,25 @@ public class JwtFilter extends OncePerRequestFilter {   // 한번만 실행된�
 
             log.info("token: {}", token);
 
-            if(jwtUtil.validateToken(token)) {
-                Authentication authentication = jwtUtil.getAuthentication(token);
+            try {
+                if (jwtUtil.validateToken(token)) {
+                    Authentication authentication = jwtUtil.getAuthentication(token);
 
-                log.info("JwtFilter를 통과한 유효한 토큰을 통해 security가 관리할 principal 객체: {}", authentication);
-                SecurityContextHolder.getContext().setAuthentication(authentication);           // 인증돼서 이후 필터 생략
+                    log.info("JwtFilter를 통과한 유효한 토큰을 통해 security가 관리할 principal 객체: {}", authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);           // 인증돼서 이후 필터 생략
+                }
+            } catch (CommonException e) {
+                response.setStatus(e.getErrorCode().getHttpStatus().value());
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                ResponseDTO<Object> errorResponse = ResponseDTO.fail(e);
+                ObjectMapper objectMapper = new ObjectMapper();
+                String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+
+                response.getWriter().write(jsonResponse);
+                return;
             }
-
         }
         /* 설명. 위의 if문으로 인증된 Authentication 객체가 principal 객체로 관리되지 않는다면 다음 필터 실행 */
         filterChain.doFilter(request, response);            // 실행 될 다음 필터는 UsernamePasswordAuthenticationFilter
