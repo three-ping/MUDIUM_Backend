@@ -23,28 +23,7 @@ public class EmailVerificationService {
         this.javaMailSender = javaMailSender;
     }
 
-    // 인증 코드 전송 후 Redis에 <email, PENDING> 저장
-    public void savePendingStatus(String email){
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        ops.set(email+"_status", "PENDING",Duration.ofMinutes(5));
-    }
 
-    // 인증 완료 후 <email, VERIFIED> 상태로 업데이트
-    public void saveVerifiedStatus(String email){
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        ops.set(email+"status", "VERIFIED",Duration.ofMinutes(5));
-    }
-
-    // 이메일 인증 상태 확인
-    public String getEmailVerificatoinStatus(String email){
-        ValueOperations<String, String> ops = redisTemplate.opsForValue();
-        return ops.get(email);
-    }
-
-    // Redis에서 해당 이메일 인증상태 삭제
-    public void deleteEmailVerificationStatus(String email){
-        redisTemplate.delete(email);
-    }
 
     /* 설명. 토큰 생성 및 Redis에 저장 */
     // 랜덤한 인증 코드 생성

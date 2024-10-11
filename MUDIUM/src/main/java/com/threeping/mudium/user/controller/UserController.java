@@ -40,11 +40,6 @@ public class UserController {
         // send verification code via email
         emailVerificationService.sendVerificationCode(newUser.getEmail());
 
-        // save pending status
-        emailVerificationService.savePendingStatus(newUser.getEmail());
-
-
-
 //        UserDTO savedUserDTO = userService.registUser(newUser);
 
 //        ResponseUserVO responseUser = modelMapper.map(savedUserDTO, ResponseUserVO.class);
@@ -58,7 +53,6 @@ public class UserController {
     public ResponseDTO<?> verifyEmailCode(@RequestParam String email, @RequestParam String code, @RequestBody RequestRegistUserVO newUser){
         boolean isVerified = emailVerificationService.verifyCode(email, code);
         if(isVerified){
-            emailVerificationService.saveVerifiedStatus(email);
             UserDTO savedUserDTO = userService.registUser(newUser);
 
             ResponseUserVO responseUserVO = modelMapper.map(savedUserDTO, ResponseUserVO.class);
