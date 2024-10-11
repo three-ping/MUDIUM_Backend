@@ -35,7 +35,5 @@ class ReviewServiceTests {
         // 추가적인 검증
         ReviewResponseDTO firstReview = reviewResponseDTO.get(0);
         assertEquals(musicalId, firstReview.getMusicalId());    // 뮤지컬 ID가 일치하는지 확인
-
-
     }
 }
