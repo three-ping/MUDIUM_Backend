@@ -36,21 +36,33 @@ public class UserController {
     @PostMapping("/normal")
     public ResponseDTO<?> registNormalUser(@RequestBody RequestRegistUserVO newUser){
 
-        /* 설명. 이메일 인증 */
+        /* email verification */
+        // send verification code via email
         emailVerificationService.sendVerificationCode(newUser.getEmail());
 
-        UserDTO savedUserDTO = userService.registUser(newUser);
+        // save pending status
+        emailVerificationService.savePendingStatus(newUser.getEmail());
 
-        ResponseUserVO responseUser = modelMapper.map(savedUserDTO, ResponseUserVO.class);
 
-        return ResponseDTO.ok(responseUser);
+
+//        UserDTO savedUserDTO = userService.registUser(newUser);
+
+//        ResponseUserVO responseUser = modelMapper.map(savedUserDTO, ResponseUserVO.class);
+
+        return ResponseDTO.ok("이메일 인증을 완료해주세요");
     }
 
+
+
     @PostMapping("/verify-code")
-    public ResponseDTO<?> verifyEmailCode(@RequestParam String email, @RequestParam String code){
+    public ResponseDTO<?> verifyEmailCode(@RequestParam String email, @RequestParam String code, @RequestBody RequestRegistUserVO newUser){
         boolean isVerified = emailVerificationService.verifyCode(email, code);
         if(isVerified){
-            return ResponseDTO.ok("이메일 인증이 완료되었습니다.");
+            emailVerificationService.saveVerifiedStatus(email);
+            UserDTO savedUserDTO = userService.registUser(newUser);
+
+            ResponseUserVO responseUserVO = modelMapper.map(savedUserDTO, ResponseUserVO.class);
+            return ResponseDTO.ok(responseUserVO);
         } else{
             return ResponseDTO.fail(new CommonException(ErrorCode.INVALID_VERIFICATION_CODE));
         }

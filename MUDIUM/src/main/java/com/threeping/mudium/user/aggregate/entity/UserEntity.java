@@ -44,7 +44,7 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "accept_status", nullable = false, length = 255)
-    private AcceptStatus acceptStatus = AcceptStatus.Y;
+    private AcceptStatus acceptStatus = AcceptStatus.N;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "signup_path", length = 255)
