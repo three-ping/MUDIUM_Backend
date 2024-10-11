@@ -35,7 +35,7 @@ public class APIServiceImpl implements APIService {
     }
 
 //    @Scheduled(cron = "0 0 1 * * ?")
-    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
+//    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
     @Transactional
     @Override
     public void updateMusicalData() {
