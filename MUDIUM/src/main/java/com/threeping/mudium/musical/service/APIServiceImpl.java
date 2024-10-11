@@ -34,7 +34,7 @@ public class APIServiceImpl implements APIService {
         this.musicalAPIClient = musicalAPIClient;
     }
 
-//    @Scheduled(cron = "0 0 1 * * ?")
+//    @Scheduled(cron = "0 0 1 * * ?") 새벽 1시마다 db 자동 업데이트
 //    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
     @Transactional
     @Override
@@ -58,7 +58,7 @@ public class APIServiceImpl implements APIService {
                     musicalAPIClient.fetchPerformanceDetail(item.getExternalId());
             updateMusicalInfo(musical, performanceItem);
             log.info("업데이트된 뮤지컬 정보 확인: " + musical);
-            Performance performance = getOrCreatedPerformance(musical.getMusicalId(), item.getArea());
+            Performance performance = getOrCreatedPerformance(musical, item.getArea());
             updatePerformance(performance, performanceItem);
             log.info("업데이트된 공연 정보 확인: " + performance);
 
@@ -85,12 +85,13 @@ public class APIServiceImpl implements APIService {
         musical.setPoster(performanceItem.getPoster());
     }
 
-    private Performance getOrCreatedPerformance(Long musicalId, String area) {
-        return performanceRepository.findPerformanceByMusicalIdAndRegion(musicalId, area)
+    private Performance getOrCreatedPerformance(Musical musical, String area) {
+        return performanceRepository.findPerformanceByMusicalAndRegion(musical, area)
                 .orElseGet(() -> {
                     Performance performance = new Performance();
-                    performance.setMusicalId(musicalId);
+                    performance.setMusical(musical);
                     performance.setRegion(area);
+                    log.info("새로 생성된 공연 정보: " + performance);
                     return performance;
                 });
     }
