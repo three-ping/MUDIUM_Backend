@@ -19,7 +19,7 @@
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/three-ping/MUDIUM_Backend.git",
-    "accountId": "0e379423-5aa1-4299-9237-a7b3233b7bc6"
+    "accountId": "b266a394-7f34-431c-8c3d-1279ee87e86e"
   }
 }]]></component>
   <component name="ProjectColorInfo">{
@@ -33,9 +33,9 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "feature/guidebook",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/dev/three-ping/MUDIUM_Backend/MUDIUM_Backend",
+    "last_opened_file_path": "C:/MudiumFolder/Mudium/MUDIUM",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
   }
@@ -58,6 +58,7 @@
       <updated>1728522344510</updated>
       <workItem from="1728522345707" duration="185000" />
       <workItem from="1728523333245" duration="38000" />
+      <workItem from="1728526917933" duration="42000" />
     </task>
     <servers />
   </component>
