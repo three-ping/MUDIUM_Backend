@@ -1,0 +1,49 @@
+package com.threeping.mudium.board.aggregate.entity;
+
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import java.sql.Timestamp;
+
+@Entity
+@Table(name = "TBL_BOARD")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@ToString
+public class Board {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
+    private int boardId;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "content")
+    private String content;
+
+    @Column(name = "created_at")
+    private Timestamp createdAt;
+
+    @Column(name = "updated_at")
+    private Timestamp updatedAt;
+
+    @Column(name = "view_count")
+    private Long viewCount;
+
+    @Column(name = "like")
+    private Long like;
+
+    @Column(name = "active_status")
+    @Enumerated(EnumType.STRING)
+    private ActiveStatus activeStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+}
