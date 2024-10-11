@@ -40,13 +40,14 @@ public enum ErrorCode {
     LOGIN_FAILURE(4010008, HttpStatus.UNAUTHORIZED, "로그인에 실패했습니다"),
     UNAUTHORIZED_ACCESS(4010010, HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
     EXPIRED_SESSION(4010011, HttpStatus.UNAUTHORIZED, "세션이 만료되었습니다."),
-    EXIST_USER(4010012, HttpStatus.UNAUTHORIZED, "이미 회원가입한 회원입니다."),
+    EXIST_USER_ID(4010012, HttpStatus.UNAUTHORIZED, "이미 회원가입한 회원입니다."),
     DUPLICATE_NICKNAME(4010013, HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
     DUPLICATE_NICKNAME_EXISTS(4010014, HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
-
+    INVALID_PASSWORD(4010008, HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다"),
     //403
     FORBIDDEN_ROLE(4030000, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),
     ACCESS_DENIED(4030010, HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
+    INACTIVE_USER(4030020, HttpStatus.FORBIDDEN, "비활성 회원입니다."),
 
     //404
     NOT_FOUND_USER(4040001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
