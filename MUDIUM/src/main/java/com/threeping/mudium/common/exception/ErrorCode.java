@@ -48,6 +48,7 @@ public enum ErrorCode {
     //403
     FORBIDDEN_ROLE(40300, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),
     ACCESS_DENIED(40310, HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
+    UNRECOMMENDED(4030201,HttpStatus.FORBIDDEN, "추천 작품이 없습니다." ),
 
     //404
     NOT_FOUND_USER(40401, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
