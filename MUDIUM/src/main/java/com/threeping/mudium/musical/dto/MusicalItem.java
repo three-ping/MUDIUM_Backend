@@ -6,11 +6,13 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @XmlRootElement(name = "db")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Getter
 @Setter
+@ToString
 public class MusicalItem {
 
     @XmlElement(name = "mt20id")
@@ -19,6 +21,7 @@ public class MusicalItem {
     @XmlElement(name = "prfnm")
     private String title;
 
-    @XmlElement(name = "poster")
-    private String poster;
+    @XmlElement(name = "area")
+    private String area;
+
 }

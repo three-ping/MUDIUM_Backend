@@ -5,17 +5,22 @@ import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.musical.dto.MusicalItem;
 import com.threeping.mudium.musical.dto.MusicalListResponse;
+import com.threeping.mudium.performance.dto.PerformanceItem;
+import com.threeping.mudium.performance.dto.PerformanceResponse;
 import jakarta.xml.bind.JAXBException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
+@Slf4j
 public class MusicalAPIClient {
 
     @Value("${kopis.api.key}")
@@ -32,7 +37,8 @@ public class MusicalAPIClient {
     }
 
     public List<MusicalItem> fetchMusicalList() {
-        String startDate = "20220101";
+        // test를 위해선 좀 줄입니다
+        String startDate = "20240901";
         String endDate = "20240930";
         int cPage = 1;
         List<MusicalItem> allMusicals = new ArrayList<>();
@@ -48,6 +54,7 @@ public class MusicalAPIClient {
                     .toUriString();
 
             String response = restTemplate.getForObject(url, String.class);
+            log.info("정보 확인: " + response);
             MusicalListResponse parsedResponse = parseXmlResponse(response);
             List<MusicalItem> musicalItems = parsedResponse.getMusicalItems();
 
@@ -60,19 +67,34 @@ public class MusicalAPIClient {
         return allMusicals;
     }
 
-//    public
-
-    private MusicalListResponse parseXmlResponse(String response) {
+    public PerformanceItem fetchPerformanceDetail(String mt20id) {
         try {
-            return JAXBManager.getInstance().unmarshal(response, MusicalListResponse.class);
+            String url = UriComponentsBuilder.fromHttpUrl(baseUrl)
+                    .path("/{mt20id}")
+                    .queryParam("service", apiKey)
+                    .buildAndExpand(mt20id)
+                    .toUriString();
+            String response = restTemplate.getForObject(url, String.class);
+            return parsePerformanceXmlResponse(response).getPerformanceItem();
+        } catch (RestClientException e) {
+            throw new CommonException(ErrorCode.API_DETAIL_BAD_REQUEST);
+        }
+    }
+
+    public PerformanceResponse parsePerformanceXmlResponse(String response) {
+        try {
+            PerformanceResponse performanceResponse =
+                    JAXBManager.getInstance().unmarshalPerformance(response, PerformanceResponse.class);
+            log.info("XML 파일 자바 객체로 전환: " + performanceResponse.toString());
+            return performanceResponse;
         } catch (JAXBException e) {
             throw new CommonException(ErrorCode.JAXB_CONTEXT_ERROR);
         }
     }
 
-    private MusicalItem parseXmlItem(String response) {
+    private MusicalListResponse parseXmlResponse(String response) {
         try {
-            return JAXBManager.getInstance().unmarshal(response, MusicalItem.class);
+            return JAXBManager.getInstance().unmarshalMusical(response, MusicalListResponse.class);
         } catch (JAXBException e) {
             throw new CommonException(ErrorCode.JAXB_CONTEXT_ERROR);
         }

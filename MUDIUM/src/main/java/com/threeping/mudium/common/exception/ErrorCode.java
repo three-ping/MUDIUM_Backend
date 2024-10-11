@@ -56,7 +56,13 @@ public enum ErrorCode {
 
     //500
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다"),
-    JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다.");
+
+
+    // Musical
+    JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
+    API_LIST_BAD_REQUEST(40011, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
+    API_DETAIL_BAD_REQUEST(40012, HttpStatus.BAD_REQUEST, "상세정보 API 통신에 실패했습니다."),
+    ITEM_PROCESSING_ERROR(50012, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;

@@ -16,7 +16,7 @@ public class Musical {
     @Column(name = "musical_info_id")
     private Long musicalId;
 
-    @Column(name = "musical_name")
+    @Column(name = "title")
     private String title;
 
     @Column(name = "rating")
