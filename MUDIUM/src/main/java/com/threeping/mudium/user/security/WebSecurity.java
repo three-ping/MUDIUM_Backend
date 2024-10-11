@@ -55,10 +55,10 @@ WebSecurity {
                         authz
                                 .requestMatchers(new AntPathRequestMatcher("/api/users/**", "POST")).permitAll()
                                 .requestMatchers(new AntPathRequestMatcher("/api/users/health")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "GET")).hasRole("MEMBER")
-                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PATCH")).hasRole("MEMBER")
-                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PUT")).hasRole("MEMBER")
-                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "DELETE")).hasRole("MEMBER")
+//                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "GET")).hasRole("MEMBER")
+//                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PATCH")).hasRole("MEMBER")
+//                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PUT")).hasRole("MEMBER")
+//                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "DELETE")).hasRole("MEMBER")
                                 .anyRequest().authenticated()
                 )
                 /* 설명. authenticationManager 등록(UserDetails를 상속받는 Service 계층 + BCrypt 암호화) */

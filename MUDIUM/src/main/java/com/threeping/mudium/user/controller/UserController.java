@@ -62,5 +62,7 @@ public class UserController {
         }
     }
 
+//    @GetMapping("/oauth2/kakao")
+//    public ResponseDTO<ResponseUserVO> handleKakaoLogin(@RequestParam String code){}
 
 }
