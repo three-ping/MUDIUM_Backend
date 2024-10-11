@@ -1,6 +1,5 @@
 package com.threeping.mudium.review.aggregate.entity;
 
-import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +14,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Getter
 @ToString
-public class ReviewEntity {
+public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
