@@ -1,5 +1,6 @@
 package com.threeping.mudium.review.aggregate.dto;
 
+import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.review.aggregate.entity.ActiveStatus;
 import lombok.*;
 
@@ -17,4 +18,5 @@ public class ReviewResponseDTO {
     private Timestamp updatedAt;
     private Long like;
     private ActiveStatus activeStatus;
+    private Long musicalId;
 }

@@ -1,5 +1,7 @@
 package com.threeping.mudium.review.aggregate.entity;
 
+import com.threeping.mudium.musical.aggregate.Musical;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -37,13 +39,13 @@ public class Review {
     private ActiveStatus activeStatus = ActiveStatus.ACTIVE;
 
     // 외래 키 매핑 (ManyToOne)
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "musical_id")  // FK 컬럼을 명시
-//    private MusicalEntity musicalId;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "user_id")  // FK 컬럼을 명시
-//    private UserEntity userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "musical_id")  // FK 컬럼을 명시
+    private Musical musical;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")  // FK 컬럼을 명시
+    private UserEntity user;
 
     public void deactivateReview() {
         this.activeStatus = ActiveStatus.INACTIVE;
