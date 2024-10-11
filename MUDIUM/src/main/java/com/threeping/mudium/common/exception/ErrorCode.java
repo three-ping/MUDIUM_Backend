@@ -19,8 +19,7 @@ public enum ErrorCode {
     INVALID_REQUEST_BODY(40011, HttpStatus.BAD_REQUEST, "잘못된 요청 본문입니다."),
     MISSING_REQUIRED_FIELD(40012, HttpStatus.BAD_REQUEST, "필수 필드가 누락되었습니다."),
     INVALID_VERIFICATION_CODE(40013, HttpStatus.BAD_REQUEST, "잘못된 인증번호입니다. 인증번호를 다시 확인해주세요"),
-    INVALID_INPUT_NICKNAME(40418, HttpStatus.BAD_REQUEST, "닉네임을 입력하지 않았습니다."),
-
+    INVALID_BOARD_ID(40021,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
 
     // 파일 관련 오류
     UNSUPPORTED_FILE_FORMAT(40020, HttpStatus.BAD_REQUEST, "지원되지 않는 파일 형식입니다."),
@@ -30,29 +29,28 @@ public enum ErrorCode {
 
     //401
     INVALID_HEADER_VALUE(40100, HttpStatus.UNAUTHORIZED, "올바르지 않은 헤더값입니다."),
-    EXPIRED_TOKEN_ERROR(40101, HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
-    INVALID_TOKEN_ERROR(40102, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
-    TOKEN_MALFORMED_ERROR(40103, HttpStatus.UNAUTHORIZED, "토큰이 올바르지 않습니다."),
-    TOKEN_TYPE_ERROR(40104, HttpStatus.UNAUTHORIZED, "토큰 타입이 일치하지 않거나 비어있습니다."),
-    TOKEN_UNSUPPORTED_ERROR(40105, HttpStatus.UNAUTHORIZED, "지원하지않는 토큰입니다."),
-    TOKEN_GENERATION_ERROR(40106, HttpStatus.UNAUTHORIZED, "토큰 생성에 실패하였습니다."),
-    TOKEN_UNKNOWN_ERROR(40107, HttpStatus.UNAUTHORIZED, "알 수 없는 토큰입니다."),
-    LOGIN_FAILURE(40108, HttpStatus.UNAUTHORIZED, "로그인에 실패하셨습니다."),
-    UNAUTHORIZED_ACCESS(40110, HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
-    EXPIRED_SESSION(40111, HttpStatus.UNAUTHORIZED, "세션이 만료되었습니다."),
-    EXIST_USER_ID(40112, HttpStatus.UNAUTHORIZED, "중복 아이디 입니다."),
-    DUPLICATE_NICKNAME(40013, HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
-    DUPLICATE_NICKNAME_EXISTS(40014, HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
-    INVALID_PASSWORD(40108, HttpStatus.UNAUTHORIZED, "비밀번호를 잘못 입력하셨습니다."),
+
+    EXPIRED_TOKEN_ERROR(4010001, HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    INVALID_TOKEN_ERROR(4010002, HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다."),
+    TOKEN_MALFORMED_ERROR(4010003, HttpStatus.UNAUTHORIZED, "토큰이 올바르지 않습니다."),
+    TOKEN_TYPE_ERROR(4010004, HttpStatus.UNAUTHORIZED, "토큰 타입이 일치하지 않거나 비어있습니다."),
+    TOKEN_UNSUPPORTED_ERROR(4010005, HttpStatus.UNAUTHORIZED, "지원하지않는 토큰입니다."),
+    TOKEN_GENERATION_ERROR(4010006, HttpStatus.UNAUTHORIZED, "토큰 생성에 실패하였습니다."),
+    TOKEN_UNKNOWN_ERROR(4010007, HttpStatus.UNAUTHORIZED, "알 수 없는 토큰입니다."),
+    LOGIN_FAILURE(4010008, HttpStatus.UNAUTHORIZED, "로그인에 실패했습니다"),
+    UNAUTHORIZED_ACCESS(4010010, HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
+    EXPIRED_SESSION(4010011, HttpStatus.UNAUTHORIZED, "세션이 만료되었습니다."),
+    EXIST_USER(4010012, HttpStatus.UNAUTHORIZED, "이미 회원가입한 회원입니다."),
+    DUPLICATE_NICKNAME(4010013, HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
+    DUPLICATE_NICKNAME_EXISTS(4010014, HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
 
     //403
-    FORBIDDEN_ROLE(40300, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),
-    ACCESS_DENIED(40310, HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
-    INACTIVE_USER(40320, HttpStatus.FORBIDDEN, "탈퇴한 회원입니다. 활성화 후 로그인 해주세요."),
+    FORBIDDEN_ROLE(4030000, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),
+    ACCESS_DENIED(4030010, HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
 
     //404
-    NOT_FOUND_USER(40401, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
-    EMAIL_VERIFICATION_REQUIRED(40416, HttpStatus.BAD_REQUEST
+    NOT_FOUND_USER(4040001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
+    EMAIL_VERIFICATION_REQUIRED(4040016, HttpStatus.BAD_REQUEST
             , "이메일 인증이 안된 이메일입니다. 이메일 인증을 완료해주세요."),
     NOT_FOUND_USER_ID(40417, HttpStatus.NOT_FOUND, "아이디를 잘못 입력하셨습니다."),
 
