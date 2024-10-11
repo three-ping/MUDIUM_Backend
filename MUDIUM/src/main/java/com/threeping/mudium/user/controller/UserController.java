@@ -8,11 +8,12 @@ import com.threeping.mudium.user.aggregate.vo.RequestRegistUserVO;
 import com.threeping.mudium.user.aggregate.vo.ResponseUserVO;
 import com.threeping.mudium.user.service.EmailVerificationService;
 import com.threeping.mudium.user.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
-
+@Slf4j
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -62,7 +63,15 @@ public class UserController {
         }
     }
 
-//    @GetMapping("/oauth2/kakao")
-//    public ResponseDTO<ResponseUserVO> handleKakaoLogin(@RequestParam String code){}
+    @GetMapping("/oauth2/kakao")
+    public ResponseDTO<ResponseUserVO> handleKakaoLogin(@RequestParam String code){
+
+        log.info("code: {}", code);
+
+        UserDTO userDTO = userService.processKakaoUser(code);
+        log.info("결과적으로 User에 담긴 값: {}", userDTO);
+
+        return ResponseDTO.ok(modelMapper.map(userDTO, ResponseUserVO.class));
+    }
 
 }

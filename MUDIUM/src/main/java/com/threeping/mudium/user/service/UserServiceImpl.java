@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -116,5 +117,14 @@ public class UserServiceImpl implements UserService {
                 , grantedAuthorities);
     }
 
+    @Override
+    public UserDTO processKakaoUser(String code) {
 
+        log.info("UserService에서 code 확인: {}", code);
+
+        /* 아래 메소드 확인 */
+        String accessToken = getKakaoAccessToken(code);
+        Map<String, Object> userInfo = getKakaoUserInfo(accessToken);
+        return null;
+    }
 }
