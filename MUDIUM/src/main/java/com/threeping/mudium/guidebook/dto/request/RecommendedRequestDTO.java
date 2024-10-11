@@ -10,7 +10,6 @@ import lombok.*;
 @ToString
 @Builder
 public class RecommendedRequestDTO {
-
     private String musicalTitle;
     private String musicalDescription;
     private Long userId;
