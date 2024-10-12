@@ -49,7 +49,6 @@ public enum ErrorCode {
     //403
     FORBIDDEN_ROLE(4030000, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),
     ACCESS_DENIED(4030010, HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
-    UNRECOMMENDED(4030201,HttpStatus.FORBIDDEN, "추천 작품이 없습니다." ),
 
     //404
     NOT_FOUND_USER(4040001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
@@ -64,7 +63,8 @@ public enum ErrorCode {
     JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
     API_LIST_BAD_REQUEST(40011, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
     API_DETAIL_BAD_REQUEST(40012, HttpStatus.BAD_REQUEST, "상세정보 API 통신에 실패했습니다."),
-    ITEM_PROCESSING_ERROR(50012, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다.");
+    ITEM_PROCESSING_ERROR(50012, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다."),
+    INVALID_MUSICAL_ID(40013, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 번호입니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;

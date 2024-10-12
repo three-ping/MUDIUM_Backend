@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface MusicalRepository extends JpaRepository<Musical, Long> {
     @Query(value = "SELECT * FROM TBL_MUSICAL_INFO m WHERE m.title = :title", nativeQuery = true)
     Optional<Musical> findMusicalByExactTitle(@Param("title") String title);
+    Optional<Musical> findMusicalByMusicalId(Long musicalId);
 }

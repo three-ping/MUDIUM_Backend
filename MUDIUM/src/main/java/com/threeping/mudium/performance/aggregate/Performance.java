@@ -1,5 +1,6 @@
 package com.threeping.mudium.performance.aggregate;
 
+import com.threeping.mudium.musical.aggregate.Musical;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,6 +37,7 @@ public class Performance {
     @Column(name = "actor_list")
     private String actorList;
 
-    @Column(name = "musical_info_id")
-    private Long musicalId;
+    @JoinColumn(name = "musical_info_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Musical musical;
 }
