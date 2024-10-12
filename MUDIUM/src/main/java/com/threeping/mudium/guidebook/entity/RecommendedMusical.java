@@ -1,6 +1,5 @@
 package com.threeping.mudium.guidebook.entity;
 
-import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

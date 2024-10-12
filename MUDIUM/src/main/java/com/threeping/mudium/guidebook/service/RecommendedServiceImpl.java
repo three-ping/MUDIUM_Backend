@@ -80,7 +80,7 @@ public class RecommendedServiceImpl implements RecommendedService {
         return recommendedRequestDTOList;
     }
 
-    //    추천 작품 조회하기
+    //   추천 작품 조회하기
     @Override
     @Transactional
     public RecommendedRequestDTO findByRecommendedId(Long recommendedId) {

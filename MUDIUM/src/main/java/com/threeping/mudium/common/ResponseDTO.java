@@ -27,6 +27,8 @@ public class ResponseDTO<T> {
     @Nullable
     private ExceptionDTO error;
 
+
+
     // 기본 생성자
     public ResponseDTO() {
     }
@@ -49,6 +51,7 @@ public class ResponseDTO<T> {
                 null
         );
     }
+
 
     //필기. 에러 발생시의 메세지(Ad)
     public static ResponseDTO<Object> fail(@NotNull CommonException e) {
@@ -78,4 +81,6 @@ public class ResponseDTO<T> {
                 ExceptionDTO.of(ErrorCode.INVALID_PARAMETER_FORMAT)
         );
     }
+
+
 }

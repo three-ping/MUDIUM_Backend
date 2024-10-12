@@ -5,7 +5,6 @@ import com.threeping.mudium.guidebook.dto.request.RecommendedRequestDTO;
 import com.threeping.mudium.guidebook.entity.RecommendedMusical;
 import com.threeping.mudium.guidebook.service.RecommendedService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
