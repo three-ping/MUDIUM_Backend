@@ -1,4 +1,4 @@
-package com.threeping.mudium.guidebook.dto.request;
+package com.threeping.mudium.guidebook.dto;
 
 import lombok.*;
 
