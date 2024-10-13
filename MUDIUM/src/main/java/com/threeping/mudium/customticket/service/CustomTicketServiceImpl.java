@@ -19,34 +19,6 @@ public class CustomTicketServiceImpl implements CustomTicketService {
         this.musicalRepository = musicalRepository;
     }
 
-//    @Override
-//    public CustomTicketEntity createCustomTicket(CustomTicketDTO customTicketDTO) {
-//        Musical musical = musicalRepository.findById(customTicketDTO.getMusicalId())
-//                .orElseThrow(() -> new RuntimeException("해당 뮤지컬을 찾을 수 없습니다."));
-//
-//        CustomTicketEntity ticket = new CustomTicketEntity();
-//        ticket.setTicketImage(customTicketDTO.getTicketImage());
-//        ticket.setThemeName(customTicketDTO.getThemeName());
-//        ticket.setMusical(musical);
-//
-//        return customTicketRepository.save(ticket);
-//    }
-//
-//    @Override
-//    public CustomTicketEntity updateCustomTicket(Long ticketId, CustomTicketDTO customTicketDTO) {
-//        CustomTicketEntity ticket = customTicketRepository.findById(ticketId)
-//                .orElseThrow(() -> new RuntimeException("티켓을 찾을 수 없습니다."));
-//
-//        ticket.setTicketImage(customTicketDTO.getTicketImage());
-//        ticket.setThemeName(customTicketDTO.getThemeName());
-//
-//        Musical musical = musicalRepository.findById(customTicketDTO.getMusicalId())
-//                .orElseThrow(() -> new RuntimeException("해당 뮤지컬을 찾을 수 없습니다."));
-//        ticket.setMusical(musical);
-//
-//        return customTicketRepository.save(ticket);
-//    }
-
     @Override
     public CustomTicketDTO createCustomTicket(CustomTicketDTO customTicketDTO) {
         Musical musical = musicalRepository.findById(customTicketDTO.getMusicalId())
