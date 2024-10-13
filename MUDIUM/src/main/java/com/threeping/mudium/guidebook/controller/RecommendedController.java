@@ -36,8 +36,8 @@ public class RecommendedController {
 
     @GetMapping("")
     public ResponseDTO<?> findRecommendedList () {
-        List<RecommendedRequestDTO> recommended = recommendedService.findRecommendedList ();
-        return ResponseDTO.ok ( recommended );
+        List<RecommendedRequestDTO> recommendedList = recommendedService.findRecommendedList ();
+        return ResponseDTO.ok ( recommendedList );
     }
 
     @GetMapping("/detail/{recommendedId}")

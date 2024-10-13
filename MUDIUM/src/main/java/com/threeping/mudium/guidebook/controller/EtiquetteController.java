@@ -6,10 +6,9 @@ import com.threeping.mudium.guidebook.entity.Etiquette;
 import com.threeping.mudium.guidebook.service.ettiquette.EtiquetteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.parameters.P;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/etiquette")
@@ -26,5 +25,23 @@ public class EtiquetteController {
     public ResponseDTO<?> createEtiquette ( @RequestBody EtiquetteRequestDTO etiquetteRequestDTO ){
         Etiquette createEtiquettes = etiquetteService.createEtiquette( etiquetteRequestDTO );
         return ResponseDTO.ok ( createEtiquettes );
+    }
+
+    @PutMapping("update/{etiquetteId}")
+    public ResponseDTO<?> modifyEtiquette(@PathVariable Long etiquetteId,
+                                          @RequestBody EtiquetteRequestDTO etiquetteRequestDTO) {
+        etiquetteService.updateEtiquette ( etiquetteRequestDTO, etiquetteId );
+        return ResponseDTO.ok ( etiquetteId );
+    }
+
+    @GetMapping("")
+    public ResponseDTO<?> findEtiquetteList() {
+        List<EtiquetteRequestDTO> etiquetteList = etiquetteService.findEtiquettesList ();
+        return ResponseDTO.ok( etiquetteList );
+    }
+
+    @GetMapping("/detail/{etiquetteId}")
+    public ResponseDTO<?> findByEtiquetteId (@PathVariable Long etiquetteId) {
+        return ResponseDTO.ok(etiquetteService.findByEtiquetteId ( etiquetteId ));
     }
 }
