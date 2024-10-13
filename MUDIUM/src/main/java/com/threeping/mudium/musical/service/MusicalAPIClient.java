@@ -85,7 +85,6 @@ public class MusicalAPIClient {
         try {
             PerformanceResponse performanceResponse =
                     JAXBManager.getInstance().unmarshalPerformance(response, PerformanceResponse.class);
-            log.info("XML 파일 자바 객체로 전환: " + performanceResponse.toString());
             return performanceResponse;
         } catch (JAXBException e) {
             throw new CommonException(ErrorCode.JAXB_CONTEXT_ERROR);

@@ -1,6 +1,6 @@
-package com.threeping.mudium.guidebook.service;
+package com.threeping.mudium.guidebook.service.recommendedMusical;
 
-import com.threeping.mudium.guidebook.dto.request.RecommendedRequestDTO;
+import com.threeping.mudium.guidebook.dto.RecommendedRequestDTO;
 import com.threeping.mudium.guidebook.entity.RecommendedMusical;
 import com.threeping.mudium.guidebook.repository.RecommendedRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -33,13 +34,12 @@ public class RecommendedServiceImpl implements RecommendedService {
                 .userId(recommendedRequestDTO.getUserId())
                 .build();
 
-        // 예외처리
        return recommendedRepository.save(recommendedMusical);
     }
 
     @Override
     @Transactional
-    public void modifyRecommended(RecommendedRequestDTO recommendedRequestDTO,Long recommendedId) {
+    public void updateRecommended(RecommendedRequestDTO recommendedRequestDTO,Long recommendedId) {
         Optional<RecommendedMusical> optionalRecommendedMusical = recommendedRepository.findById(recommendedId);
 
         if (optionalRecommendedMusical.isPresent()) {
@@ -56,15 +56,21 @@ public class RecommendedServiceImpl implements RecommendedService {
     //    전체 목록 조회
     @Transactional
     @Override
-    public List<RecommendedRequestDTO> getRecommendedList() {
+    public List<RecommendedRequestDTO> findRecommendedList() {
 
-        List<RecommendedMusical> all = recommendedRepository.findAll();
+        List<RecommendedMusical> allRecommended = recommendedRepository.findAll();
+        if (allRecommended.isEmpty()) {
+            System.out.println("추천 작품이 없습니다.");
+            return Collections.emptyList();
+        }
+
         List<RecommendedRequestDTO> recommendedRequestDTOList = new ArrayList<>();
 
-        for (RecommendedMusical recommendedMusical : all) {
+        for (RecommendedMusical recommendedMusical : allRecommended) {
             RecommendedRequestDTO recommendedRequestDTO = RecommendedRequestDTO.builder()
                     .musicalTitle(recommendedMusical.getMusicalTitle())
                     .musicalDescription(recommendedMusical.getMusicalDescription())
+                    .userId ( recommendedMusical.getUserId() )
                     .build();
 
             recommendedRequestDTOList.add(recommendedRequestDTO);
@@ -73,12 +79,12 @@ public class RecommendedServiceImpl implements RecommendedService {
         return recommendedRequestDTOList;
     }
 
-    //    추천 작품 조회하기
+    //   추천 작품 조회하기
     @Override
     @Transactional
-    public RecommendedRequestDTO getMusical(Long recommendedId) {
-        Optional<RecommendedMusical> boardWrapper = recommendedRepository.findById(recommendedId);
-        RecommendedMusical recommendedMusical = boardWrapper.get();
+    public RecommendedRequestDTO findByRecommendedId(Long recommendedId) {
+        Optional<RecommendedMusical> recommend = recommendedRepository.findById(recommendedId);
+        RecommendedMusical recommendedMusical = recommend.get();
 
         return RecommendedRequestDTO.builder()
                 .musicalTitle(recommendedMusical.getMusicalTitle())

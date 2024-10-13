@@ -1,4 +1,4 @@
-package com.threeping.mudium.guidebook.dto.request;
+package com.threeping.mudium.guidebook.dto;
 
 import lombok.*;
 
@@ -13,5 +13,5 @@ public class RecommendedRequestDTO {
     private String musicalTitle;
     private String musicalDescription;
     private Long userId;
-    
+
 }
