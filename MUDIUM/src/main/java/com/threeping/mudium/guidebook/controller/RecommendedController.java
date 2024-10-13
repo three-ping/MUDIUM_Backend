@@ -1,9 +1,9 @@
 package com.threeping.mudium.guidebook.controller;
 
 import com.threeping.mudium.common.ResponseDTO;
-import com.threeping.mudium.guidebook.dto.request.RecommendedRequestDTO;
+import com.threeping.mudium.guidebook.dto.RecommendedRequestDTO;
 import com.threeping.mudium.guidebook.entity.RecommendedMusical;
-import com.threeping.mudium.guidebook.service.RecommendedService;
+import com.threeping.mudium.guidebook.service.recommendedMusical.RecommendedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

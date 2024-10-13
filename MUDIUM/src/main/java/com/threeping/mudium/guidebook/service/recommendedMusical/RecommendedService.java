@@ -1,6 +1,6 @@
-package com.threeping.mudium.guidebook.service;
+package com.threeping.mudium.guidebook.service.recommendedMusical;
 
-import com.threeping.mudium.guidebook.dto.request.RecommendedRequestDTO;
+import com.threeping.mudium.guidebook.dto.RecommendedRequestDTO;
 import com.threeping.mudium.guidebook.entity.RecommendedMusical;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,6 +1,6 @@
-package com.threeping.mudium.guidebook.service;
+package com.threeping.mudium.guidebook.service.recommendedMusical;
 
-import com.threeping.mudium.guidebook.dto.request.RecommendedRequestDTO;
+import com.threeping.mudium.guidebook.dto.RecommendedRequestDTO;
 import com.threeping.mudium.guidebook.entity.RecommendedMusical;
 import com.threeping.mudium.guidebook.repository.RecommendedRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,7 +34,6 @@ public class RecommendedServiceImpl implements RecommendedService {
                 .userId(recommendedRequestDTO.getUserId())
                 .build();
 
-        // 예외처리
        return recommendedRepository.save(recommendedMusical);
     }
 
@@ -59,15 +58,15 @@ public class RecommendedServiceImpl implements RecommendedService {
     @Override
     public List<RecommendedRequestDTO> findRecommendedList() {
 
-        List<RecommendedMusical> all = recommendedRepository.findAll();
-        if (all.isEmpty()) {
+        List<RecommendedMusical> allRecommended = recommendedRepository.findAll();
+        if (allRecommended.isEmpty()) {
             System.out.println("추천 작품이 없습니다.");
-            return Collections.emptyList(); // 빈 리스트 반환
+            return Collections.emptyList();
         }
 
         List<RecommendedRequestDTO> recommendedRequestDTOList = new ArrayList<>();
 
-        for (RecommendedMusical recommendedMusical : all) {
+        for (RecommendedMusical recommendedMusical : allRecommended) {
             RecommendedRequestDTO recommendedRequestDTO = RecommendedRequestDTO.builder()
                     .musicalTitle(recommendedMusical.getMusicalTitle())
                     .musicalDescription(recommendedMusical.getMusicalDescription())
@@ -84,8 +83,8 @@ public class RecommendedServiceImpl implements RecommendedService {
     @Override
     @Transactional
     public RecommendedRequestDTO findByRecommendedId(Long recommendedId) {
-        Optional<RecommendedMusical> boardWrapper = recommendedRepository.findById(recommendedId);
-        RecommendedMusical recommendedMusical = boardWrapper.get();
+        Optional<RecommendedMusical> recommend = recommendedRepository.findById(recommendedId);
+        RecommendedMusical recommendedMusical = recommend.get();
 
         return RecommendedRequestDTO.builder()
                 .musicalTitle(recommendedMusical.getMusicalTitle())
