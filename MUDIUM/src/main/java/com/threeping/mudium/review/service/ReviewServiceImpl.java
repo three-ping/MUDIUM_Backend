@@ -1,9 +1,5 @@
 package com.threeping.mudium.review.service;
 
-import com.threeping.mudium.common.exception.CommonException;
-import com.threeping.mudium.common.exception.ErrorCode;
-import com.threeping.mudium.musical.aggregate.Musical;
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.aggregate.entity.Review;
 import com.threeping.mudium.review.repository.ReviewRepository;
@@ -27,12 +23,27 @@ public class ReviewServiceImpl implements ReviewService {
         this.modelMapper = modelMapper;
     }
 
+    // 리뷰 전체 조회
     @Override
     public List<ReviewResponseDTO> findReviewByMusicalId(Long musicalId) {
 
-        List<Review> reviews = reviewRepository.findReviewByMusicalId(musicalId);
+        /* 필기. 엔티티에 @ManyToOne이 있어서 JPA를 해당 메소드로 가능 */
+        List<Review> reviews = reviewRepository.findAllByMusical_MusicalId(musicalId);
 
-        /* My. Stream API 사용 */
+        /* 필기. Stream API 사용 */
+        List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
+                .map(review -> modelMapper.map(review, ReviewResponseDTO.class))
+                .collect(Collectors.toList());
+
+        return reviewResponseDTO;
+    }
+
+    // 리뷰 상세 조회
+    @Override
+    public List<ReviewResponseDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId) {
+
+        List<Review> reviews = reviewRepository.findByMusical_MusicalIdAndReviewId(musicalId, reviewId);
+
         List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
                 .map(review -> modelMapper.map(review, ReviewResponseDTO.class))
                 .collect(Collectors.toList());
