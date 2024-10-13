@@ -113,7 +113,7 @@ public class JwtUtil {
     }
 
     /* access token generate method */
-    public String generateToken(UserEntity user, List<String> roles){
+    public String generateAccessToken(UserEntity user, List<String> roles){
         return Jwts.builder()
                 .setSubject(user.getUserIdentifier())
                 .claim("email", user.getEmail())
