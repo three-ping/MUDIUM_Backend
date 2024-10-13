@@ -2,10 +2,7 @@ package com.threeping.mudium.customticket.service;
 
 import com.threeping.mudium.customticket.aggregate.dto.UserCustomTicketDTO;
 import com.threeping.mudium.customticket.aggregate.entity.UserCustomTicketId;
-import com.threeping.mudium.customticket.repository.CustomTicketRepository;
 import com.threeping.mudium.customticket.repository.UserCustomTicketRepository;
-import com.threeping.mudium.musical.repository.MusicalRepository;
-import com.threeping.mudium.user.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
