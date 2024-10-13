@@ -53,8 +53,10 @@ WebSecurity {
 
         http.authorizeHttpRequests((authz) ->
                         authz
-                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "POST")).permitAll()
-                                .requestMatchers(new AntPathRequestMatcher("/api/users/health")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/api/users/**")).permitAll()
+                                .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
+//                                .requestMatchers(new AntPathRequestMatcher("/api/users/health")).permitAll()
+//                                .requestMatchers(new AntPathRequestMatcher("/api/users/**")).permitAll()
 //                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "GET")).hasRole("MEMBER")
 //                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PATCH")).hasRole("MEMBER")
 //                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "PUT")).hasRole("MEMBER")

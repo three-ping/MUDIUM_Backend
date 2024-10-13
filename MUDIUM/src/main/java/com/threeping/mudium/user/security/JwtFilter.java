@@ -33,7 +33,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
     /*설명. 들고 온(Request Header) 토큰이 유효한지 판별 및 인증(Authentication 객체로 관리)*/
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request
+            , HttpServletResponse response
+            , FilterChain filterChain) throws ServletException, IOException {
 
         log.info("UsernamePasswordAuthenticationFilter보다 먼저 동작하는 필터");
 
