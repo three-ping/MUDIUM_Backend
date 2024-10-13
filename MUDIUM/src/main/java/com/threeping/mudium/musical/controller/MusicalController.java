@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/musical")
+@RestController("/api/musicals")
 @Slf4j
 public class MusicalController {
 
