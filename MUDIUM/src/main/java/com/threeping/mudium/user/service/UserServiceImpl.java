@@ -117,14 +117,5 @@ public class UserServiceImpl implements UserService {
                 , grantedAuthorities);
     }
 
-    @Override
-    public UserDTO processKakaoUser(String code) {
 
-        log.info("UserService에서 code 확인: {}", code);
-
-        /* 아래 메소드 확인 */
-        String accessToken = getKakaoAccessToken(code);
-        Map<String, Object> userInfo = getKakaoUserInfo(accessToken);
-        return null;
-    }
 }

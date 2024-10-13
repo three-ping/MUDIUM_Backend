@@ -12,5 +12,4 @@ public interface UserService extends UserDetailsService {
 
     UserEntity findByUserIdentifier(String userIdentifier);
 
-    UserDTO processKakaoUser(String code);
 }
