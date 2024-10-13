@@ -23,9 +23,19 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @GetMapping("/all/{musicalId}")
+    // 리뷰 전체 조회
+    @GetMapping("/{musicalId}")
     private ResponseDTO<?> findReviewByMusicalId(@PathVariable Long musicalId) {
         List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalId(musicalId);
+
+        return ResponseDTO.ok(reviewResponseDTO);
+    }
+
+    // 리뷰 상세 조회
+    @GetMapping("/{musicalId}/{reviewId}")
+    private ResponseDTO<?> findReviewByMusicalIdAndReviewId(@PathVariable Long musicalId,
+                                                            @PathVariable Long reviewId) {
+        List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
 
         return ResponseDTO.ok(reviewResponseDTO);
     }
