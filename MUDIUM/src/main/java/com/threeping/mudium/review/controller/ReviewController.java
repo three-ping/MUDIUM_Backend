@@ -45,4 +45,14 @@ public class ReviewController {
 
         return ResponseDTO.ok("리뷰 등록 성공!!!");
     }
+
+    // 리뷰 수정
+    @PutMapping("{musicalId}/{reviewId}")
+    private ResponseDTO<?> updateReview(@PathVariable Long musicalId,
+                                        @PathVariable Long reviewId,
+                                        @RequestBody ReviewRequestDTO reviewRequestDTO) {
+        reviewService.updateReview(musicalId, reviewId, reviewRequestDTO);
+
+        return ResponseDTO.ok("리뷰 수정 성공!!!");
+    }
 }

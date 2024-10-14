@@ -54,14 +54,14 @@ public enum ErrorCode {
     NOT_FOUND_USER(4040001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
     EMAIL_VERIFICATION_REQUIRED(4040016, HttpStatus.BAD_REQUEST
             , "이메일 인증이 안된 이메일입니다. 이메일 인증을 완료해주세요."),
+    MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
+    NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
+
+    //409
+    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
 
     //500
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다"),
-
-    // Review
-    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
-    USER_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
-    MUSICAL_NOT_FOUND(4041002, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
 
     // Musical
     JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),

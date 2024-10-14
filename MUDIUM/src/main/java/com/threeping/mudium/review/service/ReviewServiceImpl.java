@@ -81,7 +81,7 @@ public class ReviewServiceImpl implements ReviewService {
         }
 
         UserEntity user = userRepository.findById(reviewRequestDTO.getUserId())
-                .orElseThrow(() -> new CommonException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_USER));
         Musical musical = musicalRepository.findById(musicalId)
                 .orElseThrow(() -> new CommonException(ErrorCode.MUSICAL_NOT_FOUND));
 
@@ -91,6 +91,36 @@ public class ReviewServiceImpl implements ReviewService {
         newReview.setMusical(musical);
         newReview.setCreatedAt(Timestamp.from(Instant.now()));
         newReview.setLike(0L);
+
+        reviewRepository.save(newReview);
+    }
+
+    // 리뷰 수정
+    @Override
+    public void updateReview(Long musicalId, Long reviewId, ReviewRequestDTO reviewRequestDTO) {
+
+        List<Review> review = reviewRepository.findByMusical_MusicalIdAndReviewId(musicalId, reviewId);
+
+        // 리뷰가 존재하지 않으면 처리!
+        if (review.isEmpty()) {
+            throw new CommonException(ErrorCode.NOT_FOUND_REVIEW);
+        }
+
+        // userId를 체크
+        boolean checkUser = review.stream()
+                .anyMatch(m -> m.getUser().getUserId().equals(reviewRequestDTO.getUserId())
+                        && m.getActiveStatus() == ActiveStatus.ACTIVE);
+
+        // userId가 다르거나 리뷰가 활성화가 아니면 처리!
+        if (!checkUser) {
+            throw new CommonException(ErrorCode.WRONG_ENTRY_POINT);
+        }
+
+        // 존재한다면 리뷰는 한 개! 거기다 new가 아니라 그대로 가져와야 나머지 부분 수정 안해도 된다.
+        // Review newReview = new Review();
+        Review newReview = review.get(0);
+        newReview.setContent(reviewRequestDTO.getContent());
+        newReview.setUpdatedAt(Timestamp.from(Instant.now()));
 
         reviewRepository.save(newReview);
     }
