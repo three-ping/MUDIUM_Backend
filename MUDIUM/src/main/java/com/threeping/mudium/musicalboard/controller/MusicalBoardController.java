@@ -23,17 +23,17 @@ public class MusicalBoardController {
     public MusicalBoardController(MusicalBoardService musicalBoardService) {
         this.musicalBoardService = musicalBoardService;
     }
-
-    @GetMapping("/{boardId}")
-    public ResponseDTO<?> findMusicalBoard(@PathVariable Long boardId) {
-        List<MusicalPostListDTO> postListDTOlist = musicalBoardService.findAllPost(boardId);
-
-        ResponseDTO<List<MusicalPostListDTO>> responseDTO = new ResponseDTO<>();
-        responseDTO.setData(postListDTOlist);
-        responseDTO.setHttpStatus(HttpStatus.OK);
-        responseDTO.setSuccess(true);
-        return responseDTO;
-    }
+//
+//    @GetMapping("/{boardId}")
+//    public ResponseDTO<?> findMusicalBoard(@PathVariable Long boardId) {
+//        List<MusicalPostListDTO> postListDTOlist = musicalBoardService.findAllPost(boardId);
+//
+//        ResponseDTO<List<MusicalPostListDTO>> responseDTO = new ResponseDTO<>();
+//        responseDTO.setData(postListDTOlist);
+//        responseDTO.setHttpStatus(HttpStatus.OK);
+//        responseDTO.setSuccess(true);
+//        return responseDTO;
+//    }
 
     // 글 조회는 글의 PK만 받도록한다.
     //단일 책임 원칙 (Single Responsibility Principle):

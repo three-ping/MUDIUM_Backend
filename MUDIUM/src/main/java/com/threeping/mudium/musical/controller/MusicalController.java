@@ -23,7 +23,7 @@ public class MusicalController {
 
 
     @GetMapping("/{musicalId}")
-    public ResponseDTO<?> findMusical(@PathVariable Long musicalId) {
+    public ResponseDTO<?> findMusical(@PathVariable("musicalId") Long musicalId) {
         MusicalTotalDTO totalDTO = musicalService.findMusicalDetail(musicalId);
 
         ResponseDTO<MusicalTotalDTO> responseDTO = new ResponseDTO<>();
