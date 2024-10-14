@@ -1,8 +1,12 @@
 package com.threeping.mudium.board.service;
 
+import com.threeping.mudium.board.aggregate.entity.Board;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
+import com.threeping.mudium.board.dto.RegistBoardDTO;
+import com.threeping.mudium.board.repository.BoardRepository;
 import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.board.aggregate.entity.ActiveStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +15,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 @SpringBootTest
 class BoardServiceImplTests {
 
     private final BoardService boardService;
+    private final BoardRepository boardRepository;
 
     @Autowired
-    BoardServiceImplTests(BoardService boardService){
+    BoardServiceImplTests(BoardService boardService,
+                          BoardRepository boardRepository){
         this.boardService = boardService;
+        this.boardRepository = boardRepository;
     }
 
     @DisplayName("게시글 리스트를 페이지로 조회한다.")
@@ -53,4 +64,26 @@ class BoardServiceImplTests {
 
     }
 
+    @DisplayName("게시글을 등록한다.")
+    @Test
+    void boardCreateTest(){
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
+
+        boardService.createBoard(registBoardDTO);
+
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+
+        assertEquals(title, savedBoard.getTitle());
+        assertEquals(content, savedBoard.getContent());
+        assertEquals(0L, savedBoard.getBoardLike());
+        assertEquals(0L, savedBoard.getViewCount());
+        assertEquals(ActiveStatus.ACTIVE, savedBoard.getActiveStatus());
+        assertNotNull(savedBoard.getCreatedAt());
+        assertEquals(userId, savedBoard.getUser().getUserId());
+
+
+    }
 }
