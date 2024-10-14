@@ -15,7 +15,7 @@ public class MusicalTotalDTO {
 
     private String poster;
 
-//    private String scope; 별점이 추가되면 '평균 별점'을 계산해서 넣을 예정
+    private String scope;
 
     private String rating;
 
