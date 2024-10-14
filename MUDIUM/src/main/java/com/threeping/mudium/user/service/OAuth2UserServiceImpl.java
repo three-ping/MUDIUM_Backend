@@ -101,7 +101,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             newUser.setUserAuthId(kakaoId);
             newUser.setPassword(UUID.randomUUID().toString());
             newUser.setSignupPath(SignupPath.KAKAO);
-            newUser.setNickname(name);
+            newUser.setNickname("Kakao@"+kakaoId);
             log.info("regist newUser: {}", newUser);
             userService.registUser(newUser);
 
