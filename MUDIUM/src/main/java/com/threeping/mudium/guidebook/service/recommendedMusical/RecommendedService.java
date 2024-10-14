@@ -1,6 +1,6 @@
-package com.threeping.mudium.guidebook.service;
+package com.threeping.mudium.guidebook.service.recommendedMusical;
 
-import com.threeping.mudium.guidebook.dto.request.RecommendedRequestDTO;
+import com.threeping.mudium.guidebook.dto.RecommendedRequestDTO;
 import com.threeping.mudium.guidebook.entity.RecommendedMusical;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,12 +11,12 @@ public interface RecommendedService {
     RecommendedMusical createRecommended(RecommendedRequestDTO recommendedRequestDTO);
 
     @Transactional
-    void modifyRecommended(RecommendedRequestDTO recommendedRequestDTO, Long recommendedId);
+    void updateRecommended(RecommendedRequestDTO recommendedRequestDTO, Long recommendedId);
 
     //  추천 작품 조회하기
     @Transactional
-    List<RecommendedRequestDTO> getRecommendedList();
+    List<RecommendedRequestDTO> findRecommendedList();
 
     @Transactional
-    RecommendedRequestDTO getMusical(Long recommendedId);
+    RecommendedRequestDTO findByRecommendedId(Long recommendedId);
 }

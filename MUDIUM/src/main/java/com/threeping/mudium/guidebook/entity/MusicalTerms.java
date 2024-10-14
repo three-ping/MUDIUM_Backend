@@ -12,19 +12,19 @@ import java.sql.Timestamp;
 @Builder
 @ToString
 @Entity
-@Table(name = "TBL_RECOMMENDED_MUSICAL")
-public class RecommendedMusical {
+@Table(name = "TBL_MUSICAL_TERMS")
+public class MusicalTerms {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recommended_musical_id")
-    private Long recommendedId;
+    @Column(name = "musical_terms_id")
+    private Long termId;
 
-    @Column(name = "title", nullable = false, length = 1023)
-    private String musicalTitle;
+    @Column(name = "musical_terms", nullable = false, length = 1023)
+    private String terms;
 
-    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
-    private String musicalDescription;
+    @Column(name = "musical_terms_definition", nullable = false, columnDefinition = "TEXT")
+    private String termsDefinition;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
@@ -32,7 +32,7 @@ public class RecommendedMusical {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private Long userId;
+
 }

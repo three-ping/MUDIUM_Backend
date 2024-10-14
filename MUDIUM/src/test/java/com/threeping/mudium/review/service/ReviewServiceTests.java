@@ -20,6 +20,7 @@ class ReviewServiceTests {
     @Autowired
     ReviewService reviewService;
 
+    // 리뷰 전체 조회
     @Test
     void findReviewByMusicalId() {
         // Given
@@ -35,5 +36,24 @@ class ReviewServiceTests {
         // 추가적인 검증
         ReviewResponseDTO firstReview = reviewResponseDTO.get(0);
         assertEquals(musicalId, firstReview.getMusicalId());    // 뮤지컬 ID가 일치하는지 확인
+    }
+
+    // 리뷰 상세 조회
+    @Test
+    void findReviewByMusicalIdAndReviewId() {
+        // Given
+        Long musicalId = 1L;
+        Long reviewId = 11L;
+
+        // When
+        List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
+
+        // Then
+        assertNotNull(reviewResponseDTO);
+        assertFalse(reviewResponseDTO.isEmpty());
+
+        ReviewResponseDTO review = reviewResponseDTO.get(0);
+        assertEquals(musicalId, review.getMusicalId());
+        assertEquals(reviewId, review.getReviewId());
     }
 }

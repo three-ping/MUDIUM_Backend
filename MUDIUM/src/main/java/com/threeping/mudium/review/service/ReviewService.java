@@ -6,6 +6,9 @@ import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
 import java.util.List;
 
 public interface ReviewService {
-    // 뮤지컬 ID를 통한 리뷰 조회
+    // 리뷰 전체 조회
     List<ReviewResponseDTO> findReviewByMusicalId(Long musicalId);
+
+    // 리뷰 상세 조회
+    List<ReviewResponseDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId);
 }
