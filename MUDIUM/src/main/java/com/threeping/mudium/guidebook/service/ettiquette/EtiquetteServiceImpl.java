@@ -59,7 +59,7 @@ public class EtiquetteServiceImpl implements EtiquetteService {
             return Collections.emptyList();
         }
 
-        List<EtiquetteRequestDTO> etiquetteRequestDTOList = new ArrayList<>();
+        List<EtiquetteRequestDTO> etiquetteList = new ArrayList<>();
         for (Etiquette etiquette : allEtiquette) {
             EtiquetteRequestDTO etiquetteRequestDTO = EtiquetteRequestDTO.builder ()
                     .etiquette ( etiquette.getEtiquette() )
@@ -67,9 +67,9 @@ public class EtiquetteServiceImpl implements EtiquetteService {
                     .userId ( etiquette.getUserId () )
                     .build ();
 
-            etiquetteRequestDTOList.add ( etiquetteRequestDTO );
+            etiquetteList.add ( etiquetteRequestDTO );
         }
-        return etiquetteRequestDTOList;
+        return etiquetteList;
     }
 
     @Override
