@@ -8,7 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-@Entity(name = "TBL_MUSICAL_INFO")
+@Entity(name = "MusicalEntity")
+@Table(name = "TBL_MUSICAL_INFO")
 public class Musical {
 
     @Id
@@ -30,4 +31,10 @@ public class Musical {
 
     @Column(name = "view_count")
     private int viewCount;
+
+    @Column(name = "production")
+    private String production;
+
+    @Column(name = "synopsys")
+    private String synopsys;
 }

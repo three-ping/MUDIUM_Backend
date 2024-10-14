@@ -39,4 +39,7 @@ public class PerformanceItem {
     @XmlElement(name = "poster")
     private String poster;
 
+    @XmlElement(name = "entrpsnm")
+    private String entrps;
+
 }
