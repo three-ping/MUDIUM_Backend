@@ -42,7 +42,7 @@ public class ReviewServiceImpl implements ReviewService {
     public List<ReviewResponseDTO> findReviewByMusicalId(Long musicalId) {
 
         /* 필기. 엔티티에 @ManyToOne이 있어서 JPA를 해당 메소드로 가능 */
-        List<Review> reviews = reviewRepository.findAllByMusical_MusicalId(musicalId);
+        List<Review> reviews = reviewRepository.findAllByMusical_MusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE);
 
         /* 필기. Stream API 사용 */
         List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
@@ -56,7 +56,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public List<ReviewResponseDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId) {
 
-        List<Review> reviews = reviewRepository.findByMusical_MusicalIdAndReviewId(musicalId, reviewId);
+        List<Review> reviews = reviewRepository.findByMusical_MusicalIdAndReviewIdAndActiveStatus(
+                musicalId, reviewId, ActiveStatus.ACTIVE);
 
         List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
                 .map(review -> modelMapper.map(review, ReviewResponseDTO.class))
@@ -69,12 +70,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void createReview(Long musicalId, ReviewRequestDTO reviewRequestDTO) {
 
-        List<Review> reviews = reviewRepository.findAllByMusical_MusicalId(musicalId);
+        List<Review> reviews = reviewRepository.findAllByMusical_MusicalIdAndActiveStatus(
+                musicalId, ActiveStatus.ACTIVE);
 
         // 뮤지컬 중에서 userId가 없거나 만약 있으면 활성화 상태가 비활성화이면 리뷰 작성 / userId가 있고 활성화 상태가 활성화면 리뷰 작성 못하게.
         boolean hasActiveReview = reviews.stream()
                 .anyMatch(review -> review.getUser().getUserId().equals(
-                        reviewRequestDTO.getUserId()) && review.getActiveStatus() == ActiveStatus.ACTIVE);
+                        reviewRequestDTO.getUserId()));
 
         if (hasActiveReview) {
             throw new CommonException(ErrorCode.REVIEW_ALREADY_EXISTS);
@@ -99,7 +101,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void updateReview(Long musicalId, Long reviewId, ReviewRequestDTO reviewRequestDTO) {
 
-        List<Review> review = reviewRepository.findByMusical_MusicalIdAndReviewId(musicalId, reviewId);
+        List<Review> review = reviewRepository.findByMusical_MusicalIdAndReviewIdAndActiveStatus(
+                musicalId, reviewId, ActiveStatus.ACTIVE);
 
         // 리뷰가 존재하지 않으면 처리!
         if (review.isEmpty()) {
@@ -108,8 +111,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         // userId를 체크
         boolean checkUser = review.stream()
-                .anyMatch(m -> m.getUser().getUserId().equals(reviewRequestDTO.getUserId())
-                        && m.getActiveStatus() == ActiveStatus.ACTIVE);
+                .anyMatch(m -> m.getUser().getUserId().equals(reviewRequestDTO.getUserId()));
 
         // userId가 다르거나 리뷰가 활성화가 아니면 처리!
         if (!checkUser) {
@@ -121,6 +123,33 @@ public class ReviewServiceImpl implements ReviewService {
         Review newReview = review.get(0);
         newReview.setContent(reviewRequestDTO.getContent());
         newReview.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        reviewRepository.save(newReview);
+    }
+
+    // 리뷰 삭제
+    @Override
+    public void deleteReview(Long musicalId, Long reviewId, Long userId) {
+
+        List<Review> review = reviewRepository.findByMusical_MusicalIdAndReviewIdAndActiveStatus(
+                musicalId, reviewId, ActiveStatus.ACTIVE);
+
+        // 리뷰가 존재하지 않으면 처리!
+        if (review.isEmpty()) {
+            throw new CommonException(ErrorCode.NOT_FOUND_REVIEW);
+        }
+
+        // userId를 체크
+        boolean checkUser = review.stream()
+                .anyMatch(m -> m.getUser().getUserId().equals(userId));
+
+        // userId가 다르거나 리뷰가 활성화가 아니면 처리!
+        if (!checkUser) {
+            throw new CommonException(ErrorCode.WRONG_ENTRY_POINT);
+        }
+
+        Review newReview = review.get(0);
+        newReview.deactivateReview();
 
         reviewRepository.save(newReview);
     }

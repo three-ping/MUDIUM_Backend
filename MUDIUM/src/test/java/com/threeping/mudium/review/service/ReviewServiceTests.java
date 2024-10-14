@@ -2,6 +2,7 @@ package com.threeping.mudium.review.service;
 
 import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.aggregate.entity.ActiveStatus;
 import com.threeping.mudium.review.aggregate.entity.Review;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,11 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -24,7 +23,7 @@ class ReviewServiceTests {
 
     @DisplayName("리뷰 전체 조회한다.")
     @Test
-    void findReviewByMusicalIdTest() {
+    void findReviewByMusicalIdAndActiveStatusTest() {
         // Given
         Long musicalId = 1L;
 
@@ -42,7 +41,7 @@ class ReviewServiceTests {
 
     @DisplayName("리뷰 상세 조회한다.")
     @Test
-    void findReviewByMusicalIdAndReviewIdTest() {
+    void findReviewByMusicalIdAndReviewIdAndActiveStatusTest() {
         // Given
         Long musicalId = 1L;
         Long reviewId = 11L;
@@ -86,5 +85,17 @@ class ReviewServiceTests {
 
         // When
         assertDoesNotThrow(() -> reviewService.updateReview(musicalId, reviewId, reviewRequestDTO));
+    }
+
+    @DisplayName("리뷰 삭제를 한다.")
+    @Test
+    void deleteReviewTest() {
+        // Given
+        Long musicalId = 1L;
+        Long reviewId = 23L;
+        Long userId = 3L;
+
+        // When
+        assertDoesNotThrow(() -> reviewService.deleteReview(musicalId, reviewId, userId));
     }
 }
