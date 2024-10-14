@@ -1,25 +1,24 @@
-package com.threeping.mudium.review.aggregate.entity;
+package com.threeping.mudium.secretreview.aggregate.entity;
 
 import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "TBL_REVIEW")
+@Table(name = "TBL_SECRET_REVIEW")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Review {
+public class SecretReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "review_id")
-    private Long reviewId;
+    @Column(name = "secret_review_id")
+    private Long secretReviewId;
 
     @Column(name = "content", nullable = false)
     private String content;
@@ -30,20 +29,16 @@ public class Review {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "`like`", nullable = false)
-    private Long like;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "active_status", nullable = false)
     private ActiveStatus activeStatus = ActiveStatus.ACTIVE;
 
-    // 외래 키 매핑 (ManyToOne)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "musical_id")  // FK 컬럼을 명시
+    @JoinColumn(name = "musical_id")
     private Musical musical;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")  // FK 컬럼을 명시
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public void deactivateReview() {
