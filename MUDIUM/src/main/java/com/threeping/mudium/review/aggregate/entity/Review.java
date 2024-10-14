@@ -3,10 +3,8 @@ package com.threeping.mudium.review.aggregate.entity;
 import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 
@@ -15,6 +13,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 public class Review {
     @Id
@@ -31,7 +30,7 @@ public class Review {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "like", nullable = false)
+    @Column(name = "`like`", nullable = false)
     private Long like;
 
     @Enumerated(EnumType.STRING)

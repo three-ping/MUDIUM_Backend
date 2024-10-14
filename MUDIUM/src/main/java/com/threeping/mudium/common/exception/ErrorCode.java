@@ -58,6 +58,10 @@ public enum ErrorCode {
     //500
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다"),
 
+    // Review
+    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
+    USER_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
+    MUSICAL_NOT_FOUND(4041002, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
 
     // Musical
     JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),

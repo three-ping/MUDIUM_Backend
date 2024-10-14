@@ -10,8 +10,10 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 public class ReviewRequestDTO {
-    private Long reviewId;
+    // @PathVariable로 받는 부분은 DTO에 작성하지 않아도 된다.
+//    private Long reviewId;
     private String content;
-    private Timestamp createdAt;
-
+//    private Timestamp createdAt;
+//    private Long musicalId;
+    private Long userId;
 }

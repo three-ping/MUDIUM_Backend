@@ -5,10 +5,7 @@ import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,5 +35,14 @@ public class ReviewController {
         List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
 
         return ResponseDTO.ok(reviewResponseDTO);
+    }
+
+    // 리뷰 작성
+    @PostMapping("/{musicalId}")
+    private ResponseDTO<?> createReview(@PathVariable Long musicalId,
+                                        @RequestBody ReviewRequestDTO reviewRequestDTO) {
+        reviewService.createReview(musicalId, reviewRequestDTO);
+
+        return ResponseDTO.ok("리뷰 등록 성공!!!");
     }
 }
