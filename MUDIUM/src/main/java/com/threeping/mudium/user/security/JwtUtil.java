@@ -2,6 +2,7 @@ package com.threeping.mudium.user.security;
 
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.service.UserService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -20,26 +21,35 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Component
 public class JwtUtil {
 
-    private final Key key;
+    private final Key secretKey;
     private final UserService userService;
+    private final long accessExpirationTime;
+    private final long refreshExpirationTime;
 
     @Autowired
-    public JwtUtil(@Value("${token.secret}") String secretKey, UserService userService) {
+    public JwtUtil(@Value("${token.secret}") String secretKey
+            , UserService userService
+            , @Value("${token.access-expiration-time}") long accessExpirationTime
+            , @Value("${token.refresh-expiration-time}") long refreshExpirationTime) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytes);
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
         this.userService = userService;
+        this.accessExpirationTime = accessExpirationTime;
+        this.refreshExpirationTime = refreshExpirationTime;
     }
 
     /* 설명. Token 검증(Bearer 토큰이 넘어왔고, 우리 사이트의 secret key로 만들어 졌는가, 만료되었는지와 내용이 비어있진 않은지) */
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
         } catch (SecurityException | MalformedJwtException e) {
             log.info("Invalid JWT Token: {}", e);
             throw new CommonException(ErrorCode.INVALID_TOKEN_ERROR);
@@ -80,10 +90,10 @@ public class JwtUtil {
 
             authorities =
                     Arrays.stream(claims.get("auth").toString()
-                            .replace("[","")
-                            .replace("]","")
-                            .split(", "))
-                            .map(role->new SimpleGrantedAuthority(role))
+                                    .replace("[", "")
+                                    .replace("]", "")
+                                    .split(", "))
+                            .map(role -> new SimpleGrantedAuthority(role))
                             .collect(Collectors.toList());
         }
 
@@ -94,11 +104,37 @@ public class JwtUtil {
 
     /* 설명. Token에서 Claims 추출 */
     public Claims parseClaims(String token) {
-        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     }
 
     /* 설명. Token에서 사용자의 id(subject claim) 추출 */
     public String getUserId(String token) {
         return parseClaims(token).getSubject();     // 이메일꺼냄
+    }
+
+    /* access token generate method */
+    public String generateAccessToken(UserEntity user, List<String> roles){
+        return Jwts.builder()
+                .setSubject(user.getUserIdentifier())
+                .claim("email", user.getEmail())
+                .claim("auth", roles)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + accessExpirationTime))
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
+    }
+
+    /* refresh token generate method */
+    public String generateRefreshToken(UserEntity user, List<String> roles){
+        log.info("generate RefreshToken - user: {}", user);
+        return Jwts.builder()
+                .setSubject(user.getUserIdentifier())
+                .claim("email",user.getEmail())
+                .claim("auth",roles)
+                .claim("userIdentifier",user.getUserIdentifier())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + refreshExpirationTime))
+                .signWith(secretKey, SignatureAlgorithm.HS512)
+                .compact();
     }
 }

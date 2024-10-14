@@ -22,19 +22,19 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @GetMapping("")
+    @GetMapping("/")
     private ResponseDTO<?> viewBoardPage(Pageable pageable){
         Page<BoardListDTO> boardPage = boardService.viewBoardList(pageable);
         return ResponseDTO.ok(boardPage);
     }
 
-    @GetMapping("{boardId}")
+    @GetMapping("/{boardId}")
     private ResponseDTO<?> viewDetailBoard(@PathVariable Long boardId){
         BoardDetailDTO boardDetail = boardService.viewBoard(boardId);
         return ResponseDTO.ok(boardDetail);
     }
 
-    @PostMapping("")
+    @PostMapping("/")
     private ResponseDTO<?> createBoard(@RequestBody RegistBoardDTO registBoardDTO){
         boardService.createBoard(registBoardDTO);
         return ResponseDTO.ok(null);
