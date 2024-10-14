@@ -21,7 +21,6 @@ public enum ErrorCode {
     INVALID_REQUEST_BODY(40011, HttpStatus.BAD_REQUEST, "잘못된 요청 본문입니다."),
     MISSING_REQUIRED_FIELD(40012, HttpStatus.BAD_REQUEST, "필수 필드가 누락되었습니다."),
     INVALID_VERIFICATION_CODE(40013, HttpStatus.BAD_REQUEST, "잘못된 인증번호입니다. 인증번호를 다시 확인해주세요"),
-    INVALID_BOARD_ID(40021,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
 
     // 파일 관련 오류
     UNSUPPORTED_FILE_FORMAT(40020, HttpStatus.BAD_REQUEST, "지원되지 않는 파일 형식입니다."),
@@ -70,7 +69,11 @@ public enum ErrorCode {
     ITEM_PROCESSING_ERROR(50012, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다."),
     INVALID_MUSICAL_ID(40013, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 번호입니다."),
     INVALID_MUSICAL_BOARD_ID(40014, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 게시글 번호입니다."),
-    NOT_FOUND_MUSICAL_BOARD(40411, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다.");
+    NOT_FOUND_MUSICAL_BOARD(40411, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다."),
+
+    //Board
+    INVALID_BOARD_ID(4002101,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
+    INVALID_BOARD_USER_ID(4002102,HttpStatus.BAD_REQUEST,"수정 권한이 없는 게시글입니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;

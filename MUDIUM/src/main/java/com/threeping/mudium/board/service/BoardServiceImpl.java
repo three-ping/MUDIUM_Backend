@@ -5,6 +5,7 @@ import com.threeping.mudium.board.aggregate.entity.Board;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
+import com.threeping.mudium.board.dto.UpdateBoardDTO;
 import com.threeping.mudium.board.repository.BoardRepository;
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
@@ -45,8 +46,7 @@ public class BoardServiceImpl implements BoardService {
         Sort pageSort = Sort.by("createdAt").descending();
         Pageable boardPageable = PageRequest.of(pageNumber,pageSize,pageSort);
 
-        Page<Board> boards = boardRepository.findAll(boardPageable);
-
+        Page<Board> boards = boardRepository.findByActiveStatus(ActiveStatus.ACTIVE,boardPageable);
 
         List<BoardListDTO> boardListDTOList = boards.stream()
                 .map(board -> {
@@ -64,7 +64,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     public BoardDetailDTO viewBoard(Long boardId) {
 
-        Board board = boardRepository.findById(boardId).orElseThrow(()->new CommonException(ErrorCode.INVALID_BOARD_ID));
+        Board board = boardRepository.findByActiveStatusAndBoardId(ActiveStatus.ACTIVE,boardId).orElseThrow(()->new CommonException(ErrorCode.INVALID_BOARD_ID));
         BoardDetailDTO boardDetailDTO = modelMapper.map(board, BoardDetailDTO.class);
         boardDetailDTO.setNickname(board.getUser().getNickname());
 
@@ -85,6 +85,45 @@ public class BoardServiceImpl implements BoardService {
             return new CommonException(ErrorCode.NOT_FOUND_USER);
         });
         board.setUser(user);
+        boardRepository.save(board);
+    }
+
+    @Override
+    public void updateBoard(UpdateBoardDTO updateBoardDTO) {
+        Board board = boardRepository.findByActiveStatusAndBoardIdAndUser_UserId(
+                ActiveStatus.ACTIVE,
+                updateBoardDTO.getBoardId(),
+                updateBoardDTO.getUserId()
+                ).orElseThrow(
+                ()-> {
+                    return new CommonException(ErrorCode.INVALID_BOARD_USER_ID);
+                }
+        );
+        if(!updateBoardDTO.getTitle().isEmpty()) {
+            board.setTitle(updateBoardDTO.getTitle());
+        }
+
+        if(!updateBoardDTO.getContent().isEmpty()) {
+            board.setContent(updateBoardDTO.getContent());
+        }
+
+        board.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        boardRepository.save(board);
+    }
+
+    @Override
+    public void deleteBoard(UpdateBoardDTO updateBoardDTO) {
+        Board board = boardRepository.findByActiveStatusAndBoardIdAndUser_UserId(
+                ActiveStatus.ACTIVE,
+                updateBoardDTO.getBoardId(),
+                updateBoardDTO.getUserId()
+        ).orElseThrow(
+                ()->{
+                    return new CommonException(ErrorCode.INVALID_BOARD_USER_ID);
+                }
+        );
+        board.setActiveStatus(ActiveStatus.INACTIVE);
+        board.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         boardRepository.save(board);
     }
 }

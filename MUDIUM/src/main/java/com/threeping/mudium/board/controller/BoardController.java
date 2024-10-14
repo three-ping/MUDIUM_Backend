@@ -3,6 +3,7 @@ package com.threeping.mudium.board.controller;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
+import com.threeping.mudium.board.dto.UpdateBoardDTO;
 import com.threeping.mudium.board.service.BoardService;
 import com.threeping.mudium.common.ResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,19 @@ public class BoardController {
         boardService.createBoard(registBoardDTO);
         return ResponseDTO.ok(null);
     }
-}
+
+    @PutMapping("{boardId}")
+    private ResponseDTO<?> updateBoard(@PathVariable Long boardId,
+                                       @RequestBody UpdateBoardDTO updateBoardDTO){
+        updateBoardDTO.setBoardId(boardId);
+        boardService.updateBoard(updateBoardDTO);
+        return ResponseDTO.ok(null);
+    }
+
+    @DeleteMapping("{boardId}")
+    private ResponseDTO<?> deleteBoard(@PathVariable Long boardId,
+                                       @RequestBody UpdateBoardDTO updateBoardDTO){
+        updateBoardDTO.setBoardId(boardId);
+        boardService.deleteBoard(updateBoardDTO);
+        return ResponseDTO.ok(null);
+    }}

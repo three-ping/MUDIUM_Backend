@@ -4,6 +4,7 @@ import com.threeping.mudium.board.aggregate.entity.Board;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
+import com.threeping.mudium.board.dto.UpdateBoardDTO;
 import com.threeping.mudium.board.repository.BoardRepository;
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.board.aggregate.entity.ActiveStatus;
@@ -83,7 +84,47 @@ class BoardServiceImplTests {
         assertEquals(ActiveStatus.ACTIVE, savedBoard.getActiveStatus());
         assertNotNull(savedBoard.getCreatedAt());
         assertEquals(userId, savedBoard.getUser().getUserId());
+    }
 
+    @Test
+    @DisplayName("게시글을 수정한다.")
+    void boardUpdateTest(){
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
 
+        boardService.createBoard(registBoardDTO);
+
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+
+        String updatedTitle = "수정할제목";
+        String updatedContent = "수정할내용";
+        UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO(
+                updatedTitle,updatedContent,1L,Long.valueOf(savedBoard.getBoardId()));
+        Board updatedBoard = boardRepository.findById(Long.valueOf(savedBoard.getBoardId())).orElseThrow();
+        boardService.updateBoard(updateBoardDTO);
+        assertEquals(updatedTitle, updatedBoard.getTitle());
+        assertEquals(updatedContent, updatedBoard.getContent());
+        assertNotNull(updatedBoard.getUpdatedAt());
+    }
+
+    @Test
+    @DisplayName("게시글을 삭제한다.")
+    void boardDeleteTest(){
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
+
+        boardService.createBoard(registBoardDTO);
+
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        UpdateBoardDTO boardDTO = new UpdateBoardDTO();
+        boardDTO.setBoardId(Long.valueOf(savedBoard.getBoardId()));
+        boardDTO.setUserId(savedBoard.getUser().getUserId());
+        boardService.deleteBoard(boardDTO);
+
+        assertEquals(savedBoard.getActiveStatus(),ActiveStatus.INACTIVE);
     }
 }

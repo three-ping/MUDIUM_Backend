@@ -3,6 +3,7 @@ package com.threeping.mudium.board.service;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
+import com.threeping.mudium.board.dto.UpdateBoardDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -12,4 +13,8 @@ public interface BoardService {
     BoardDetailDTO viewBoard(Long boardId);
 
     void createBoard(RegistBoardDTO registBoardDTO);
+
+    void updateBoard(UpdateBoardDTO updateBoardDTO);
+
+    void deleteBoard(UpdateBoardDTO updateBoardDTO);
 }
