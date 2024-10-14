@@ -1,5 +1,6 @@
 package com.threeping.mudium.board.dto;
 
+import com.threeping.mudium.board.aggregate.entity.ActiveStatus;
 import lombok.*;
 
 import java.sql.Timestamp;
