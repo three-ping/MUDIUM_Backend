@@ -2,10 +2,7 @@ package com.threeping.mudium.board.aggregate.entity;
 
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -14,6 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 public class Board {
     @Id
@@ -36,8 +34,8 @@ public class Board {
     @Column(name = "view_count")
     private Long viewCount;
 
-    @Column(name = "like")
-    private Long like;
+    @Column(name = "boardLike")
+    private Long boardLike;
 
     @Column(name = "active_status")
     @Enumerated(EnumType.STRING)
