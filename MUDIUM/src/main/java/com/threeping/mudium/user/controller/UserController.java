@@ -63,6 +63,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{userId}")
+    public ResponseDTO<?> getUser(@PathVariable Long userId){
+        return ResponseDTO.ok(userService.findByUserId(userId));
+    }
+
 
 
 }

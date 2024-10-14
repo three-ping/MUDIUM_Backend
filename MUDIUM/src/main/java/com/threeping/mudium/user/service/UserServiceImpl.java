@@ -117,5 +117,12 @@ public class UserServiceImpl implements UserService {
                 , grantedAuthorities);
     }
 
-
+    @Override
+    public UserDTO findByUserId(Long userId) {
+        UserEntity foundUser = userRepository.findByUserId(userId);
+        if(foundUser == null || foundUser == null){
+            throw new CommonException(ErrorCode.NOT_FOUND_USER_ID);
+        }
+        return modelMapper.map(foundUser, UserDTO.class);
+    }
 }
