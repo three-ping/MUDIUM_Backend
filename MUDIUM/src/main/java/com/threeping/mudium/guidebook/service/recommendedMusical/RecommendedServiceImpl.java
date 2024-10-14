@@ -64,7 +64,7 @@ public class RecommendedServiceImpl implements RecommendedService {
             return Collections.emptyList();
         }
 
-        List<RecommendedRequestDTO> recommendedRequestDTOList = new ArrayList<>();
+        List<RecommendedRequestDTO> recommendedList = new ArrayList<>();
 
         for (RecommendedMusical recommendedMusical : allRecommended) {
             RecommendedRequestDTO recommendedRequestDTO = RecommendedRequestDTO.builder()
@@ -73,10 +73,10 @@ public class RecommendedServiceImpl implements RecommendedService {
                     .userId ( recommendedMusical.getUserId() )
                     .build();
 
-            recommendedRequestDTOList.add(recommendedRequestDTO);
+            recommendedList.add(recommendedRequestDTO);
         }
 
-        return recommendedRequestDTOList;
+        return recommendedList;
     }
 
     //   추천 작품 조회하기

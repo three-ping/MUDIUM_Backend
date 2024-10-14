@@ -5,7 +5,6 @@ import com.threeping.mudium.guidebook.dto.EtiquetteRequestDTO;
 import com.threeping.mudium.guidebook.entity.Etiquette;
 import com.threeping.mudium.guidebook.service.ettiquette.EtiquetteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

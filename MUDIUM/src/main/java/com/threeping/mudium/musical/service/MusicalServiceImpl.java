@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
 @Service
 public class MusicalServiceImpl implements MusicalService {
 
@@ -20,7 +21,8 @@ public class MusicalServiceImpl implements MusicalService {
     private final PerformanceService performanceService;
 
     @Autowired
-    public MusicalServiceImpl(MusicalRepository musicalRepository, PerformanceService performanceService) {
+    public MusicalServiceImpl(MusicalRepository musicalRepository,
+                              PerformanceService performanceService) {
         this.musicalRepository = musicalRepository;
         this.performanceService = performanceService;
     }
@@ -38,5 +40,13 @@ public class MusicalServiceImpl implements MusicalService {
         totalDTO.setPerformanceList(performanceList);
 
         return totalDTO;
+    }
+
+    @Override
+    @Transactional
+    public Musical findMusicalByMusicalId(Long musicalId) {
+        Musical musical = musicalRepository.findMusicalByMusicalId(musicalId)
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_ID));
+        return musical;
     }
 }
