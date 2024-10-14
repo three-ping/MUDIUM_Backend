@@ -5,6 +5,9 @@ import com.threeping.mudium.customticket.service.UserCustomTicketService;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/user-custom-ticket")
 @Transactional
@@ -37,5 +40,11 @@ public class UserCustomTicketController {
         @PathVariable Long customTicketId) {
         userCustomTicketService.deleteUserCustomTicket(userId, customTicketId);
     return ResponseDTO.ok(null); // 삭제 시 데이터가 없으므로 null 반환
+    }
+
+    @GetMapping("/user/{userId}")
+    public ResponseDTO<List<UserCustomTicketDTO>> getUserCustomTickets(@PathVariable Long userId) {
+        List<UserCustomTicketDTO> userTickets = userCustomTicketService.findUserCustomTickets(userId);
+        return ResponseDTO.ok(userTickets);
     }
 }

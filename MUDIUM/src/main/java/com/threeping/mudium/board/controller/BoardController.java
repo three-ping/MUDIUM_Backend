@@ -23,8 +23,31 @@ public class BoardController {
     }
 
     @GetMapping("")
-    private ResponseDTO<?> viewBoardPage(Pageable pageable){
-        Page<BoardListDTO> boardPage = boardService.viewBoardList(pageable);
+    public ResponseDTO<?> viewBoardPage(
+            @RequestParam(required = false) String searchType,
+            @RequestParam(required = false) String searchQuery,
+            Pageable pageable) {
+
+        Page<BoardListDTO> boardPage;
+
+        if (searchType != null && searchQuery != null && !searchQuery.trim().isEmpty()) {
+            switch (searchType) {
+                case "author":
+                    boardPage = boardService.searchBoardsByUser_NickName(searchQuery, pageable);
+                    break;
+                case "title":
+                    boardPage = boardService.searchBoardsByTitle(searchQuery, pageable);
+                    break;
+                case "content":
+                    boardPage = boardService.searchBoardsByContent(searchQuery, pageable);
+                    break;
+                default:
+                    boardPage = boardService.viewBoardList(pageable);
+            }
+        } else {
+            boardPage = boardService.viewBoardList(pageable);
+        }
+
         return ResponseDTO.ok(boardPage);
     }
 

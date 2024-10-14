@@ -126,4 +126,32 @@ public class BoardServiceImpl implements BoardService {
         board.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         boardRepository.save(board);
     }
+
+
+
+
+    @Override
+    public Page<BoardListDTO> searchBoardsByUser_NickName(String nickname, Pageable pageable) {
+        return boardRepository.findByUser_NicknameContaining(nickname, pageable).map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<BoardListDTO> searchBoardsByTitle(String title, Pageable pageable) {
+        return boardRepository.findByTitleContaining(title, pageable).map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<BoardListDTO> searchBoardsByContent(String content, Pageable pageable) {
+        return boardRepository.findByContentContaining(content, pageable).map(this::convertToDTO);
+    }
+
+    private BoardListDTO convertToDTO(Board board) {
+        BoardListDTO boardListDTO = new BoardListDTO();
+        boardListDTO.setTitle(board.getTitle());
+        boardListDTO.setId(Long.valueOf(board.getBoardId()));
+        boardListDTO.setCreatedAt(board.getCreatedAt());
+        boardListDTO.setNickname(board.getUser().getNickname());
+        boardListDTO.setUserId(board.getUser().getUserId());
+        return boardListDTO;
+    }
 }

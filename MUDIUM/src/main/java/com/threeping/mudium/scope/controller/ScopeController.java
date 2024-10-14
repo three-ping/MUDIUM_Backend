@@ -2,6 +2,7 @@ package com.threeping.mudium.scope.controller;
 
 import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
 import com.threeping.mudium.scope.service.ScopeService;
+import com.threeping.mudium.scope.vo.ScopeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,8 @@ public class ScopeController {
     @PostMapping("/create/{userId}/{musicalId}")
     public ResponseEntity<ScopeEntity> createScope(@PathVariable("musicalId") Long musicalId,
                                                    @PathVariable("userId") Long userId,
-                                                   @RequestBody ScopeEntity scopeEntity) {
-        scopeEntity.setMusicalId(musicalId);  // musicalId 설정
-        scopeEntity.setUserId(userId);        // userId 설정
-        ScopeEntity createdRating = scopeService.createOrUpdateScope(scopeEntity);
+                                                   @RequestBody ScopeVO scopeVO) {
+        ScopeEntity createdRating = scopeService.createOrUpdateScope(musicalId, userId, scopeVO);
         return new ResponseEntity<>(createdRating, HttpStatus.CREATED);
     }
 
@@ -32,10 +31,8 @@ public class ScopeController {
     @PutMapping("/update/{userId}/{musicalId}")
     public ResponseEntity<ScopeEntity> updateScope(@PathVariable("musicalId") Long musicalId,
                                                    @PathVariable("userId") Long userId,
-                                                   @RequestBody ScopeEntity scopeEntity) {
-        scopeEntity.setMusicalId(musicalId);  // musicalId 설정
-        scopeEntity.setUserId(userId);        // userId 설정
-        ScopeEntity updatedRating = scopeService.createOrUpdateScope(scopeEntity);
+                                                   @RequestBody ScopeVO scopeVO) {
+        ScopeEntity updatedRating = scopeService.createOrUpdateScope(musicalId, userId, scopeVO);
         return new ResponseEntity<>(updatedRating, HttpStatus.OK);
     }
 
