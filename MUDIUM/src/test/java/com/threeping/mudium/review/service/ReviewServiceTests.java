@@ -1,5 +1,6 @@
 package com.threeping.mudium.review.service;
 
+import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.aggregate.entity.Review;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ class ReviewServiceTests {
 
     // 리뷰 전체 조회
     @Test
-    void findReviewByMusicalId() {
+    void findReviewByMusicalIdTest() {
         // Given
         Long musicalId = 1L;
 
@@ -40,7 +41,7 @@ class ReviewServiceTests {
 
     // 리뷰 상세 조회
     @Test
-    void findReviewByMusicalIdAndReviewId() {
+    void findReviewByMusicalIdAndReviewIdTest() {
         // Given
         Long musicalId = 1L;
         Long reviewId = 11L;
@@ -55,5 +56,21 @@ class ReviewServiceTests {
         ReviewResponseDTO review = reviewResponseDTO.get(0);
         assertEquals(musicalId, review.getMusicalId());
         assertEquals(reviewId, review.getReviewId());
+    }
+
+    // 리뷰 작성
+    @Test
+    void createReviewTest() {
+        // Given
+        Long musicalId = 2L;
+        Long userId = 1L;
+        String content = "정말 판타스틱한 뮤지컬이에요!";
+
+        ReviewRequestDTO reviewRequestDTO = new ReviewRequestDTO(content, userId);
+
+        // When
+        assertDoesNotThrow(() -> reviewService.createReview(musicalId, reviewRequestDTO));
+
+
     }
 }

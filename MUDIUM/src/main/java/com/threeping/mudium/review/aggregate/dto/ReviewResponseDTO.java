@@ -19,4 +19,5 @@ public class ReviewResponseDTO {
     private Long like;
     private ActiveStatus activeStatus;
     private Long musicalId;
+    private Long userId;
 }

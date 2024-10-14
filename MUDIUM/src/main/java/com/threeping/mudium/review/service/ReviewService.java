@@ -11,4 +11,7 @@ public interface ReviewService {
 
     // 리뷰 상세 조회
     List<ReviewResponseDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId);
+
+    // 리뷰 작성
+    void createReview(Long musicalId, ReviewRequestDTO reviewRequestDTO);
 }
