@@ -3,6 +3,7 @@ package com.threeping.mudium.user.service;
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.user.aggregate.dto.UserDTO;
+import com.threeping.mudium.user.aggregate.entity.SignupPath;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.aggregate.vo.OAuth2LoginVO;
 import com.threeping.mudium.user.aggregate.vo.RequestRegistUserVO;
@@ -79,10 +80,12 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
         String accessToken = getKakaoAccessToken(code);
         Map<String, Object> userInfo = getKakaoUserInfo(accessToken);
 
-        String kakaoId = (String) userInfo.get("id");
+        String kakaoId = String.valueOf(userInfo.get("id"));
         String email = (String) userInfo.get("email");
         String name = (String) userInfo.get("nickname");
-
+        log.info("kakaoId: {}", kakaoId);
+        log.info("email: {}", email);
+        log.info("name: {}", name);
         if (email == null || email.isEmpty()) {
             email = kakaoId + "@kakao.com";
         }
@@ -97,7 +100,9 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             newUser.setUserName(name != null ? name : "KakaoUser");
             newUser.setUserAuthId(kakaoId);
             newUser.setPassword(UUID.randomUUID().toString());
-
+            newUser.setSignupPath(SignupPath.KAKAO);
+            newUser.setNickname(name);
+            log.info("regist newUser: {}", newUser);
             userService.registUser(newUser);
 
             userEntity = userRepository.findByUserIdentifier("KAKAO_" + kakaoId);
@@ -106,6 +111,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
         OAuth2LoginVO user = new OAuth2LoginVO();
         user.setAccessToken(accessToken);
 
+        log.info("userEntity: {}", userEntity);
         String refreshToken = jwtUtil.generateRefreshToken(userEntity, new ArrayList<>());
         log.info("refreshToken: {}", refreshToken);
         user.setRefreshToken(refreshToken);

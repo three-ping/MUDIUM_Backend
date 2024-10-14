@@ -126,6 +126,7 @@ public class JwtUtil {
 
     /* refresh token generate method */
     public String generateRefreshToken(UserEntity user, List<String> roles){
+        log.info("generate RefreshToken - user: {}", user);
         return Jwts.builder()
                 .setSubject(user.getUserIdentifier())
                 .claim("email",user.getEmail())

@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO registUser(RequestRegistUserVO newUser) {
-        UserEntity existingUser = userRepository.findByUserIdentifier("NORMAL_"+newUser.getUserAuthId());
+        UserEntity existingUser = userRepository.findByUserIdentifier(newUser.getSignupPath() +"_"+ newUser.getUserAuthId());
         /* 설명. ModelMapper는 경우에 따라 자의적인 판단으로 필드끼리 매핑하는 경우가 있어 정확히 일치되게 매칭하려면 strict 설정해야됨 */
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -71,13 +71,13 @@ public class UserServiceImpl implements UserService {
                 .userAuthId(newUser.getUserAuthId())
                 .userName(newUser.getUserName())
                 .email(newUser.getEmail())
-                .signupPath(SignupPath.NORMAL)
+                .signupPath(newUser.getSignupPath())
                 .createdAt(LocalDateTime.now().withNano(0))
                 .acceptStatus(AcceptStatus.Y)
                 .userStatus(ActiveStatus.ACTIVE)
                 .nickname(newUser.getNickname())
                 .profileImage(defaultProfileImageUrl)
-                .userIdentifier("NORMAL_" + newUser.getUserAuthId())
+                .userIdentifier(newUser.getSignupPath()+ "_"+ newUser.getUserAuthId())
                 .build();
         log.info("newUserDTO: {}", newUserDTO);
         UserEntity userEntity = modelMapper.map(newUserDTO, UserEntity.class);
