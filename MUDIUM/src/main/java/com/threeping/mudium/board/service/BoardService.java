@@ -17,4 +17,10 @@ public interface BoardService {
     void updateBoard(UpdateBoardDTO updateBoardDTO);
 
     void deleteBoard(UpdateBoardDTO updateBoardDTO);
+
+    Page<BoardListDTO> searchBoardsByUser_NickName(String nickname, Pageable pageable);
+
+    Page<BoardListDTO> searchBoardsByTitle(String searchQuery, Pageable pageable);
+
+    Page<BoardListDTO> searchBoardsByContent(String searchQuery, Pageable pageable);
 }
