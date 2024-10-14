@@ -36,4 +36,9 @@ public class CustomTicketController {
         customTicketService.deleteCustomTicket(ticketId);
         return ResponseDTO.ok(null);
     }
+
+    @GetMapping("/all")
+    public ResponseDTO<?> getAllCustomTickets() {
+        return ResponseDTO.ok(customTicketService.getAllCustomTickets());
+    }
 }
