@@ -1,9 +1,7 @@
 package com.threeping.mudium.review.service;
 
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
-import com.threeping.mudium.review.aggregate.entity.ActiveStatus;
-import com.threeping.mudium.review.aggregate.entity.Review;
+import com.threeping.mudium.review.dto.ReviewRequestDTO;
+import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
