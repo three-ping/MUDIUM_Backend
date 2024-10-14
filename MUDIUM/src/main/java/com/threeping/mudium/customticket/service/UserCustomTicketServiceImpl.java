@@ -6,6 +6,9 @@ import com.threeping.mudium.customticket.aggregate.entity.UserCustomTicketId;
 import com.threeping.mudium.customticket.repository.UserCustomTicketRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class UserCustomTicketServiceImpl implements UserCustomTicketService {
 
@@ -55,5 +58,17 @@ public class UserCustomTicketServiceImpl implements UserCustomTicketService {
     public void deleteUserCustomTicket(Long userId, Long customTicketId) {
         UserCustomTicketId compositeKey = new UserCustomTicketId(userId, customTicketId);
         userCustomTicketRepository.deleteById(compositeKey);
+    }
+
+    @Override
+    public List<UserCustomTicketDTO> findUserCustomTickets(Long userId) {
+        return userCustomTicketRepository.findByUserId(userId).stream()
+                .map(entity -> new UserCustomTicketDTO(
+                        entity.getUserId(),
+                        entity.getCustomTicketId(),
+                        entity.getPhotoUrl(),
+                        entity.getTicketAttributers()
+                ))
+                .collect(Collectors.toList());
     }
 }

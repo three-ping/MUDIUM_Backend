@@ -67,6 +67,9 @@ public enum ErrorCode {
     MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
     NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
 
+    //
+    SCOPE_NOT_FOUND(4041003, HttpStatus.NOT_FOUND, "별점이 존재하지 않습니다."),
+
     // Musical
     JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
     API_LIST_BAD_REQUEST(40011, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
