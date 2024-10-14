@@ -55,4 +55,14 @@ public class ReviewController {
 
         return ResponseDTO.ok("리뷰 수정 성공!!!");
     }
+
+    // 리뷰 삭제
+    @DeleteMapping("/{musicalId}/{reviewId}")
+    private ResponseDTO<?> deleteReview(@PathVariable Long musicalId,
+                                        @PathVariable Long reviewId,
+                                        @RequestBody Long userId) {
+        reviewService.deleteReview(musicalId, reviewId, userId);
+
+        return ResponseDTO.ok("리뷰 삭제 성공!!!");
+    }
 }
