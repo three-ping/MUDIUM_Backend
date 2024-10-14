@@ -1,19 +1,13 @@
 package com.threeping.mudium.user.aggregate.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "TBL_USER")
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@ToString
+@Data
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +26,9 @@ public class UserEntity {
     @Column(name = "email", length = 255)
     private String email;
 
+    @Column(name="user_auth_id", nullable = false, length=255)
+    private String userAuthId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 255)
     private ActiveStatus userStatus = ActiveStatus.ACTIVE;
@@ -47,18 +44,21 @@ public class UserEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "accept_status", nullable = false, length = 255)
-    private AcceptStatus acceptStatus = AcceptStatus.Y;
+    private AcceptStatus acceptStatus = AcceptStatus.N;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "signup_path", length = 255)
     private SignupPath signupPath;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", length = 255)
+    private UserRole userRole;
     @Column(name = "user_identifier", nullable = false, unique = true, length = 511)
     private String userIdentifier;
 
     @PrePersist
     public void prePersist() {
-        this.userIdentifier = this.signupPath + "_" + this.email;
+        this.userIdentifier = this.signupPath + "_" + this.userAuthId;
     }
 
     public void deactivateUser() {

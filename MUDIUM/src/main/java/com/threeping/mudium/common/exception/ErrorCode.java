@@ -1,7 +1,5 @@
 package com.threeping.mudium.common.exception;
 
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -42,26 +40,31 @@ public enum ErrorCode {
     LOGIN_FAILURE(4010008, HttpStatus.UNAUTHORIZED, "로그인에 실패했습니다"),
     UNAUTHORIZED_ACCESS(4010010, HttpStatus.UNAUTHORIZED, "인증되지 않은 접근입니다."),
     EXPIRED_SESSION(4010011, HttpStatus.UNAUTHORIZED, "세션이 만료되었습니다."),
-    EXIST_USER(4010012, HttpStatus.UNAUTHORIZED, "이미 회원가입한 회원입니다."),
+    EXIST_USER_ID(4010012, HttpStatus.UNAUTHORIZED, "이미 회원가입한 회원입니다."),
     DUPLICATE_NICKNAME(4010013, HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
     DUPLICATE_NICKNAME_EXISTS(4010014, HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
-
+    INVALID_PASSWORD(4010008, HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다"),
     //403
     FORBIDDEN_ROLE(4030000, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),
     ACCESS_DENIED(4030010, HttpStatus.FORBIDDEN, "접근이 거부되었습니다."),
+    INACTIVE_USER(4030020, HttpStatus.FORBIDDEN, "비활성 회원입니다."),
 
     //404
     NOT_FOUND_USER(4040001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
     EMAIL_VERIFICATION_REQUIRED(4040016, HttpStatus.BAD_REQUEST
             , "이메일 인증이 안된 이메일입니다. 이메일 인증을 완료해주세요."),
-    MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
-    NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
+    NOT_FOUND_USER_ID(40417, HttpStatus.NOT_FOUND, "아이디를 잘못 입력하셨습니다."),
 
-    //409
-    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
+    //429 (Too Many Requests)
+    TOO_MANY_REQUESTS(42900, HttpStatus.TOO_MANY_REQUESTS, "요청 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요."),
 
     //500
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다"),
+
+    // Review
+    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
+    USER_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
+    MUSICAL_NOT_FOUND(4041002, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
 
     // Musical
     JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
