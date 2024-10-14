@@ -1,11 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="ab7d8d74-0df1-4fb6-9db8-7666bbd342cf" name="Changes" comment="" />
+    <list default="true" id="ab7d8d74-0df1-4fb6-9db8-7666bbd342cf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/MUDIUM_Backend.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -16,12 +42,19 @@
     &quot;assignee&quot;: &quot;dongkh9&quot;
   }
 }</component>
+<<<<<<< Updated upstream
   <component name="GithubPullRequestsUISettings"><![CDATA[{
   "selectedUrlAndAccountId": {
     "url": "https://github.com/three-ping/MUDIUM_Backend.git",
-    "accountId": "0e379423-5aa1-4299-9237-a7b3233b7bc6"
+    "accountId": "b266a394-7f34-431c-8c3d-1279ee87e86e"
+=======
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://siu98@github.com/three-ping/MUDIUM_Backend.git&quot;,
+    &quot;accountId&quot;: &quot;224582a2-8c0e-47e9-8211-a568c62f830f&quot;
+>>>>>>> Stashed changes
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 1
@@ -33,10 +66,24 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+<<<<<<< Updated upstream
+    "git-widget-placeholder": "feature/guidebook",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/dev/three-ping/MUDIUM_Backend/MUDIUM_Backend",
+    "last_opened_file_path": "C:/MudiumFolder/Mudium/MUDIUM",
+=======
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "develop",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/Users/siu/Desktop/sw/MUDIUM_Backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+>>>>>>> Stashed changes
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -58,6 +105,12 @@
       <updated>1728522344510</updated>
       <workItem from="1728522345707" duration="185000" />
       <workItem from="1728523333245" duration="38000" />
+<<<<<<< Updated upstream
+      <workItem from="1728526917933" duration="42000" />
+=======
+      <workItem from="1728632538045" duration="173000" />
+      <workItem from="1728632720362" duration="406000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
