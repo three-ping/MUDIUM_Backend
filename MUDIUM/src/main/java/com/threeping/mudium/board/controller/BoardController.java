@@ -1,5 +1,6 @@
 package com.threeping.mudium.board.controller;
 
+import com.threeping.mudium.board.aggregate.enumerate.SearchType;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
@@ -24,26 +25,14 @@ public class BoardController {
 
     @GetMapping("")
     public ResponseDTO<?> viewBoardPage(
-            @RequestParam(required = false) String searchType,
+            @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchQuery,
             Pageable pageable) {
 
         Page<BoardListDTO> boardPage;
 
         if (searchType != null && searchQuery != null && !searchQuery.trim().isEmpty()) {
-            switch (searchType) {
-                case "author":
-                    boardPage = boardService.searchBoardsByUser_NickName(searchQuery, pageable);
-                    break;
-                case "title":
-                    boardPage = boardService.searchBoardsByTitle(searchQuery, pageable);
-                    break;
-                case "content":
-                    boardPage = boardService.searchBoardsByContent(searchQuery, pageable);
-                    break;
-                default:
-                    boardPage = boardService.viewBoardList(pageable);
-            }
+            boardPage = boardService.viewSearchedBoardList(pageable,searchType,searchQuery);
         } else {
             boardPage = boardService.viewBoardList(pageable);
         }

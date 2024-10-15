@@ -1,6 +1,5 @@
-package com.threeping.mudium.board.aggregate.entity;
+package com.threeping.mudium.notice.aggregate.entity;
 
-import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,17 +7,17 @@ import lombok.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "TBL_BOARD")
+@Table(name = "TBL_NOTICE")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class Board {
+public class Notice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
-    private int boardId;
+    @Column(name = "notice_id")
+    private Long noticeId;
 
     @Column(name = "title")
     private String title;
@@ -34,13 +33,6 @@ public class Board {
 
     @Column(name = "view_count")
     private Long viewCount;
-
-    @Column(name = "boardLike")
-    private Long boardLike;
-
-    @Column(name = "active_status")
-    @Enumerated(EnumType.STRING)
-    private ActiveStatus activeStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

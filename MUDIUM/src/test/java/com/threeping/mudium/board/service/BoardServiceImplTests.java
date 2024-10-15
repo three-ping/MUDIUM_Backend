@@ -7,7 +7,7 @@ import com.threeping.mudium.board.dto.RegistBoardDTO;
 import com.threeping.mudium.board.dto.UpdateBoardDTO;
 import com.threeping.mudium.board.repository.BoardRepository;
 import com.threeping.mudium.common.exception.CommonException;
-import com.threeping.mudium.board.aggregate.entity.ActiveStatus;
+import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.*;
 

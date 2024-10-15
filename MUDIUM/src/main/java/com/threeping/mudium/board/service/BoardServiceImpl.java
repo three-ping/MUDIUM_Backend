@@ -1,7 +1,8 @@
 package com.threeping.mudium.board.service;
 
-import com.threeping.mudium.board.aggregate.entity.ActiveStatus;
+import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.board.aggregate.entity.Board;
+import com.threeping.mudium.board.aggregate.enumerate.SearchType;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
@@ -128,21 +129,32 @@ public class BoardServiceImpl implements BoardService {
     }
 
 
-
-
-    @Override
     public Page<BoardListDTO> searchBoardsByUser_NickName(String nickname, Pageable pageable) {
         return boardRepository.findByUser_NicknameContaining(nickname, pageable).map(this::convertToDTO);
     }
 
-    @Override
     public Page<BoardListDTO> searchBoardsByTitle(String title, Pageable pageable) {
         return boardRepository.findByTitleContaining(title, pageable).map(this::convertToDTO);
     }
 
-    @Override
     public Page<BoardListDTO> searchBoardsByContent(String content, Pageable pageable) {
         return boardRepository.findByContentContaining(content, pageable).map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<BoardListDTO> viewSearchedBoardList(Pageable pageable, SearchType searchType, String searchQuery) {
+        int pageNumber = pageable.getPageNumber() > 0 ? pageable.getPageNumber() - 1 : 0;
+        int pageSize = pageable.getPageSize();
+        Sort pageSort = Sort.by("createdAt").descending();
+        Pageable boardPageable = PageRequest.of(pageNumber,pageSize,pageSort);
+        if (searchType.equals(SearchType.NICKNAME)) {
+            return searchBoardsByUser_NickName(searchQuery,boardPageable);
+        } else if (searchType.equals(SearchType.TITLE)){
+            return searchBoardsByTitle(searchQuery,boardPageable);
+        } else if (searchType.equals(SearchType.CONTENT)) {
+            return searchBoardsByContent(searchQuery,boardPageable);
+        }
+        return null;
     }
 
     private BoardListDTO convertToDTO(Board board) {
