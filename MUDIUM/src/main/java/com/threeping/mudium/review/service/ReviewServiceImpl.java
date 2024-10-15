@@ -4,8 +4,8 @@ import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.musical.repository.MusicalRepository;
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewRequestDTO;
+import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.aggregate.entity.ActiveStatus;
 import com.threeping.mudium.review.aggregate.entity.Review;
 import com.threeping.mudium.review.repository.ReviewRepository;
@@ -13,6 +13,8 @@ import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -29,6 +31,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final UserRepository userRepository;
     private final MusicalRepository musicalRepository;
 
+    @Autowired
     public ReviewServiceImpl(ReviewRepository reviewRepository,
                              ModelMapper modelMapper, UserRepository userRepository, MusicalRepository musicalRepository) {
         this.reviewRepository = reviewRepository;
