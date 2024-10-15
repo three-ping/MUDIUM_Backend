@@ -1,5 +1,6 @@
 package com.threeping.mudium.secretreview.service;
 
+import com.threeping.mudium.secretreview.dto.SecretReviewRequestDTO;
 import com.threeping.mudium.secretreview.dto.SecretReviewResponseDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -54,6 +55,45 @@ class SecretReviewServiceTests {
         SecretReviewResponseDTO secretReview = secretReviewResponseDTO.get(0);
         assertEquals(userId, secretReview.getUserId());
         assertEquals(secretReviewId, secretReview.getSecretReviewId());
+    }
+
+    @DisplayName("비밀리뷰 작성을 한다.")
+    @Test
+    void createSecretReviewTest() {
+        // Given
+        Long musicalId = 4L;
+        Long userId = 1L;
+        String content = "작성 테스트 해봅니다~!";
+
+        SecretReviewRequestDTO secretReviewRequestDTO = new SecretReviewRequestDTO(content, userId);
+
+        // When
+        assertDoesNotThrow(() -> secretReviewService.createSecretReview(musicalId, secretReviewRequestDTO));
+    }
+
+    @DisplayName("비밀리뷰 수정을 한다.")
+    @Test
+    void updateSecretReviewTest() {
+        // Given
+        Long secretReviewId = 19L;
+        Long userId = 1L;
+        String content = "수정 테스트 해볼까요~?";
+
+        SecretReviewRequestDTO secretReviewRequestDTO = new SecretReviewRequestDTO(content, userId);
+
+        // When
+        assertDoesNotThrow(() -> secretReviewService.updateSecretReview(secretReviewId, secretReviewRequestDTO));
+    }
+
+    @DisplayName("비밀리뷰 삭제를 한다.")
+    @Test
+    void deleteSecretReviewTest() {
+        // Given
+        Long secretReviewId = 19L;
+        Long userId = 1L;
+
+        // When
+        assertDoesNotThrow(() -> secretReviewService.deleteSecretReview(secretReviewId, userId));
     }
 
 }
