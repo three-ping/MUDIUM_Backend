@@ -35,7 +35,4 @@ public class Musical {
     @Column(name = "view_count")
     private int viewCount;
 
-    // 북마크 N:1 연관관계
-    @OneToMany(mappedBy = "musicalInfo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Bookmark> bookmarks = new ArrayList<> ();
 }

@@ -59,9 +59,6 @@ public class UserEntity {
     @Column(name = "user_identifier", nullable = false, unique = true, length = 511)
     private String userIdentifier;
 
-    // 북마크 1:N 연관관계
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Bookmark> bookmarks = new ArrayList<> ();
 
     @PrePersist
     public void prePersist () {
