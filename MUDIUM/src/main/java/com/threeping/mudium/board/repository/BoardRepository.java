@@ -1,6 +1,6 @@
 package com.threeping.mudium.board.repository;
 
-import com.threeping.mudium.board.aggregate.entity.ActiveStatus;
+import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.board.aggregate.entity.Board;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,19 +1,19 @@
-package com.threeping.mudium.board.dto;
+package com.threeping.mudium.notice.dto;
 
+import com.threeping.mudium.user.aggregate.entity.UserRole;
 import lombok.*;
 
 import java.sql.Timestamp;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @ToString
-public class BoardListDTO {
+public class NoticeListDTO {
     private Long id;
+    private UserRole userRole;
     private String title;
-    private String nickname;
     private Long userId;
     private Timestamp createdAt;
-    private Long boardLike;
 }

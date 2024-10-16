@@ -1,4 +1,4 @@
-package com.threeping.mudium.board.dto;
+package com.threeping.mudium.notice.dto;
 
 import lombok.*;
 
@@ -9,11 +9,10 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
-public class BoardListDTO {
-    private Long id;
+public class NoticeDetailDTO {
+    private Long noticeId;
     private String title;
-    private String nickname;
-    private Long userId;
+    private String content;
     private Timestamp createdAt;
-    private Long boardLike;
+    private Timestamp updatedAt;
 }

@@ -81,7 +81,9 @@ public enum ErrorCode {
 
     //Board
     INVALID_BOARD_ID(4002101,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
-    INVALID_BOARD_USER_ID(4002102,HttpStatus.BAD_REQUEST,"수정 권한이 없는 게시글입니다.");
+    INVALID_BOARD_USER_ID(4002102,HttpStatus.BAD_REQUEST,"수정 권한이 없는 게시글입니다."),
+    //Notice
+    INVALID_NOTICE_ID(4002201,HttpStatus.BAD_REQUEST ,"잘못된 공지게시글 번호입니다." );
 
     private final Integer code;
     private final HttpStatus httpStatus;
