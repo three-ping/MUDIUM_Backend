@@ -34,7 +34,7 @@ public class Musical {
     private String poster;
 
     @Column(name = "view_count")
-    private int viewCount;
+    private Long viewCount;
 
     @Column(name = "production")
     private String production;

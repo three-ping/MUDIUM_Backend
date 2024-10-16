@@ -4,16 +4,16 @@ import com.threeping.mudium.common.ResponseDTO;
 import com.threeping.mudium.musicalboard.dto.MusicalPostDTO;
 import com.threeping.mudium.musicalboard.dto.MusicalPostListDTO;
 import com.threeping.mudium.musicalboard.service.MusicalBoardService;
+import com.threeping.mudium.musicalboard.vo.MusicalPostVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/musical-board")
+@RestController
+@RequestMapping("/api/musical-board")
 @Slf4j
 public class MusicalBoardController {
 
@@ -23,17 +23,17 @@ public class MusicalBoardController {
     public MusicalBoardController(MusicalBoardService musicalBoardService) {
         this.musicalBoardService = musicalBoardService;
     }
-//
-//    @GetMapping("/{boardId}")
-//    public ResponseDTO<?> findMusicalBoard(@PathVariable Long boardId) {
-//        List<MusicalPostListDTO> postListDTOlist = musicalBoardService.findAllPost(boardId);
-//
-//        ResponseDTO<List<MusicalPostListDTO>> responseDTO = new ResponseDTO<>();
-//        responseDTO.setData(postListDTOlist);
-//        responseDTO.setHttpStatus(HttpStatus.OK);
-//        responseDTO.setSuccess(true);
-//        return responseDTO;
-//    }
+
+    @GetMapping("/{boardId}")
+    public ResponseDTO<?> findMusicalBoard(@PathVariable Long boardId) {
+        List<MusicalPostListDTO> postListDTOlist = musicalBoardService.findAllPost(boardId);
+
+        ResponseDTO<List<MusicalPostListDTO>> responseDTO = new ResponseDTO<>();
+        responseDTO.setData(postListDTOlist);
+        responseDTO.setHttpStatus(HttpStatus.OK);
+        responseDTO.setSuccess(true);
+        return responseDTO;
+    }
 
     // 글 조회는 글의 PK만 받도록한다.
     //단일 책임 원칙 (Single Responsibility Principle):
@@ -49,5 +49,34 @@ public class MusicalBoardController {
         responseDTO.setHttpStatus(HttpStatus.OK);
         responseDTO.setSuccess(true);
         return responseDTO;
+    }
+
+    @PostMapping("/{musicalId}")
+    public ResponseDTO<?> createMusicalPost(@PathVariable Long musicalId, @RequestBody MusicalPostVO postVO) {
+        MusicalPostDTO postDTO = new MusicalPostDTO();
+        postDTO.setContent(postVO.getContent());
+        postDTO.setTitle(postVO.getTitle());
+
+        musicalBoardService.createPost(musicalId, postVO.getUserId() ,postDTO);
+
+        return ResponseDTO.ok("생성 성공");
+    }
+
+    @PutMapping("/{musicalPostId}")
+    public ResponseDTO<?> updateMusicalPost(@PathVariable Long musicalPostId, @RequestBody MusicalPostVO postVO) {
+        MusicalPostDTO postDTO = new MusicalPostDTO();
+        postDTO.setTitle(postVO.getTitle());
+        postDTO.setContent(postVO.getContent());
+
+        musicalBoardService.updatePost(musicalPostId, postVO.getUserId(), postDTO);
+
+        return ResponseDTO.ok("수정 성공");
+    }
+
+    @DeleteMapping("/{musicalPostId}")
+    public ResponseDTO<?> deleteMusicalPost(@PathVariable Long musicalPostId, @RequestBody MusicalPostVO postVO) {
+        musicalBoardService.deletePost(musicalPostId, postVO.getUserId());
+
+        return ResponseDTO.ok("삭제 성공");
     }
 }

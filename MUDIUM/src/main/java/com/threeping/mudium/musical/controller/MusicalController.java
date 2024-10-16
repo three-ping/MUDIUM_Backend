@@ -1,8 +1,8 @@
 package com.threeping.mudium.musical.controller;
 
 import com.threeping.mudium.common.ResponseDTO;
+import com.threeping.mudium.musical.dto.MusicalDTO;
 import com.threeping.mudium.musical.dto.MusicalListDTO;
-import com.threeping.mudium.musical.dto.MusicalTotalDTO;
 import com.threeping.mudium.musical.service.MusicalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/musical")
@@ -40,10 +38,22 @@ public class MusicalController {
 
     @GetMapping("/{musicalId}")
     public ResponseDTO<?> findMusical(@PathVariable("musicalId") Long musicalId) {
-        MusicalTotalDTO totalDTO = musicalService.findMusicalDetail(musicalId);
+        MusicalDTO musicalDTO = musicalService.findMusicalDetail(musicalId);
 
-        ResponseDTO<MusicalTotalDTO> responseDTO = new ResponseDTO<>();
-        responseDTO.setData(totalDTO);
+        ResponseDTO<MusicalDTO> responseDTO = new ResponseDTO<>();
+        responseDTO.setData(musicalDTO);
+        responseDTO.setHttpStatus(HttpStatus.OK);
+        responseDTO.setSuccess(true);
+
+        return responseDTO;
+    }
+
+    @GetMapping("/title")
+    public ResponseDTO<?> findMusicalByTitle(@RequestParam String title) {
+        MusicalDTO musicalDTO = musicalService.findMusicalDetailByName(title);
+
+        ResponseDTO<MusicalDTO> responseDTO = new ResponseDTO<>();
+        responseDTO.setData(musicalDTO);
         responseDTO.setHttpStatus(HttpStatus.OK);
         responseDTO.setSuccess(true);
 
