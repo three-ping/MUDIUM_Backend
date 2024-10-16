@@ -37,8 +37,7 @@ public class MusicalAPIClient {
     }
 
     public List<MusicalItem> fetchMusicalList() {
-        // test를 위해선 좀 줄입니다
-        String startDate = "20240901";
+        String startDate = "20220101";
         String endDate = "20240930";
         int cPage = 1;
         List<MusicalItem> allMusicals = new ArrayList<>();

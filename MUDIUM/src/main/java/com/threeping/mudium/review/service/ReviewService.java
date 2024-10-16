@@ -1,7 +1,7 @@
 package com.threeping.mudium.review.service;
 
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewRequestDTO;
+import com.threeping.mudium.review.dto.ReviewResponseDTO;
 
 import java.util.List;
 
@@ -14,4 +14,10 @@ public interface ReviewService {
 
     // 리뷰 작성
     void createReview(Long musicalId, ReviewRequestDTO reviewRequestDTO);
+
+    // 리뷰 수정
+    void updateReview(Long musicalId, Long reviewId, ReviewRequestDTO reviewRequestDTO);
+
+    // 리뷰 삭제
+    void deleteReview(Long musicalId, Long reviewId, Long userId);
 }

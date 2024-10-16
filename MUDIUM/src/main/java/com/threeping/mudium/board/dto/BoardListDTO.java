@@ -15,4 +15,5 @@ public class BoardListDTO {
     private String nickname;
     private Long userId;
     private Timestamp createdAt;
+    private Long boardLike;
 }

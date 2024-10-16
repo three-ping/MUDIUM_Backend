@@ -1,5 +1,6 @@
 package com.threeping.mudium.board.aggregate.entity;
 
+import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;

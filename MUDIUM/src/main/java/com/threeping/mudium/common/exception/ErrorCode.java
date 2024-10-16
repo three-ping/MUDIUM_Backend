@@ -19,7 +19,6 @@ public enum ErrorCode {
     INVALID_REQUEST_BODY(40011, HttpStatus.BAD_REQUEST, "잘못된 요청 본문입니다."),
     MISSING_REQUIRED_FIELD(40012, HttpStatus.BAD_REQUEST, "필수 필드가 누락되었습니다."),
     INVALID_VERIFICATION_CODE(40013, HttpStatus.BAD_REQUEST, "잘못된 인증번호입니다. 인증번호를 다시 확인해주세요"),
-    INVALID_BOARD_ID(40021,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
 
     // 파일 관련 오류
     UNSUPPORTED_FILE_FORMAT(40020, HttpStatus.BAD_REQUEST, "지원되지 않는 파일 형식입니다."),
@@ -53,7 +52,11 @@ public enum ErrorCode {
     NOT_FOUND_USER(4040001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
     EMAIL_VERIFICATION_REQUIRED(4040016, HttpStatus.BAD_REQUEST
             , "이메일 인증이 안된 이메일입니다. 이메일 인증을 완료해주세요."),
+
     NOT_FOUND_USER_ID(40417, HttpStatus.NOT_FOUND, "아이디를 잘못 입력하셨습니다."),
+
+    //409
+    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
 
     //429 (Too Many Requests)
     TOO_MANY_REQUESTS(42900, HttpStatus.TOO_MANY_REQUESTS, "요청 횟수가 너무 많습니다. 잠시 후 다시 시도해 주세요."),
@@ -61,10 +64,11 @@ public enum ErrorCode {
     //500
     INTERNAL_SERVER_ERROR(50000, HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 오류입니다"),
 
-    // Review
-    REVIEW_ALREADY_EXISTS(4091001, HttpStatus.CONFLICT, "이미 리뷰가 존재합니다."),
-    USER_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
-    MUSICAL_NOT_FOUND(4041002, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
+    MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
+    NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
+
+    //
+    SCOPE_NOT_FOUND(4041003, HttpStatus.NOT_FOUND, "별점이 존재하지 않습니다."),
 
     // Musical
     JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
@@ -73,7 +77,13 @@ public enum ErrorCode {
     ITEM_PROCESSING_ERROR(50012, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다."),
     INVALID_MUSICAL_ID(40013, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 번호입니다."),
     INVALID_MUSICAL_BOARD_ID(40014, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 게시글 번호입니다."),
-    NOT_FOUND_MUSICAL_BOARD(40411, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다.");
+    NOT_FOUND_MUSICAL_BOARD(40411, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다."),
+
+    //Board
+    INVALID_BOARD_ID(4002101,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
+    INVALID_BOARD_USER_ID(4002102,HttpStatus.BAD_REQUEST,"수정 권한이 없는 게시글입니다."),
+    //Notice
+    INVALID_NOTICE_ID(4002201,HttpStatus.BAD_REQUEST ,"잘못된 공지게시글 번호입니다." );
 
     private final Integer code;
     private final HttpStatus httpStatus;

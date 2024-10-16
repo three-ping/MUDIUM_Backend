@@ -49,9 +49,4 @@ public class Review {
     public void deactivateReview() {
         this.activeStatus = ActiveStatus.INACTIVE;
     }
-
-    // 다시 생성하는데 필요한지는 의문.
-    public void activateReview() {
-        this.activeStatus = ActiveStatus.ACTIVE;
-    }
 }

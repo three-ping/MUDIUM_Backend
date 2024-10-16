@@ -1,4 +1,4 @@
-package com.threeping.mudium.review.aggregate.dto;
+package com.threeping.mudium.review.dto;
 
 import lombok.*;
 

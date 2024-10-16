@@ -37,6 +37,9 @@ public class Performance {
     @Column(name = "actor_list")
     private String actorList;
 
+    @Column(name = "poster")
+    private String poster;
+
     @JoinColumn(name = "musical_info_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Musical musical;

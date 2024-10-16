@@ -16,6 +16,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,6 +57,7 @@ public class APIServiceImpl implements APIService {
             Musical musical = getOrCreatedMusical(OriginTitle);
             PerformanceItem performanceItem =
                     musicalAPIClient.fetchPerformanceDetail(item.getExternalId());
+            log.info("external Id: " + item.getExternalId());
             updateMusicalInfo(musical, performanceItem);
             log.info("업데이트된 뮤지컬 정보 확인: " + musical);
             Performance performance = getOrCreatedPerformance(musical, item.getArea());
@@ -77,12 +79,15 @@ public class APIServiceImpl implements APIService {
         performance.setEndDate(timeStampConverter(performanceItem.getEndDate()));
         performance.setStartDate(timeStampConverter(performanceItem.getStartDate()));
         performance.setRunTime(performanceItem.getRunTime());
+        performance.setPoster(performanceItem.getPoster());
     }
 
     private void updateMusicalInfo(Musical musical, PerformanceItem performanceItem) {
         musical.setRating(performanceItem.getAge());
         if(musical.getPoster() == null)
-        musical.setPoster(performanceItem.getPoster());
+            musical.setPoster(performanceItem.getPoster());
+        if(musical.getProduction() == null)
+            musical.setProduction(performanceItem.getEntrps());
     }
 
     private Performance getOrCreatedPerformance(Musical musical, String area) {
