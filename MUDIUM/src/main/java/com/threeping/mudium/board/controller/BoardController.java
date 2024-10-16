@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/board")
 public class BoardController {
 
-    private BoardService boardService;
+    private final BoardService  boardService;
 
     @Autowired
     private BoardController(BoardService boardService){
@@ -60,10 +60,12 @@ public class BoardController {
         return ResponseDTO.ok(null);
     }
 
-    @DeleteMapping("{boardId}")
+    @DeleteMapping("{boardId}/{userId}")
     private ResponseDTO<?> deleteBoard(@PathVariable Long boardId,
-                                       @RequestBody UpdateBoardDTO updateBoardDTO){
+                                       @PathVariable Long userId){
+        UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
         updateBoardDTO.setBoardId(boardId);
+        updateBoardDTO.setUserId(userId);
         boardService.deleteBoard(updateBoardDTO);
         return ResponseDTO.ok(null);
     }}
