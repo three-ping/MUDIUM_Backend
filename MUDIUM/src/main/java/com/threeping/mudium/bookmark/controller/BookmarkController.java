@@ -23,13 +23,13 @@ public class BookmarkController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BookmarkResponseDTO> addBookmark ( @RequestBody BookmarkRequestDTO bookmarkRequestDTO ) {
+    public ResponseDTO<BookmarkResponseDTO> addBookmark ( @RequestBody BookmarkRequestDTO bookmarkRequestDTO ) {
         Bookmark bookmark = bookmarkService.addBookmark ( bookmarkRequestDTO.getUserId (), bookmarkRequestDTO.getMusicalId () );
         BookmarkResponseDTO bookmarkResponseDTO = new BookmarkResponseDTO (
                 bookmark.getUserId (),
                 bookmark.getMusicalId ());
-
-        return ResponseEntity.status ( HttpStatus.CREATED).body(bookmarkResponseDTO);
+        return ResponseDTO.ok (bookmarkResponseDTO);
+//        return ResponseEntity.status ( HttpStatus.CREATED).body(bookmarkResponseDTO);
     }
 
     @DeleteMapping("")
@@ -39,8 +39,8 @@ public class BookmarkController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<BookmarkResponseDTO>> findBookmarkByUserId(@PathVariable Long userId) {
+    public ResponseDTO<List<BookmarkResponseDTO>> findBookmarkByUserId(@PathVariable Long userId) {
         List<BookmarkResponseDTO> bookmarks = bookmarkService.findBookmarkByUserId ( userId );
-        return ResponseEntity.ok ( bookmarks);  // 삭제 후 목록 반환
+        return ResponseDTO.ok ( bookmarks);  // 삭제 후 목록 반환
     }
 }
