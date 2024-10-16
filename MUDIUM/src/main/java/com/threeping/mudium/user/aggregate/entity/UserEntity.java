@@ -1,8 +1,11 @@
 package com.threeping.mudium.user.aggregate.entity;
 
+import com.threeping.mudium.bookmark.entity.Bookmark;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.time.LocalDateTime;
 
 @Entity
@@ -26,7 +29,7 @@ public class UserEntity {
     @Column(name = "email", length = 255)
     private String email;
 
-    @Column(name="user_auth_id", nullable = false, length=255)
+    @Column(name = "user_auth_id", nullable = false, length = 255)
     private String userAuthId;
 
     @Enumerated(EnumType.STRING)
@@ -56,26 +59,27 @@ public class UserEntity {
     @Column(name = "user_identifier", nullable = false, unique = true, length = 511)
     private String userIdentifier;
 
+
     @PrePersist
-    public void prePersist() {
+    public void prePersist () {
         this.userIdentifier = this.signupPath + "_" + this.userAuthId;
     }
 
-    public void deactivateUser() {
+    public void deactivateUser () {
         this.userStatus = ActiveStatus.INACTIVE;
-        this.withdrawnAt = LocalDateTime.now().withNano(0);
+        this.withdrawnAt = LocalDateTime.now ().withNano ( 0 );
     }
 
-    public void activateUser() {
+    public void activateUser () {
         this.userStatus = ActiveStatus.ACTIVE;
         this.withdrawnAt = null;
     }
 
-    public void updateProfile(String nickname, String profileImage) {
-        if (nickname != null && !nickname.isEmpty()) {
+    public void updateProfile ( String nickname, String profileImage ) {
+        if (nickname != null && !nickname.isEmpty ()) {
             this.nickname = nickname;
         }
-        if (profileImage != null && !profileImage.isEmpty()) {
+        if (profileImage != null && !profileImage.isEmpty ()) {
             this.profileImage = profileImage;
         }
     }

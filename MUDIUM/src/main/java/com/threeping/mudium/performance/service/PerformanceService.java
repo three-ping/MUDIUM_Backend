@@ -6,5 +6,5 @@ import com.threeping.mudium.performance.dto.PerformanceDTO;
 import java.util.List;
 
 public interface PerformanceService {
-    List<PerformanceDTO> findPerformances(Musical musical);
+    List<PerformanceDTO> findPerformances(Long musicalId);
 }

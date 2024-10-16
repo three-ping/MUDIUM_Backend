@@ -3,18 +3,15 @@ package com.threeping.mudium.musical.service;
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.musical.aggregate.Musical;
+import com.threeping.mudium.musical.dto.MusicalDTO;
 import com.threeping.mudium.musical.dto.MusicalListDTO;
-import com.threeping.mudium.musical.dto.MusicalTotalDTO;
 import com.threeping.mudium.musical.repository.MusicalRepository;
-import com.threeping.mudium.performance.dto.PerformanceDTO;
-import com.threeping.mudium.performance.service.PerformanceService;
 import com.threeping.mudium.scope.service.ScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,15 +22,12 @@ import java.util.stream.Collectors;
 public class MusicalServiceImpl implements MusicalService {
 
     private final MusicalRepository musicalRepository;
-    private final PerformanceService performanceService;
     private final ScopeService scopeService;
 
     @Autowired
     public MusicalServiceImpl(MusicalRepository musicalRepository,
-                              PerformanceService performanceService,
                               ScopeService scopeService) {
         this.musicalRepository = musicalRepository;
-        this.performanceService = performanceService;
         this.scopeService = scopeService;
     }
 
@@ -97,29 +91,50 @@ public class MusicalServiceImpl implements MusicalService {
     }
 
     @Override
-    public MusicalTotalDTO findMusicalDetail(Long musicalId) {
-        MusicalTotalDTO totalDTO = new MusicalTotalDTO();
+    public MusicalDTO findMusicalDetail(Long musicalId) {
+        MusicalDTO musicalDTO = new MusicalDTO();
         Musical musical = musicalRepository.findMusicalByMusicalId(musicalId)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_ID));
-        List<PerformanceDTO> performanceList = performanceService.findPerformances(musical);
-        totalDTO.setTitle(musical.getTitle());
-        totalDTO.setRating(musical.getRating());
-        totalDTO.setPoster(musical.getPoster());
-        totalDTO.setPerformanceList(performanceList);
-        List<Long> musicalIds = new ArrayList<>();
-        musicalIds.add(musical.getMusicalId());
-        totalDTO.setScope(scopeService.calculateAverageScopeBatch(musicalIds).get(musicalId));
+        musicalDTO.setTitle(musical.getTitle());
+        musicalDTO.setRating(musical.getRating());
+        musicalDTO.setPoster(musical.getPoster());
+        musicalDTO.setProduction(musical.getProduction());
+        musicalDTO.setSynopsys(musical.getSynopsys());
+        musicalDTO.setViewCount(musical.getViewCount() + 1);
         // 조회되면 조회 수 1 증가
         musical.setViewCount(musical.getViewCount() + 1);
         musicalRepository.save(musical);
 
-        return totalDTO;
+        return musicalDTO;
     }
 
     @Override
-    public Musical findMusicalByMusicalId(Long musicalId) {
+    public MusicalDTO findMusicalByMusicalId(Long musicalId) {
         Musical musical = musicalRepository.findMusicalByMusicalId(musicalId)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_ID));
-        return musical;
+        MusicalDTO musicalDTO = new MusicalDTO();
+        musicalDTO.setTitle(musical.getTitle());
+        musicalDTO.setReviewVideos(musical.getReviewVideo());
+        musicalDTO.setPoster(musical.getPoster());
+        musicalDTO.setProduction(musical.getProduction());
+        musicalDTO.setSynopsys(musical.getSynopsys());
+        musicalDTO.setViewCount(musical.getViewCount());
+        musicalDTO.setRating(musical.getRating());
+        return musicalDTO;
+    }
+
+    @Override
+    public MusicalDTO findMusicalDetailByName(String title) {
+        Musical musical = musicalRepository.findMusicalByExactTitle(title)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_MUSICAL));
+        MusicalDTO musicalDTO = new MusicalDTO();
+        musicalDTO.setTitle(musical.getTitle());
+        musicalDTO.setReviewVideos(musical.getReviewVideo());
+        musicalDTO.setPoster(musical.getPoster());
+        musicalDTO.setProduction(musical.getProduction());
+        musicalDTO.setSynopsys(musical.getSynopsys());
+        musicalDTO.setViewCount(musical.getViewCount());
+        musicalDTO.setRating(musical.getRating());
+        return musicalDTO;
     }
 }

@@ -1,53 +1,42 @@
 package com.threeping.mudium.musicalboard.aggregate;
 
-import com.threeping.mudium.musical.aggregate.Musical;
-import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "musicalPost")
-@Table(name = "TBL_MUSICAL_BOARD")
-public class MusicalPost {
+@Table(name = "TBL_MUSICAL_BOARD_COMMENT")
+@Entity(name = "musicalComment")
+public class MusicalComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "musical_board_id")
-    private Long musicalPostId;
+    @Column(name = "musical_board_comment_id")
+    private Long commentId;
 
-    @Column(name = "title")
-    private String title;
-
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
 
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-    @Column(name = "view_count")
-    private Long viewCount;
-
-    @Column(name = "`like`")
-    private Long likeCount;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "active_status", nullable = false)
+    @Enumerated(EnumType.STRING)
     private ActiveStatus activeStatus = ActiveStatus.ACTIVE;
+
+    @Column(name = "musical_info_id")
+    private Long musicalId;
 
     @Column(name = "user_id")
     private Long userId;
-
-    @Column
-    private Long musicalId;
 
     public void softDelete() {
         this.activeStatus = ActiveStatus.INACTIVE;
