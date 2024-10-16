@@ -60,7 +60,7 @@ public class APIServiceImpl implements APIService {
             log.info("external Id: " + item.getExternalId());
             updateMusicalInfo(musical, performanceItem);
             log.info("업데이트된 뮤지컬 정보 확인: " + musical);
-            Performance performance = getOrCreatedPerformance(musical, item.getArea());
+            Performance performance = getOrCreatedPerformance(musical.getMusicalId(), item.getArea());
             updatePerformance(performance, performanceItem);
             log.info("업데이트된 공연 정보 확인: " + performance);
 
@@ -90,11 +90,11 @@ public class APIServiceImpl implements APIService {
             musical.setProduction(performanceItem.getEntrps());
     }
 
-    private Performance getOrCreatedPerformance(Musical musical, String area) {
-        return performanceRepository.findPerformanceByMusicalAndRegion(musical, area)
+    private Performance getOrCreatedPerformance(Long musicalId, String area) {
+        return performanceRepository.findPerformanceByMusicalIdAndRegion(musicalId, area)
                 .orElseGet(() -> {
                     Performance performance = new Performance();
-                    performance.setMusical(musical);
+                    performance.setMusicalId(musicalId);
                     performance.setRegion(area);
                     log.info("새로 생성된 공연 정보: " + performance);
                     return performance;

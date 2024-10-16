@@ -71,13 +71,14 @@ public enum ErrorCode {
     SCOPE_NOT_FOUND(4041003, HttpStatus.NOT_FOUND, "별점이 존재하지 않습니다."),
 
     // Musical
-    JAXB_CONTEXT_ERROR(50011, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
-    API_LIST_BAD_REQUEST(40011, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
-    API_DETAIL_BAD_REQUEST(40012, HttpStatus.BAD_REQUEST, "상세정보 API 통신에 실패했습니다."),
-    ITEM_PROCESSING_ERROR(50012, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다."),
-    INVALID_MUSICAL_ID(40013, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 번호입니다."),
-    INVALID_MUSICAL_BOARD_ID(40014, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 게시글 번호입니다."),
-    NOT_FOUND_MUSICAL_BOARD(40411, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다."),
+    JAXB_CONTEXT_ERROR(5001301, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
+    API_LIST_BAD_REQUEST(4001302, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
+    API_DETAIL_BAD_REQUEST(4001303, HttpStatus.BAD_REQUEST, "상세정보 API 통신에 실패했습니다."),
+    ITEM_PROCESSING_ERROR(5001304, HttpStatus.INTERNAL_SERVER_ERROR, "뮤지컬 정보 혹은 공연 정보 저장에 실패했습니다."),
+    INVALID_MUSICAL_ID(4001305, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 번호입니다."),
+    INVALID_MUSICAL_BOARD_ID(4001306, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 게시글 번호입니다."),
+    NOT_FOUND_MUSICAL_BOARD(4041307, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다."),
+    NOT_FOUND_MUSICAL(4041308, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬입니다."),
 
     //Board
     INVALID_BOARD_ID(4002101,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),

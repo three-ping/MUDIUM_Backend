@@ -25,8 +25,8 @@ public class PerformanceServiceImpl implements PerformanceService {
 
     @Transactional
     @Override
-    public List<PerformanceDTO> findPerformances(Musical musical) {
-        List<Performance> performanceList = performanceRepository.findAllByMusical(musical);
+    public List<PerformanceDTO> findPerformances(Long musicalId) {
+        List<Performance> performanceList = performanceRepository.findAllByMusicalId(musicalId);
         if (performanceList.isEmpty()) {
             throw new CommonException(ErrorCode.INVALID_MUSICAL_ID);
         }
