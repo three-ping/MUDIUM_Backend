@@ -1,5 +1,6 @@
 package com.threeping.mudium.board.controller;
 
+import com.threeping.mudium.board.aggregate.enumerate.SearchType;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/board")
 public class BoardController {
 
-    private BoardService boardService;
+    private final BoardService  boardService;
 
     @Autowired
     private BoardController(BoardService boardService){
@@ -23,8 +24,19 @@ public class BoardController {
     }
 
     @GetMapping("")
-    private ResponseDTO<?> viewBoardPage(Pageable pageable){
-        Page<BoardListDTO> boardPage = boardService.viewBoardList(pageable);
+    public ResponseDTO<?> viewBoardPage(
+            @RequestParam(required = false) SearchType searchType,
+            @RequestParam(required = false) String searchQuery,
+            Pageable pageable) {
+
+        Page<BoardListDTO> boardPage;
+
+        if (searchType != null && searchQuery != null && !searchQuery.trim().isEmpty()) {
+            boardPage = boardService.viewSearchedBoardList(pageable,searchType,searchQuery);
+        } else {
+            boardPage = boardService.viewBoardList(pageable);
+        }
+
         return ResponseDTO.ok(boardPage);
     }
 
@@ -48,10 +60,12 @@ public class BoardController {
         return ResponseDTO.ok(null);
     }
 
-    @DeleteMapping("{boardId}")
+    @DeleteMapping("{boardId}/{userId}")
     private ResponseDTO<?> deleteBoard(@PathVariable Long boardId,
-                                       @RequestBody UpdateBoardDTO updateBoardDTO){
+                                       @PathVariable Long userId){
+        UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO();
         updateBoardDTO.setBoardId(boardId);
+        updateBoardDTO.setUserId(userId);
         boardService.deleteBoard(updateBoardDTO);
         return ResponseDTO.ok(null);
     }}

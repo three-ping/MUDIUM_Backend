@@ -1,5 +1,6 @@
 package com.threeping.mudium.board.service;
 
+import com.threeping.mudium.board.aggregate.enumerate.SearchType;
 import com.threeping.mudium.board.dto.BoardDetailDTO;
 import com.threeping.mudium.board.dto.BoardListDTO;
 import com.threeping.mudium.board.dto.RegistBoardDTO;
@@ -17,4 +18,6 @@ public interface BoardService {
     void updateBoard(UpdateBoardDTO updateBoardDTO);
 
     void deleteBoard(UpdateBoardDTO updateBoardDTO);
+
+    Page<BoardListDTO> viewSearchedBoardList(Pageable pageable, SearchType searchType, String searchQuery);
 }

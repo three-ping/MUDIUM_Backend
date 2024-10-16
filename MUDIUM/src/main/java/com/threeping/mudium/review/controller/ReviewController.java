@@ -1,8 +1,8 @@
 package com.threeping.mudium.review.controller;
 
 import com.threeping.mudium.common.ResponseDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewRequestDTO;
+import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

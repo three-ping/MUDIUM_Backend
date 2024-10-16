@@ -1,5 +1,6 @@
 package com.threeping.mudium.scope.aggregate.entity;
 
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,4 +32,7 @@ public class ScopeEntity {
 
     @Column(name="updated_at", nullable=true)
     private Timestamp updatedAt;
+
+    @Column(name = "user_nickname", nullable = false)
+    private String userNickname;
 }
