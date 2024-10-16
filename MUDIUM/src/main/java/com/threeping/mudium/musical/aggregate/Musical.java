@@ -1,11 +1,8 @@
 package com.threeping.mudium.musical.aggregate;
 
-import com.threeping.mudium.bookmark.entity.Bookmark;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
