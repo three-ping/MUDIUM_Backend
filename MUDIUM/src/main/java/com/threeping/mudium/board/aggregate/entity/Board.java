@@ -38,6 +38,9 @@ public class Board {
     @Column(name = "boardLike")
     private Long boardLike;
 
+    @Column(name = "comments")
+    private Long comments;
+
     @Column(name = "active_status")
     @Enumerated(EnumType.STRING)
     private ActiveStatus activeStatus;

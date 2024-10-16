@@ -82,6 +82,7 @@ public class BoardServiceImpl implements BoardService {
         board.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         board.setBoardLike(0L);
         board.setViewCount(0L);
+        board.setComments(0L);
         UserEntity user = userRepository.findById(registBoardDTO.getUserId()).orElseThrow(()->{
             return new CommonException(ErrorCode.NOT_FOUND_USER);
         });
@@ -90,6 +91,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void updateBoard(UpdateBoardDTO updateBoardDTO) {
         Board board = boardRepository.findByActiveStatusAndBoardIdAndUser_UserId(
                 ActiveStatus.ACTIVE,
@@ -113,6 +115,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public void deleteBoard(UpdateBoardDTO updateBoardDTO) {
         Board board = boardRepository.findByActiveStatusAndBoardIdAndUser_UserId(
                 ActiveStatus.ACTIVE,
@@ -142,6 +145,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional
     public Page<BoardListDTO> viewSearchedBoardList(Pageable pageable, SearchType searchType, String searchQuery) {
         int pageNumber = pageable.getPageNumber() > 0 ? pageable.getPageNumber() - 1 : 0;
         int pageSize = pageable.getPageSize();
@@ -155,6 +159,14 @@ public class BoardServiceImpl implements BoardService {
             return searchBoardsByContent(searchQuery,boardPageable);
         }
         return null;
+    }
+
+    @Override
+    @Transactional
+    public void plusBoardViewCount(Long boardId) {
+        Board board = boardRepository.findById(boardId).orElseThrow(()->new CommonException(ErrorCode.INVALID_BOARD_ID));
+        board.setViewCount(board.getViewCount()+1);
+        boardRepository.save(board);
     }
 
     private BoardListDTO convertToDTO(Board board) {

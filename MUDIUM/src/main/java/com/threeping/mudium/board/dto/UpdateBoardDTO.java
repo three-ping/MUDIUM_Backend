@@ -12,5 +12,6 @@ public class UpdateBoardDTO {
     private String content;
     private Long userId;
     private Long boardId;
+    private Long viewCount;
 
 }

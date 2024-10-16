@@ -20,4 +20,6 @@ public interface BoardService {
     void deleteBoard(UpdateBoardDTO updateBoardDTO);
 
     Page<BoardListDTO> viewSearchedBoardList(Pageable pageable, SearchType searchType, String searchQuery);
+
+    void plusBoardViewCount(Long boardId);
 }
