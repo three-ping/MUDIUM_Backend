@@ -2,6 +2,7 @@ package com.threeping.mudium.notice.controller;
 
 import com.threeping.mudium.notice.aggregate.enumerate.SearchType;
 import com.threeping.mudium.common.ResponseDTO;
+import com.threeping.mudium.notice.dto.CreateNoticeDTO;
 import com.threeping.mudium.notice.dto.NoticeDetailDTO;
 import com.threeping.mudium.notice.dto.NoticeListDTO;
 import com.threeping.mudium.notice.service.NoticeService;
@@ -22,7 +23,7 @@ public class NoticeController {
     }
 
     @GetMapping("")
-    public ResponseDTO<?> viewNoticePage(
+    private ResponseDTO<?> viewNoticePage(
             @RequestParam(required = false) SearchType searchType,
             @RequestParam(required = false) String searchQuery,
             Pageable pageable) {
@@ -42,5 +43,11 @@ public class NoticeController {
     private ResponseDTO<?> viewDetailNotice(@PathVariable Long noticeId){
         NoticeDetailDTO noticeDetail = noticeService.viewNotice(noticeId);
         return ResponseDTO.ok(noticeDetail);
+    }
+
+    @PostMapping("")
+    private ResponseDTO<?> createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
+        noticeService.createNotice(createNoticeDTO);
+        return ResponseDTO.ok(null);
     }
 }

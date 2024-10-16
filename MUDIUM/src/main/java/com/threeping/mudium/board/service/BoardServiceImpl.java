@@ -83,9 +83,9 @@ public class BoardServiceImpl implements BoardService {
         board.setBoardLike(0L);
         board.setViewCount(0L);
         board.setComments(0L);
-        UserEntity user = userRepository.findById(registBoardDTO.getUserId()).orElseThrow(()->{
-            return new CommonException(ErrorCode.NOT_FOUND_USER);
-        });
+        UserEntity user = userRepository.findById(registBoardDTO.getUserId()).orElseThrow(()->
+             new CommonException(ErrorCode.NOT_FOUND_USER)
+        );
         board.setUser(user);
         boardRepository.save(board);
     }
@@ -98,9 +98,7 @@ public class BoardServiceImpl implements BoardService {
                 updateBoardDTO.getBoardId(),
                 updateBoardDTO.getUserId()
                 ).orElseThrow(
-                ()-> {
-                    return new CommonException(ErrorCode.INVALID_BOARD_USER_ID);
-                }
+                ()-> new CommonException(ErrorCode.INVALID_BOARD_USER_ID)
         );
         if(!updateBoardDTO.getTitle().isEmpty()) {
             board.setTitle(updateBoardDTO.getTitle());
@@ -122,9 +120,8 @@ public class BoardServiceImpl implements BoardService {
                 updateBoardDTO.getBoardId(),
                 updateBoardDTO.getUserId()
         ).orElseThrow(
-                ()->{
-                    return new CommonException(ErrorCode.INVALID_BOARD_USER_ID);
-                }
+                ()->
+                     new CommonException(ErrorCode.INVALID_BOARD_USER_ID)
         );
         board.setActiveStatus(ActiveStatus.INACTIVE);
         board.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
@@ -172,7 +169,7 @@ public class BoardServiceImpl implements BoardService {
     private BoardListDTO convertToDTO(Board board) {
         BoardListDTO boardListDTO = new BoardListDTO();
         boardListDTO.setTitle(board.getTitle());
-        boardListDTO.setId(Long.valueOf(board.getBoardId()));
+        boardListDTO.setId(board.getBoardId());
         boardListDTO.setCreatedAt(board.getCreatedAt());
         boardListDTO.setNickname(board.getUser().getNickname());
         boardListDTO.setUserId(board.getUser().getUserId());
