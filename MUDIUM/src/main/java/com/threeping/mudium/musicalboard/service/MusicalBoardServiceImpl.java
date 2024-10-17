@@ -12,6 +12,7 @@ import com.threeping.mudium.user.aggregate.dto.UserDTO;
 import com.threeping.mudium.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,25 +41,30 @@ public class MusicalBoardServiceImpl implements MusicalBoardService {
     }
 
     @Override
-    public List<MusicalPostListDTO> findAllPost(Long musicalId) {
-        List<Object[]> results = musicalBoardRepository.findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE);
+    public Page<MusicalPostListDTO> findAllPost(Long musicalId, Pageable pageable) {
+        int pageNumber = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1;
+        Sort sort = Sort.by("createdAt").descending();
+        Pageable adjustedPageable = PageRequest.of(pageNumber, pageable.getPageSize(), sort);
 
-        List<MusicalPostListDTO> postDTOList = results.stream()
+        Page<Object[]> results = musicalBoardRepository.findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE, adjustedPageable);
+
+        List<MusicalPostListDTO> postDTOList = results.getContent().stream()
                 .map(result -> {
                     MusicalPost post = (MusicalPost) result[0];
                     String nickName = (String) result[1];
 
                     MusicalPostListDTO postDTO = new MusicalPostListDTO();
+                    postDTO.setPostId(post.getMusicalPostId());
                     postDTO.setTitle(post.getTitle());
                     postDTO.setViewCount(viewConverter(post.getViewCount()));
-                    postDTO.setPostId(post.getMusicalPostId());
                     postDTO.setLikeCount(post.getLikeCount());
                     postDTO.setCreatedAt(timeConverter(post.getCreatedAt()));
                     postDTO.setWriter(nickName);
+                    postDTO.setCommentCount(post.getComments());
                     return postDTO;
                 }).collect(Collectors.toList());
 
-        return postDTOList;
+        return new PageImpl<>(postDTOList, adjustedPageable, results.getTotalElements());
     }
 
     @Override
@@ -69,6 +75,7 @@ public class MusicalBoardServiceImpl implements MusicalBoardService {
 
 
         MusicalPostDTO postDTO = new MusicalPostDTO();
+        postDTO.setPostId(musicalPost.getMusicalPostId());
         postDTO.setTitle(musicalPost.getTitle());
         postDTO.setContent(musicalPost.getContent());
         postDTO.setLike(musicalPost.getLikeCount());
@@ -76,6 +83,7 @@ public class MusicalBoardServiceImpl implements MusicalBoardService {
         postDTO.setUpdatedAt(detailTimeConverter(musicalPost.getUpdatedAt()));
         postDTO.setNickname(user.getNickname());
         postDTO.setViewCount(musicalPost.getViewCount());
+        postDTO.setCommentCount(musicalPost.getComments());
 
         return postDTO;
     }
@@ -88,8 +96,10 @@ public class MusicalBoardServiceImpl implements MusicalBoardService {
         musicalPost.setMusicalId(musicalId);
         musicalPost.setUserId(userId);
         musicalPost.setCreatedAt(Timestamp.from(Instant.now()));
-        musicalPost.setViewCount(Long.valueOf(1));
+        musicalPost.setUpdatedAt(Timestamp.from(Instant.now()));
+        musicalPost.setViewCount(Long.valueOf(0));
         musicalPost.setLikeCount(Long.valueOf(0));
+        musicalPost.setComments(0L);
 
         musicalBoardRepository.save(musicalPost);
     }

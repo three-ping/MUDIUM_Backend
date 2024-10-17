@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -46,32 +47,33 @@ class MusicalBoardServiceImplTests {
     void findAllPosts() {
         // given
         Long musicalId = 1L;
-        List<Object[]> mockPosts = new ArrayList<>();
-        Object[] arr = new Object[]{createMockPost(1L, "제목", "내용", 1L, 1L), "user1"};
-        Object[] arr2 = new Object[]{createMockPost(2L, "제목2", "내용2", 2L, 1L), "user2"};
-        mockPosts.add(arr);
-        mockPosts.add(arr2);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+        List<Object[]> content = Arrays.asList(
+                new Object[]{createMockPost(1L, "제목", "내용", 1L, 1L), "user1"},
+                new Object[]{createMockPost(2L, "제목2", "내용2", 2L, 1L), "user2"}
+        );
+        Page<Object[]> mockPosts = new PageImpl<>(content, pageable, content.size());
 
-        when(musicalBoardRepository.findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE))
+        when(musicalBoardRepository.findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE, pageable))
                 .thenReturn(mockPosts);
         when(userService.findByUserId(1L)).thenReturn(createMockUser(1L, "user1"));
         when(userService.findByUserId(2L)).thenReturn(createMockUser(2L, "user2"));
 
         // when
-        List<MusicalPostListDTO> postList = musicalBoardService.findAllPost(musicalId);
+        Page<MusicalPostListDTO> postList = musicalBoardService.findAllPost(musicalId, pageable);
 
         // then
         assertNotNull(postList, "게시글 리스트는 null이 아니다.");
         assertFalse(postList.isEmpty(), "게시글 리스트는 비어있지 않다.");
-        assertEquals(mockPosts.size(), postList.size(), "게시글 리스트의 사이즈는 2이다.");
+        assertEquals(postList.getContent().size(), 2, "게시글 리스트의 사이즈는 2이다.");
 
-        assertEquals(postList.get(0).getTitle(), "제목", "첫번째 게시글의 제목은 '제목'이다.");
-        assertEquals(postList.get(0).getWriter(), "user1", "첫번째 게시글의 작성자 닉네임은 'user1'이다.");
+        assertEquals(postList.getContent().get(0).getTitle(), "제목", "첫번째 게시글의 제목은 '제목'이다.");
+        assertEquals(postList.getContent().get(0).getWriter(), "user1", "첫번째 게시글의 작성자 닉네임은 'user1'이다.");
 
-        assertEquals(postList.get(1).getTitle(), "제목2", "두번째 게시글의 제목은 '제목2'이다.");
-        assertEquals(postList.get(1).getWriter(), "user2", "두번째 게시글의 작성자 닉네임은 'user2'이다.");
+        assertEquals(postList.getContent().get(1).getTitle(), "제목2", "두번째 게시글의 제목은 '제목2'이다.");
+        assertEquals(postList.getContent().get(1).getWriter(), "user2", "두번째 게시글의 작성자 닉네임은 'user2'이다.");
 
-        verify(musicalBoardRepository).findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE);
+        verify(musicalBoardRepository).findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE, pageable);
     }
 
     private UserDTO createMockUser(Long id, String nickName) {
@@ -142,7 +144,6 @@ class MusicalBoardServiceImplTests {
         postDTO.setTitle("갈라쇼 후기");
         postDTO.setContent("너무 재밌었습니다!");
 
-        // when
         musicalBoardService.createPost(musicalId, userId, postDTO);
 
         // then
@@ -152,5 +153,73 @@ class MusicalBoardServiceImplTests {
                                 post.getTitle().equals(postDTO.getTitle()) &&
                                 post.getContent().equals(postDTO.getContent())
                 ));
+    }
+
+    @DisplayName("특정 뮤지컬에 관한 게시글을 수정한다.")
+    @Test
+    void updatePost() {
+        // given
+        Long musicalPostId = 1L;
+        Long userId = 1L;
+        MusicalPostDTO postDTO = new MusicalPostDTO();
+        postDTO.setContent("내용 수정");
+        postDTO.setTitle("제목 수정");
+
+        MusicalPost musicalPost = new MusicalPost();
+        musicalPost.setMusicalPostId(musicalPostId);
+        musicalPost.setUserId(userId);
+        musicalPost.setTitle("원래 제목");
+        musicalPost.setContent("원래 내용");
+        musicalPost.setCreatedAt(Timestamp.from(Instant.now()));
+        musicalPost.setViewCount(1L);
+        musicalPost.setLikeCount(0L);
+
+        when(musicalBoardRepository.findMusicalPostByMusicalPostIdAndUserIdAndActiveStatus(
+                musicalPostId, userId, ActiveStatus.ACTIVE
+        )).thenReturn(Optional.of(musicalPost));
+
+        // when
+        musicalBoardService.updatePost(musicalPostId, userId, postDTO);
+
+        // then
+        verify(musicalBoardRepository).findMusicalPostByMusicalPostIdAndUserIdAndActiveStatus(
+                musicalPostId, userId, ActiveStatus.ACTIVE
+        );
+
+        verify(musicalBoardRepository).save(argThat(post ->
+                post.getMusicalPostId().equals(musicalPostId) &&
+                        post.getUserId().equals(userId) &&
+                        post.getTitle().equals(postDTO.getTitle()) &&
+                        post.getContent().equals(postDTO.getContent())
+        ));
+    }
+
+    @DisplayName("특정 뮤지컬 게시글을 삭제한다.")
+    @Test
+    void deletePost() {
+        // given
+        Long musicalPostId = 1L;
+        Long userId = 1L;
+        MusicalPost musicalPost = new MusicalPost();
+        musicalPost.setMusicalPostId(musicalPostId);
+        musicalPost.setUserId(userId);
+        musicalPost.setTitle("삭제될 글 제목");
+        musicalPost.setContent("삭제될 글 내용");
+        musicalPost.setCreatedAt(Timestamp.from(Instant.now()));
+        musicalPost.setViewCount(1L);
+        musicalPost.setLikeCount(0L);
+
+        when(musicalBoardRepository.findMusicalPostByMusicalPostIdAndUserIdAndActiveStatus(
+                musicalPostId, userId, ActiveStatus.ACTIVE
+        )).thenReturn(Optional.of(musicalPost));
+
+        // when
+        musicalBoardService.deletePost(musicalPostId, userId);
+
+        // then
+        verify(musicalBoardRepository).findMusicalPostByMusicalPostIdAndUserIdAndActiveStatus(
+                musicalPostId, userId, ActiveStatus.ACTIVE
+        );
+        verify(musicalBoardRepository).save(argThat(post -> post.getActiveStatus().equals(ActiveStatus.INACTIVE)));
     }
 }

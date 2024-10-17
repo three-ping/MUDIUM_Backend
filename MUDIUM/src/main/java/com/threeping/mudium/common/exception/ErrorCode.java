@@ -79,6 +79,9 @@ public enum ErrorCode {
     INVALID_MUSICAL_BOARD_ID(4001306, HttpStatus.BAD_REQUEST, "잘못된 뮤지컬 게시글 번호입니다."),
     NOT_FOUND_MUSICAL_BOARD(4041307, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬 게시글 번호입니다."),
     NOT_FOUND_MUSICAL(4041308, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬입니다."),
+    MISSING_REQUIRED_CONTENT(4001308, HttpStatus.BAD_REQUEST, "필수 내용이 누락되었습니다."),
+    NOT_FOUND_COMMENT(4001309, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
+
 
     //Board
     INVALID_BOARD_ID(4002101,HttpStatus.BAD_REQUEST,"잘못된 자유게시글 번호입니다."),
