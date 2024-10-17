@@ -4,6 +4,8 @@ import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.boardcomment.aggregate.BoardComment;
 import com.threeping.mudium.boardcomment.dto.BoardCommentDTO;
 import com.threeping.mudium.boardcomment.repository.BoardCommentRepository;
+import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -67,6 +69,26 @@ public class BoardCommentServiceImpl implements BoardCommentService{
         boardComment.setContent(boardCommentDTO.getContent());
         boardComment.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
+        boardCommentRepository.save(boardComment);
+    }
+
+    @Override
+    public void updateBoardComment(BoardCommentDTO boardCommentDTO) {
+        BoardComment boardComment = boardCommentRepository.findById(boardCommentDTO.getBoardCommentId())
+                .orElseThrow(()->new CommonException(ErrorCode.NOT_FOUND_BOARD_COMMENT));
+
+        boardComment.setContent(boardCommentDTO.getContent());
+        boardComment.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        boardCommentRepository.save(boardComment);
+    }
+
+    @Override
+    public void deleteBoardComment(Long boardCommentId) {
+        BoardComment boardComment = boardCommentRepository.findById(boardCommentId)
+                .orElseThrow(()->new CommonException(ErrorCode.NOT_FOUND_BOARD_COMMENT));
+
+        boardComment.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        boardComment.setActiveStatus(ActiveStatus.INACTIVE);
         boardCommentRepository.save(boardComment);
     }
 }

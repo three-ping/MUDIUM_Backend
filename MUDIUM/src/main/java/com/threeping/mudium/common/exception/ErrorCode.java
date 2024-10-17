@@ -91,7 +91,9 @@ public enum ErrorCode {
     INVALID_NOTICE_ID(4002201,HttpStatus.BAD_REQUEST ,"잘못된 공지게시글 번호입니다." ),
     INVALID_USER_ROLE(4002202,HttpStatus.BAD_REQUEST ,"공지 게시글은 관리자만 관리할 수 있습니다." ),
     //Inquiry
-    NOT_FOUND_USER_INQUIRY(4012301,HttpStatus.NOT_FOUND ,"해당 문의를 찾을 수 없습니다." );
+    NOT_FOUND_USER_INQUIRY(4042301,HttpStatus.NOT_FOUND ,"해당 문의를 찾을 수 없습니다." ),
+    //BoardComment
+    NOT_FOUND_BOARD_COMMENT(4042401,HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;
