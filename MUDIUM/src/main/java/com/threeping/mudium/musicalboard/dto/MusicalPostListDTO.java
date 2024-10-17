@@ -20,4 +20,6 @@ public class MusicalPostListDTO {
     private String viewCount;
 
     private String createdAt;
+
+    private Long commentCount;
 }

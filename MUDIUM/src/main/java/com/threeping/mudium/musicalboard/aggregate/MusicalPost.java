@@ -39,6 +39,9 @@ public class MusicalPost {
     @Column(name = "`like`")
     private Long likeCount;
 
+    @Column(name = "comments")
+    private Long comments;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "active_status", nullable = false)
     private ActiveStatus activeStatus = ActiveStatus.ACTIVE;

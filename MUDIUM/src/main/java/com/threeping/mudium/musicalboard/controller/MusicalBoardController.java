@@ -7,10 +7,10 @@ import com.threeping.mudium.musicalboard.service.MusicalBoardService;
 import com.threeping.mudium.musicalboard.vo.MusicalPostVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/musical-board")
@@ -25,10 +25,10 @@ public class MusicalBoardController {
     }
 
     @GetMapping("/{boardId}")
-    public ResponseDTO<?> findMusicalBoard(@PathVariable Long boardId) {
-        List<MusicalPostListDTO> postListDTOlist = musicalBoardService.findAllPost(boardId);
+    public ResponseDTO<?> findMusicalBoard(@PathVariable Long boardId, Pageable pageable) {
+        Page<MusicalPostListDTO> postListDTOlist = musicalBoardService.findAllPost(boardId, pageable);
 
-        ResponseDTO<List<MusicalPostListDTO>> responseDTO = new ResponseDTO<>();
+        ResponseDTO<Page<MusicalPostListDTO>> responseDTO = new ResponseDTO<>();
         responseDTO.setData(postListDTOlist);
         responseDTO.setHttpStatus(HttpStatus.OK);
         responseDTO.setSuccess(true);
