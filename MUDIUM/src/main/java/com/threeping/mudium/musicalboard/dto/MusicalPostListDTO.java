@@ -15,11 +15,11 @@ public class MusicalPostListDTO {
 
     private String writer;
 
-    private Long comment;
-
-    private Long like;
+    private Long likeCount;
 
     private String viewCount;
 
     private String createdAt;
+
+    private Long commentCount;
 }

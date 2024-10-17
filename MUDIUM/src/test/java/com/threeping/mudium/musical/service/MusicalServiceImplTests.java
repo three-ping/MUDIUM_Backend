@@ -1,7 +1,7 @@
 package com.threeping.mudium.musical.service;
 
+import com.threeping.mudium.musical.dto.MusicalDTO;
 import com.threeping.mudium.musical.dto.MusicalListDTO;
-import com.threeping.mudium.musical.dto.MusicalTotalDTO;
 import com.threeping.mudium.performance.dto.PerformanceDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,12 +33,10 @@ class MusicalServiceImplTests {
         Long musicId = 3L;
 
         // when
-        MusicalTotalDTO musicalDetail = musicalService.findMusicalDetail(musicId);
-        List<PerformanceDTO> list = musicalDetail.getPerformanceList();
+        MusicalDTO musicalDetail = musicalService.findMusicalDetail(musicId);
 
         // then
         assertNotNull(musicalDetail, "조회된 뮤지컬 상세 정보는 null이 아니다.");
-        assertFalse(list.isEmpty(), "조회된 뮤지컬의 공연 정보는 비어있지 않다.");
     }
 
 
@@ -75,5 +73,19 @@ class MusicalServiceImplTests {
         // then
         assertNotNull(dtoPage, "검색된 이름으로 조회된 뮤지컬은 null이 아니다.");
         assertTrue(dtoPage.hasContent(), "검색된 이름으로 조회된 페이징 객체는 내용을 갖고 있다.");
+    }
+
+    @DisplayName("메인 화면에서 뮤지컬을 클릭 시, 뮤지컬의 이름으로 상세조회를 실행한다.")
+    @Test
+    void searchByExactTitle() {
+        // given
+        String title = "킹키부츠";
+
+        // when
+        MusicalDTO dto = musicalService.findMusicalDetailByName(title);
+
+        // then
+        assertNotNull(dto, "조회된 뮤지컬은 null이 아니다.");
+        assertEquals(dto.getTitle(), title);
     }
 }

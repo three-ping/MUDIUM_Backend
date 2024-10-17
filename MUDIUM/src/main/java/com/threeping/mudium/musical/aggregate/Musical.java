@@ -3,6 +3,7 @@ package com.threeping.mudium.musical.aggregate;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -30,7 +31,7 @@ public class Musical {
     private String poster;
 
     @Column(name = "view_count")
-    private int viewCount;
+    private Long viewCount;
 
     @Column(name = "production")
     private String production;

@@ -1,5 +1,6 @@
 package com.threeping.mudium.board.aggregate.entity;
 
+import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,7 @@ public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
-    private int boardId;
+    private Long boardId;
 
     @Column(name = "title")
     private String title;
@@ -34,8 +35,11 @@ public class Board {
     @Column(name = "view_count")
     private Long viewCount;
 
-    @Column(name = "boardLike")
+    @Column(name = "board_like")
     private Long boardLike;
+
+    @Column(name = "comments")
+    private Long comments;
 
     @Column(name = "active_status")
     @Enumerated(EnumType.STRING)

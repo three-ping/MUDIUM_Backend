@@ -25,12 +25,12 @@ public class GlobalExceptionHandler {
     }
 
     // 메소드의 인자 타입이 일치하지 않을 때 발생하는 예외
-    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
-    public ResponseDTO<?> handleArgumentNotValidException(MethodArgumentTypeMismatchException e) {
-        log.error("handleArgumentNotValidException() in GlobalExceptionHandler throw MethodArgumentTypeMismatchException : {}"
-                , e.getMessage());
-        return ResponseDTO.fail(e);
-    }
+//    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
+//    public ResponseDTO<?> handleArgumentNotValidException(MethodArgumentTypeMismatchException e) {
+//        log.error("handleArgumentNotValidException() in GlobalExceptionHandler throw MethodArgumentTypeMismatchException : {}"
+//                , e.getMessage());
+//        return ResponseDTO.fail(e);
+//    }
 
     // 필수 파라미터가 누락되었을 때 발생하는 예외
     @ExceptionHandler(value = {MissingServletRequestParameterException.class})

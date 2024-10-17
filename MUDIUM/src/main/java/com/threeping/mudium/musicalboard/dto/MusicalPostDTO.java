@@ -9,6 +9,8 @@ import lombok.*;
 @ToString
 public class MusicalPostDTO {
 
+    private Long postId;
+
     private String title;
 
     private String content;
@@ -22,6 +24,8 @@ public class MusicalPostDTO {
     private Long viewCount;
 
     private String nickname;
+
+    private Long commentCount;
 
 //    private List<MusicalComment> commentList;
 
