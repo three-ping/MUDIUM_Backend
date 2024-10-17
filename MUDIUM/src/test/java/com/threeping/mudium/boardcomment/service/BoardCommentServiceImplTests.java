@@ -82,7 +82,6 @@ class BoardCommentServiceImplTests {
         RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
         boardService.createBoard(registBoardDTO);
         Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
-        log.info("{}",savedBoard);
         String commentContent = "테스트 댓글 내용";
         BoardCommentDTO boardCommentDTO = new BoardCommentDTO();
         boardCommentDTO.setBoardId(savedBoard.getBoardId());
