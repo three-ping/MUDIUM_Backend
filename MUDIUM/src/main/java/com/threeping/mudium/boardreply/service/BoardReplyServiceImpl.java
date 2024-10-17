@@ -4,6 +4,8 @@ import com.threeping.mudium.board.aggregate.enumerate.ActiveStatus;
 import com.threeping.mudium.boardreply.aggregate.entity.BoardReply;
 import com.threeping.mudium.boardreply.dto.BoardReplyDTO;
 import com.threeping.mudium.boardreply.repository.BoardReplyRepository;
+import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,8 @@ public class BoardReplyServiceImpl implements BoardReplyService{
 
     @Override
     public List<BoardReplyDTO> viewBoardReply(Long boardCommentId) {
-        List<BoardReply> boardReplyList = boardReplyRepository.findByBoardCommentId(boardCommentId);
+        List<BoardReply> boardReplyList = boardReplyRepository
+                .findByBoardCommentIdAndActiveStatus(boardCommentId,ActiveStatus.ACTIVE);
         List<BoardReplyDTO> boardReplyDTOS = boardReplyList.stream()
                 .map(boardReply -> modelMapper.map(boardReply,BoardReplyDTO.class)).toList();
 
@@ -45,6 +48,24 @@ public class BoardReplyServiceImpl implements BoardReplyService{
         boardReply.setActiveStatus(ActiveStatus.ACTIVE);
         boardReply.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
+        boardReplyRepository.save(boardReply);
+    }
+
+    @Override
+    public void updateBoardReply(BoardReplyDTO boardReplyDTO) {
+        BoardReply boardReply  = boardReplyRepository.findById(boardReplyDTO.getBoardReplyId())
+                .orElseThrow(()->new CommonException(ErrorCode.NOT_FOUND_BOARD_REPLY));
+        boardReply.setContent(boardReplyDTO.getContent());
+        boardReply.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        boardReplyRepository.save(boardReply);
+    }
+
+    @Override
+    public void deleteBoardReply(Long boardReplyId) {
+        BoardReply boardReply = boardReplyRepository.findById(boardReplyId)
+                .orElseThrow(()->new CommonException(ErrorCode.NOT_FOUND_BOARD_REPLY));
+        boardReply.setActiveStatus(ActiveStatus.INACTIVE);
+        boardReply.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         boardReplyRepository.save(boardReply);
     }
 }

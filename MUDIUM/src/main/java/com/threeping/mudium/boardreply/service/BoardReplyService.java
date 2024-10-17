@@ -8,4 +8,8 @@ public interface BoardReplyService {
     List<BoardReplyDTO> viewBoardReply(Long boardCommentId);
 
     void createBoardReply(BoardReplyDTO boardReplyDTO);
+
+    void updateBoardReply(BoardReplyDTO boardReplyDTO);
+
+    void deleteBoardReply(Long boardReplyId);
 }

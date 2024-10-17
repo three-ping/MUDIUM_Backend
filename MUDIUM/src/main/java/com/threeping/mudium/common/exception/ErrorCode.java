@@ -93,7 +93,9 @@ public enum ErrorCode {
     //Inquiry
     NOT_FOUND_USER_INQUIRY(4042301,HttpStatus.NOT_FOUND ,"해당 문의를 찾을 수 없습니다." ),
     //BoardComment
-    NOT_FOUND_BOARD_COMMENT(4042401,HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다.");
+    NOT_FOUND_BOARD_COMMENT(4042401,HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
+    // BoardReply
+    NOT_FOUND_BOARD_REPLY(4042501,HttpStatus.NOT_FOUND,"해당 대댓글을 찾을 수 없습니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;

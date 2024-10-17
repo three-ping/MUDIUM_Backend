@@ -34,4 +34,20 @@ public class BoardReplyController {
 
         return ResponseDTO.ok(null);
     }
+
+    @PutMapping("{boardReplyId}")
+    private ResponseDTO<?> updateBoardReply(@PathVariable Long boardReplyId,
+                                            @RequestBody BoardReplyDTO boardReplyDTO){
+        boardReplyDTO.setBoardReplyId(boardReplyId);
+        boardReplyService.updateBoardReply(boardReplyDTO);
+
+        return ResponseDTO.ok(null);
+    }
+
+    @DeleteMapping("{boardReplyId}")
+    private ResponseDTO<?> deleteBoardReply(@PathVariable Long boardReplyId){
+        boardReplyService.deleteBoardReply(boardReplyId);
+
+        return ResponseDTO.ok(null);
+    }
 }
