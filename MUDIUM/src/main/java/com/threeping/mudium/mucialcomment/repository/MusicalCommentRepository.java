@@ -17,4 +17,6 @@ public interface MusicalCommentRepository extends JpaRepository<MusicalComment, 
 
     Optional<MusicalComment> findMusicalCommentByMusicalBoardCommentIdAndUserIdAndMusicalPostIdAndActiveStatus(
             Long musicalBoardCommentId, Long userId, Long postId, ActiveStatus activeStatus);
+
+    Optional<MusicalComment> findMusicalCommentByMusicalBoardCommentId(Long musicalBoardCommentId);
 }

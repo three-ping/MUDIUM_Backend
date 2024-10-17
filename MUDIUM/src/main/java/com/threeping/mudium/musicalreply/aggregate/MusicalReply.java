@@ -39,4 +39,8 @@ public class MusicalReply {
 
     @Column(name = "user_id")
     private Long userId;
+
+    public void softDelete() {
+        this.activeStatus = ActiveStatus.INACTIVE;
+    }
 }

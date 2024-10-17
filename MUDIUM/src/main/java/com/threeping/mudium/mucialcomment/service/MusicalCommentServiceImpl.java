@@ -6,6 +6,8 @@ import com.threeping.mudium.mucialcomment.aggregate.ActiveStatus;
 import com.threeping.mudium.mucialcomment.aggregate.MusicalComment;
 import com.threeping.mudium.mucialcomment.dto.MusicalCommentDTO;
 import com.threeping.mudium.mucialcomment.repository.MusicalCommentRepository;
+import com.threeping.mudium.musicalboard.aggregate.MusicalPost;
+import com.threeping.mudium.musicalboard.service.MusicalBoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +21,12 @@ import java.util.stream.Collectors;
 public class MusicalCommentServiceImpl implements MusicalCommentService {
 
     private final MusicalCommentRepository musicalCommentRepository;
+    private final MusicalBoardService musicalBoardService;
 
     @Autowired
-    public MusicalCommentServiceImpl(MusicalCommentRepository musicalCommentRepository) {
+    public MusicalCommentServiceImpl(MusicalCommentRepository musicalCommentRepository, MusicalBoardService musicalBoardService) {
         this.musicalCommentRepository = musicalCommentRepository;
+        this.musicalBoardService = musicalBoardService;
     }
 
     @Override
@@ -53,6 +57,9 @@ public class MusicalCommentServiceImpl implements MusicalCommentService {
 
     @Override
     public void createComment(Long userId, MusicalCommentDTO commentDTO) {
+       if(musicalBoardService.existingCheck(commentDTO.getPostId()) == false)
+           throw new CommonException(ErrorCode.NOT_FOUND_MUSICAL_BOARD);
+
         MusicalComment newComment = new MusicalComment();
         if(commentDTO.getContent().trim().isEmpty()) {
             throw new CommonException(ErrorCode.MISSING_REQUIRED_CONTENT);
@@ -96,6 +103,11 @@ public class MusicalCommentServiceImpl implements MusicalCommentService {
         existingComment.setActiveStatus(ActiveStatus.INACTIVE);
 
         musicalCommentRepository.save(existingComment);
+    }
+
+    @Override
+    public boolean existingCheck(Long commentId) {
+        return musicalCommentRepository.findMusicalCommentByMusicalBoardCommentId(commentId).isPresent();
     }
 
     private String timeConverter(Timestamp date) {
