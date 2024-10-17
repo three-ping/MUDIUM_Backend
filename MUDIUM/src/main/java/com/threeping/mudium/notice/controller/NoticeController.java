@@ -5,6 +5,7 @@ import com.threeping.mudium.common.ResponseDTO;
 import com.threeping.mudium.notice.dto.CreateNoticeDTO;
 import com.threeping.mudium.notice.dto.NoticeDetailDTO;
 import com.threeping.mudium.notice.dto.NoticeListDTO;
+import com.threeping.mudium.notice.dto.UpdateNoticeDTO;
 import com.threeping.mudium.notice.service.NoticeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,7 +34,7 @@ public class NoticeController {
         if (searchType != null && searchQuery != null && !searchQuery.trim().isEmpty()) {
             noticePage = noticeService.viewSearchedNoticeList(pageable,searchType,searchQuery);
         } else {
-            noticePage = noticeService.viewBoardList(pageable);
+            noticePage = noticeService.viewNoticeList(pageable);
         }
 
         return ResponseDTO.ok(noticePage);
@@ -48,6 +49,21 @@ public class NoticeController {
     @PostMapping("")
     private ResponseDTO<?> createNotice(@RequestBody CreateNoticeDTO createNoticeDTO){
         noticeService.createNotice(createNoticeDTO);
+        return ResponseDTO.ok(null);
+    }
+
+    @PutMapping("{noticeId}")
+    private ResponseDTO<?> updateNotice(@PathVariable Long noticeId,
+                                        @RequestBody UpdateNoticeDTO updateNoticeDTO){
+        updateNoticeDTO.setNoticeId(noticeId);
+        noticeService.updateNotice(updateNoticeDTO);
+        return ResponseDTO.ok(null);
+    }
+
+    @DeleteMapping("{noticeId}/{userId}")
+    private ResponseDTO<?> deleteNotice(@PathVariable Long noticeId,
+                                        @PathVariable Long userId){
+        noticeService.deleteNotice(noticeId,userId);
         return ResponseDTO.ok(null);
     }
 }
