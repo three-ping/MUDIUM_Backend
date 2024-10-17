@@ -18,4 +18,6 @@ public interface MusicalBoardService {
     void updatePost(Long musicalPostId, Long userId, MusicalPostDTO postDTO);
 
     void deletePost(Long musicalPostId, Long userId);
+
+    boolean existingCheck(Long postId);
 }

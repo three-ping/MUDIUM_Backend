@@ -81,6 +81,7 @@ public enum ErrorCode {
     NOT_FOUND_MUSICAL(4041308, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬입니다."),
     MISSING_REQUIRED_CONTENT(4001308, HttpStatus.BAD_REQUEST, "필수 내용이 누락되었습니다."),
     NOT_FOUND_COMMENT(4001309, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
+    NOT_FOUND_REPLY(4001310, HttpStatus.NOT_FOUND, "대댓글이 존재하지 않습니다."),
 
 
     //Board
