@@ -54,15 +54,27 @@ class InquiryServiceImplTests {
     @DisplayName("게시글 상세 정보를 조회한다.")
     @Test
     void inquiryDetailViewTest(){
-        Long inquiryId = 1L;
         Long invalidInquiryId = -1L;
-        Long memberId = 1L;
-        InquiryDetailDTO inquiryDetailDTO = inquiryService.viewInquiry(memberId,inquiryId);
+        Long userId = 1L;
+        String title = "테스트용 문의";
+        String content = "테스트용 문의 내용";
+        UserEntity user = new UserEntity();
+        user.setUserId(userId);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+
+        CreateInquiryDTO createInquiryDTO = new CreateInquiryDTO(
+                title,content,new Timestamp(System.currentTimeMillis()),user);
+
+        inquiryService.createInquiry(createInquiryDTO);
+
+        Inquiry createdInquiry = inquiryRepository.findByUser_userId(userId,pageable).getContent().get(0);
+
+        InquiryDetailDTO inquiryDetailDTO = inquiryService.viewInquiry(userId,createdInquiry.getInquiryId());
 
         assertNotNull(inquiryDetailDTO,"조회된 게시글은 null이 아니다.");
-        assertEquals(inquiryId,inquiryDetailDTO.getInquiryId(),"조회된 게시글 ID는 요청된 ID와 일치한다.");
+        assertEquals(createdInquiry.getInquiryId(),inquiryDetailDTO.getInquiryId(),"조회된 게시글 ID는 요청된 ID와 일치한다.");
         Exception exception = assertThrows(CommonException.class,
-                ()->inquiryService.viewInquiry(memberId,invalidInquiryId));
+                ()->inquiryService.viewInquiry(userId,invalidInquiryId));
         assertEquals("해당 문의를 찾을 수 없습니다.",exception.getMessage());
     }
 
