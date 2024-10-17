@@ -6,11 +6,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 @SpringBootTest
+@Transactional
 class MusicalBoardServiceImplTest {
 
     private final MusicalBoardService musicalBoardService;
@@ -25,9 +31,10 @@ class MusicalBoardServiceImplTest {
     void findAllPosts() {
         // given
         Long musicalBoardId = 1L;
+        Pageable pageable = PageRequest.of(0, 15, Sort.by("createdAt").descending());
 
         // when
-        List<MusicalPostListDTO> postList = musicalBoardService.findAllPost(musicalBoardId);
+        Page<MusicalPostListDTO> postList = musicalBoardService.findAllPost(musicalBoardId, pageable);
 
         // then
         assertNotNull(postList, "게시글 리스트는 null이 아니다.");
