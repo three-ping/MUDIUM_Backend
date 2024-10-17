@@ -90,7 +90,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             email = kakaoId + "@kakao.com";
         }
 
-        UserEntity userEntity = userRepository.findByUserIdentifier("KAKAO_" + name);
+        UserEntity userEntity = userRepository.findByUserIdentifier("KAKAO_" + email);
 
         if (userEntity == null) {
             log.info("regist new Kakao User: {}", name);
@@ -105,7 +105,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             log.info("regist newUser: {}", newUser);
             userService.registUser(newUser);
 
-            userEntity = userRepository.findByUserIdentifier("KAKAO_" + kakaoId);
+            userEntity = userRepository.findByUserIdentifier("KAKAO_" + email);
 
         }
         OAuth2LoginVO user = new OAuth2LoginVO();
