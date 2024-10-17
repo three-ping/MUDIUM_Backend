@@ -2,9 +2,11 @@ package com.threeping.mudium.inquiry.controller;
 
 import com.threeping.mudium.inquiry.aggregate.enumerate.SearchType;
 import com.threeping.mudium.common.ResponseDTO;
+import com.threeping.mudium.inquiry.dto.CreateInquiryDTO;
 import com.threeping.mudium.inquiry.dto.InquiryDetailDTO;
 import com.threeping.mudium.inquiry.dto.InquiryListDTO;
 import com.threeping.mudium.inquiry.service.InquiryService;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +46,17 @@ public class InquiryController {
                                           @PathVariable Long inquiryId){
         InquiryDetailDTO inquiryDetail = inquiryService.viewInquiry(userId,inquiryId);
         return ResponseDTO.ok(inquiryDetail);
+    }
+
+    @PostMapping("{userId}")
+    private ResponseDTO<?> createInquiry(@PathVariable Long userId,
+                                         @RequestBody CreateInquiryDTO createInquiryDTO){
+        UserEntity user = new UserEntity();
+        user.setUserId(userId);
+        createInquiryDTO.setUser(user);
+        inquiryService.createInquiry(createInquiryDTO);
+
+        return ResponseDTO.ok(null);
     }
 
 

@@ -1,8 +1,12 @@
 package com.threeping.mudium.inquiry.service;
 
 import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.inquiry.aggregate.entity.Inquiry;
+import com.threeping.mudium.inquiry.dto.CreateInquiryDTO;
 import com.threeping.mudium.inquiry.dto.InquiryDetailDTO;
 import com.threeping.mudium.inquiry.dto.InquiryListDTO;
+import com.threeping.mudium.inquiry.repository.InquiryRepository;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -22,6 +28,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class InquiryServiceImplTests {
 
     private final InquiryService inquiryService;
+    @Autowired
+    private InquiryRepository inquiryRepository;
+
     @Autowired
     InquiryServiceImplTests(InquiryService inquiryService) {
         this.inquiryService = inquiryService;
@@ -54,5 +63,27 @@ class InquiryServiceImplTests {
         Exception exception = assertThrows(CommonException.class,
                 ()->inquiryService.viewInquiry(memberId,invalidInquiryId));
         assertEquals("해당 문의를 찾을 수 없습니다.",exception.getMessage());
+    }
+
+    @DisplayName("게시글을 작성한다.")
+    @Test
+    void inquiryCreateTest(){
+        Long userId = 1L;
+        String title = "테스트용 문의";
+        String content = "테스트용 문의 내용";
+        UserEntity user = new UserEntity();
+        user.setUserId(userId);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+
+        CreateInquiryDTO createInquiryDTO = new CreateInquiryDTO(
+                title,content,new Timestamp(System.currentTimeMillis()),user);
+
+        inquiryService.createInquiry(createInquiryDTO);
+
+        Inquiry createdInquiry = inquiryRepository.findByUser_userId(userId,pageable).getContent().get(0);
+
+        assertEquals(title,createdInquiry.getTitle());
+        assertEquals(content,createdInquiry.getContent());
+
     }
 }
