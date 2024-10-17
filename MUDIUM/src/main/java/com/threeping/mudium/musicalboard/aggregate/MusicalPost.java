@@ -5,13 +5,14 @@ import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
-@Entity
+@Entity(name = "musicalPost")
 @Table(name = "TBL_MUSICAL_BOARD")
 public class MusicalPost {
 
@@ -35,18 +36,23 @@ public class MusicalPost {
     @Column(name = "view_count")
     private Long viewCount;
 
-    @Column(name = "like")
-    private Long like;
+    @Column(name = "`like`")
+    private Long likeCount;
+
+    @Column(name = "comments")
+    private Long comments;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "active_status", nullable = false)
-    private ActiveStatus activeStatus;
+    private ActiveStatus activeStatus = ActiveStatus.ACTIVE;
 
-    @JoinColumn(name = "user_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity userEntity;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @JoinColumn(name = "musical_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Musical musical;
+    @Column
+    private Long musicalId;
+
+    public void softDelete() {
+        this.activeStatus = ActiveStatus.INACTIVE;
+    }
 }

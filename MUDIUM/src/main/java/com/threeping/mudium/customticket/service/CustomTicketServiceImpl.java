@@ -7,6 +7,9 @@ import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.musical.repository.MusicalRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CustomTicketServiceImpl implements CustomTicketService {
 
@@ -62,5 +65,18 @@ public class CustomTicketServiceImpl implements CustomTicketService {
     @Override
     public void deleteCustomTicket(Long ticketId) {
         customTicketRepository.deleteById(ticketId);
+    }
+
+    @Override
+    public List<CustomTicketDTO> getAllCustomTickets() {
+        List<CustomTicketEntity> tickets = customTicketRepository.findAll();
+        return tickets.stream()
+                .map(ticket -> new CustomTicketDTO(
+                        ticket.getCustomTicketId(),
+                        ticket.getTicketImage(),
+                        ticket.getThemeName(),
+                        ticket.getMusical().getMusicalId()
+                ))
+                .collect(Collectors.toList());
     }
 }

@@ -1,11 +1,18 @@
 package com.threeping.mudium.musical.service;
 
-import com.threeping.mudium.musical.aggregate.Musical;
-import com.threeping.mudium.musical.dto.MusicalTotalDTO;
+
+import com.threeping.mudium.musical.dto.MusicalDTO;
+import com.threeping.mudium.musical.dto.MusicalListDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 
 public interface MusicalService {
-    MusicalTotalDTO findMusicalDetail(Long musicId);
+    MusicalDTO findMusicalDetail(Long musicId);
 
-    Musical findMusicalByMusicalId(Long musicalId);
+    MusicalDTO findMusicalByMusicalId(Long musicalId);
+
+    Page<MusicalListDTO> findByName(String title,Pageable pageable);
+
+    MusicalDTO findMusicalDetailByName(String title);
 }

@@ -1,4 +1,4 @@
-package com.threeping.mudium.board.aggregate.entity;
+package com.threeping.mudium.mucialcomment.aggregate;
 
 public enum ActiveStatus {
     ACTIVE,

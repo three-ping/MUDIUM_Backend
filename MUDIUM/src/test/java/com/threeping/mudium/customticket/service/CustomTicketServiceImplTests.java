@@ -28,7 +28,7 @@ class CustomTicketServiceImplTests {
     @Test
     public void testCreateCustomTicket() {
         // 테스트용 뮤지컬 생성 및 저장
-        Musical musical = new Musical(null, "Test Musical", "4.5", "url", "poster", 0);
+        Musical musical = new Musical(1L, "Test Musical", "전체관람가", "url", "poster", 1L, "production", "synopsys");
         musical = musicalRepository.save(musical); // 저장된 뮤지컬 객체
 
         // 커스텀 티켓 생성
@@ -50,7 +50,7 @@ class CustomTicketServiceImplTests {
     @Test
     public void testUpdateCustomTicket() {
         // 먼저 생성된 뮤지컬과 티켓 저장
-        Musical musical = new Musical(null, "Test Musical", "4.5", "url", "poster", 0);
+        Musical musical = new Musical(1L, "Test Musical", "전체관람가", "url", "poster", 1L, "production", "synopsys");
         musical = musicalRepository.save(musical);
 
         CustomTicketDTO customTicketDTO = new CustomTicketDTO(
@@ -84,7 +84,7 @@ class CustomTicketServiceImplTests {
     @Test
     public void testDeleteCustomTicket() {
         // 먼저 생성된 뮤지컬과 티켓 저장
-        Musical musical = new Musical(null, "Test Musical", "4.5", "url", "poster", 0);
+        Musical musical = new Musical(1L, "Test Musical", "전체관람가", "url", "poster", 1L, "production", "synopsys");
         musical = musicalRepository.save(musical);
 
         CustomTicketDTO customTicketDTO = new CustomTicketDTO(

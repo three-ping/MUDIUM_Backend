@@ -17,4 +17,7 @@ public class BoardDetailDTO {
     private Long userId;
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private Long boardLike;
+    private Long viewCount;
+    private Long comments;
 }

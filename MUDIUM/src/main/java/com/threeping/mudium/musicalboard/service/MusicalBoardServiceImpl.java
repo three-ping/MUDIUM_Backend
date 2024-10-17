@@ -2,20 +2,23 @@ package com.threeping.mudium.musicalboard.service;
 
 import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
-import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.musical.service.MusicalService;
 import com.threeping.mudium.musicalboard.aggregate.ActiveStatus;
 import com.threeping.mudium.musicalboard.aggregate.MusicalPost;
 import com.threeping.mudium.musicalboard.dto.MusicalPostDTO;
 import com.threeping.mudium.musicalboard.dto.MusicalPostListDTO;
 import com.threeping.mudium.musicalboard.repository.MusicalBoardRepository;
+import com.threeping.mudium.user.aggregate.dto.UserDTO;
+import com.threeping.mudium.user.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,52 +29,105 @@ public class MusicalBoardServiceImpl implements MusicalBoardService {
 
     private final MusicalBoardRepository musicalBoardRepository;
     private final MusicalService musicalService;
+    private final UserService userService;
 
     @Autowired
-    public MusicalBoardServiceImpl(MusicalBoardRepository musicalBoardRepository, MusicalService musicalService) {
+    public MusicalBoardServiceImpl(MusicalBoardRepository musicalBoardRepository,
+                                   MusicalService musicalService,
+                                   UserService userService) {
         this.musicalBoardRepository = musicalBoardRepository;
         this.musicalService = musicalService;
+        this.userService = userService;
     }
 
     @Override
-    public List<MusicalPostListDTO> findAllPost(Long musicalId) {
-        Musical musical = musicalService.findMusicalByMusicalId(musicalId);
-        List<MusicalPost> postList = musicalBoardRepository.findAllByMusicalAndActiveStatus(musical, ActiveStatus.ACTIVE);
+    public Page<MusicalPostListDTO> findAllPost(Long musicalId, Pageable pageable) {
+        int pageNumber = pageable.getPageNumber() <= 0 ? 0 : pageable.getPageNumber() - 1;
+        Sort sort = Sort.by("createdAt").descending();
+        Pageable adjustedPageable = PageRequest.of(pageNumber, pageable.getPageSize(), sort);
 
-        List<MusicalPostListDTO> postDTOList = postList.stream()
-                .map(musicalPost -> {
+        Page<Object[]> results = musicalBoardRepository.findAllByMusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE, adjustedPageable);
+
+        List<MusicalPostListDTO> postDTOList = results.getContent().stream()
+                .map(result -> {
+                    MusicalPost post = (MusicalPost) result[0];
+                    String nickName = (String) result[1];
+
                     MusicalPostListDTO postDTO = new MusicalPostListDTO();
-                    postDTO.setPostId(musicalPost.getMusicalPostId());
-                    postDTO.setTitle(musicalPost.getTitle());
-                    postDTO.setLike(musicalPost.getLike());
-                    postDTO.setViewCount(viewConverter(musicalPost.getViewCount()));
-                    postDTO.setCreatedAt(timeConverter(musicalPost.getCreatedAt()));
-                    postDTO.setWriter(musicalPost.getUserEntity().getNickname());
+                    postDTO.setPostId(post.getMusicalPostId());
+                    postDTO.setTitle(post.getTitle());
+                    postDTO.setViewCount(viewConverter(post.getViewCount()));
+                    postDTO.setLikeCount(post.getLikeCount());
+                    postDTO.setCreatedAt(timeConverter(post.getCreatedAt()));
+                    postDTO.setWriter(nickName);
+                    postDTO.setCommentCount(post.getComments());
                     return postDTO;
                 }).collect(Collectors.toList());
 
-        return postDTOList;
+        return new PageImpl<>(postDTOList, adjustedPageable, results.getTotalElements());
     }
 
     @Override
     public MusicalPostDTO findPost(Long musicalPostId) {
-        MusicalPost musicalPost = musicalBoardRepository.findMusicalPostsByMusicalPostId(musicalPostId)
+        MusicalPost musicalPost = musicalBoardRepository.findMusicalPostByMusicalPostIdAndActiveStatus(musicalPostId, ActiveStatus.ACTIVE)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_BOARD_ID));
+        UserDTO user = userService.findByUserId(musicalPost.getUserId());
 
-        if(musicalPost.getActiveStatus() == ActiveStatus.INACTIVE) {
-            throw new CommonException(ErrorCode.NOT_FOUND_MUSICAL_BOARD);
-        }
 
         MusicalPostDTO postDTO = new MusicalPostDTO();
+        postDTO.setPostId(musicalPost.getMusicalPostId());
         postDTO.setTitle(musicalPost.getTitle());
         postDTO.setContent(musicalPost.getContent());
-        postDTO.setLike(musicalPost.getLike());
+        postDTO.setLike(musicalPost.getLikeCount());
         postDTO.setCreatedAt(detailTimeConverter(musicalPost.getCreatedAt()));
         postDTO.setUpdatedAt(detailTimeConverter(musicalPost.getUpdatedAt()));
-        postDTO.setNickname(musicalPost.getUserEntity().getNickname());
+        postDTO.setNickname(user.getNickname());
         postDTO.setViewCount(musicalPost.getViewCount());
+        postDTO.setCommentCount(musicalPost.getComments());
 
         return postDTO;
+    }
+
+    @Override
+    public void createPost(Long musicalId, Long userId, MusicalPostDTO postDTO) {
+        MusicalPost musicalPost = new MusicalPost();
+        musicalPost.setTitle(postDTO.getTitle());
+        musicalPost.setContent(postDTO.getContent());
+        musicalPost.setMusicalId(musicalId);
+        musicalPost.setUserId(userId);
+        musicalPost.setCreatedAt(Timestamp.from(Instant.now()));
+        musicalPost.setUpdatedAt(Timestamp.from(Instant.now()));
+        musicalPost.setViewCount(Long.valueOf(0));
+        musicalPost.setLikeCount(Long.valueOf(0));
+        musicalPost.setComments(0L);
+
+        musicalBoardRepository.save(musicalPost);
+    }
+
+    @Override
+    public void updatePost(Long musicalPostId, Long userId, MusicalPostDTO postDTO) {
+        MusicalPost musicalPost = musicalBoardRepository.
+                findMusicalPostByMusicalPostIdAndUserIdAndActiveStatus(musicalPostId, userId, ActiveStatus.ACTIVE)
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_BOARD_ID));
+        if(!postDTO.getTitle().isEmpty()) {
+            postDTO.setTitle(musicalPost.getTitle());
+        }
+        if(!postDTO.getContent().isEmpty()) {
+            musicalPost.setContent(postDTO.getContent());
+        }
+        musicalPost.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        musicalBoardRepository.save(musicalPost);
+    }
+
+    @Override
+    public void deletePost(Long musicalPostId, Long userId) {
+        MusicalPost musicalPost = musicalBoardRepository.
+                findMusicalPostByMusicalPostIdAndUserIdAndActiveStatus(musicalPostId, userId, ActiveStatus.ACTIVE)
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_BOARD_ID));
+
+        musicalPost.softDelete();
+        musicalBoardRepository.save(musicalPost);
     }
 
     private String viewConverter(Long viewCount) {

@@ -3,12 +3,14 @@ package com.threeping.mudium.musical.aggregate;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @ToString
-@Entity(name = "TBL_MUSICAL_INFO")
+@Entity(name = "MusicalEntity")
+@Table(name = "TBL_MUSICAL_INFO")
 public class Musical {
 
     @Id
@@ -29,5 +31,11 @@ public class Musical {
     private String poster;
 
     @Column(name = "view_count")
-    private int viewCount;
+    private Long viewCount;
+
+    @Column(name = "production")
+    private String production;
+
+    @Column(name = "synopsys")
+    private String synopsys;
 }

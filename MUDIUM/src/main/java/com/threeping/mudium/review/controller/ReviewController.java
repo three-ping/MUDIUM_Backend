@@ -1,8 +1,8 @@
 package com.threeping.mudium.review.controller;
 
 import com.threeping.mudium.common.ResponseDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewRequestDTO;
+import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +44,25 @@ public class ReviewController {
         reviewService.createReview(musicalId, reviewRequestDTO);
 
         return ResponseDTO.ok("리뷰 등록 성공!!!");
+    }
+
+    // 리뷰 수정
+    @PutMapping("{musicalId}/{reviewId}")
+    private ResponseDTO<?> updateReview(@PathVariable Long musicalId,
+                                        @PathVariable Long reviewId,
+                                        @RequestBody ReviewRequestDTO reviewRequestDTO) {
+        reviewService.updateReview(musicalId, reviewId, reviewRequestDTO);
+
+        return ResponseDTO.ok("리뷰 수정 성공!!!");
+    }
+
+    // 리뷰 삭제
+    @DeleteMapping("/{musicalId}/{reviewId}")
+    private ResponseDTO<?> deleteReview(@PathVariable Long musicalId,
+                                        @PathVariable Long reviewId,
+                                        @RequestBody Long userId) {
+        reviewService.deleteReview(musicalId, reviewId, userId);
+
+        return ResponseDTO.ok("리뷰 삭제 성공!!!");
     }
 }

@@ -1,18 +1,16 @@
 package com.threeping.mudium.review.service;
 
-import com.threeping.mudium.review.aggregate.dto.ReviewRequestDTO;
-import com.threeping.mudium.review.aggregate.dto.ReviewResponseDTO;
-import com.threeping.mudium.review.aggregate.entity.Review;
+import com.threeping.mudium.review.dto.ReviewRequestDTO;
+import com.threeping.mudium.review.dto.ReviewResponseDTO;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @Transactional
@@ -21,9 +19,9 @@ class ReviewServiceTests {
     @Autowired
     ReviewService reviewService;
 
-    // 리뷰 전체 조회
+    @DisplayName("리뷰 전체 조회한다.")
     @Test
-    void findReviewByMusicalIdTest() {
+    void findReviewByMusicalIdAndActiveStatusTest() {
         // Given
         Long musicalId = 1L;
 
@@ -39,9 +37,9 @@ class ReviewServiceTests {
         assertEquals(musicalId, firstReview.getMusicalId());    // 뮤지컬 ID가 일치하는지 확인
     }
 
-    // 리뷰 상세 조회
+    @DisplayName("리뷰 상세 조회한다.")
     @Test
-    void findReviewByMusicalIdAndReviewIdTest() {
+    void findReviewByMusicalIdAndReviewIdAndActiveStatusTest() {
         // Given
         Long musicalId = 1L;
         Long reviewId = 11L;
@@ -58,7 +56,7 @@ class ReviewServiceTests {
         assertEquals(reviewId, review.getReviewId());
     }
 
-    // 리뷰 작성
+    @DisplayName("리뷰 작성을 한다.")
     @Test
     void createReviewTest() {
         // Given
@@ -70,7 +68,32 @@ class ReviewServiceTests {
 
         // When
         assertDoesNotThrow(() -> reviewService.createReview(musicalId, reviewRequestDTO));
+    }
 
+    @DisplayName("리뷰 수정을 한다.")
+    @Test
+    void updateReviewTest() {
+        // Given
+        Long musicalId = 1L;
+        Long reviewId = 11L;
+        Long userId = 5L;
+        String content = "지루하지 않고 몰입하며 봤습니다. 재미있어요!!!";
 
+        ReviewRequestDTO reviewRequestDTO = new ReviewRequestDTO(content, userId);
+
+        // When
+        assertDoesNotThrow(() -> reviewService.updateReview(musicalId, reviewId, reviewRequestDTO));
+    }
+
+    @DisplayName("리뷰 삭제를 한다.")
+    @Test
+    void deleteReviewTest() {
+        // Given
+        Long musicalId = 1L;
+        Long reviewId = 23L;
+        Long userId = 3L;
+
+        // When
+        assertDoesNotThrow(() -> reviewService.deleteReview(musicalId, reviewId, userId));
     }
 }

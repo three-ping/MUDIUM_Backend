@@ -3,6 +3,7 @@ package com.threeping.mudium.scope.service;
 import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
 import com.threeping.mudium.scope.aggregate.entity.ScopeId;
 import com.threeping.mudium.scope.repository.ScopeRepository;
+import com.threeping.mudium.scope.vo.ScopeVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,10 +31,11 @@ class ScopeServiceImplTests {
         // DB에 이미 존재하는 회원 ID와 뮤지컬 ID 사용
         Long existingUserId = 1L;
         Long existingMusicalId = 1L;
+        ScopeVO scopeVO = new ScopeVO((byte) 5);
+
 
         // 새로운 별점 추가 테스트
-        ScopeEntity scopeEntity = new ScopeEntity(existingMusicalId, existingUserId, (byte) 5, null, null);
-        ScopeEntity savedScope = scopeService.createOrUpdateScope(scopeEntity);
+        ScopeEntity savedScope = scopeService.createOrUpdateScope(existingMusicalId, existingUserId, scopeVO);
 
         // 별점이 정상적으로 추가되었는지 확인
         assertNotNull(savedScope);
@@ -43,12 +45,11 @@ class ScopeServiceImplTests {
     @Test
     public void testUpdateScope() {
         // 기존에 별점이 있는 경우 수정 테스트
-        ScopeEntity existingScope = new ScopeEntity(1L, 1L, (byte) 4, Timestamp.valueOf(LocalDateTime.now()), null);
+        ScopeEntity existingScope = new ScopeEntity(1L, 1L, (byte) 4, Timestamp.valueOf(LocalDateTime.now()), null, "닉네임");
         scopeRepository.save(existingScope);
 
         // 기존 별점을 5로 수정
-        ScopeEntity updatedScope = new ScopeEntity(1L, 1L, (byte) 5, null, null);
-        ScopeEntity result = scopeService.createOrUpdateScope(updatedScope);
+        ScopeEntity result = scopeService.createOrUpdateScope(1L, 1L, new ScopeVO((byte) 4));
 
         // 별점이 정상적으로 수정되었는지 확인
         assertNotNull(result);
