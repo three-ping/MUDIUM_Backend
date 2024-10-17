@@ -48,11 +48,28 @@ public class ReviewServiceImpl implements ReviewService {
         List<Review> reviews = reviewRepository.findAllByMusical_MusicalIdAndActiveStatus(musicalId, ActiveStatus.ACTIVE);
 
         /* 필기. Stream API 사용 */
-        List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
-                .map(review -> modelMapper.map(review, ReviewResponseDTO.class))
-                .collect(Collectors.toList());
+//        List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
+//                .map(review -> modelMapper.map(review, ReviewResponseDTO.class))
+//                .collect(Collectors.toList());
+//
+//        return reviewResponseDTO;
+        return reviews.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
-        return reviewResponseDTO;
+    private ReviewResponseDTO convertToDTO(Review review) {
+        ReviewResponseDTO dto = new ReviewResponseDTO();
+        dto.setReviewId(review.getReviewId());
+        dto.setContent(review.getContent());
+        dto.setCreatedAt(review.getCreatedAt());
+        dto.setLike(review.getLike());
+        dto.setActiveStatus(review.getActiveStatus());
+        dto.setMusicalId(review.getMusical().getMusicalId());
+        dto.setUserId(review.getUser().getUserId());
+        dto.setUserProfile(review.getUser().getProfileImage());
+        dto.setUserNickname(review.getUser().getNickname());
+        dto.setMusicalTitle(review.getMusical().getTitle());
+
+        return dto;
     }
 
     // 리뷰 상세 조회
