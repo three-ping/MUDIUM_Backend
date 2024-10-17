@@ -5,6 +5,7 @@ import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.inquiry.aggregate.entity.Inquiry;
 import com.threeping.mudium.inquiry.aggregate.enumerate.SearchType;
+import com.threeping.mudium.inquiry.dto.CreateInquiryDTO;
 import com.threeping.mudium.inquiry.dto.InquiryDetailDTO;
 import com.threeping.mudium.inquiry.dto.InquiryListDTO;
 import com.threeping.mudium.inquiry.repository.InquiryRepository;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 // 관리자용 전체 조회 메서드 추가 예정
@@ -83,6 +85,18 @@ public class InquiryServiceImpl implements InquiryService{
             throw new CommonException(ErrorCode.NOT_FOUND_USER_INQUIRY);
         }
         return inquiryDetailDTO;
+    }
+
+    @Override
+    public void createInquiry(CreateInquiryDTO createInquiryDTO) {
+        Inquiry inquiry = new Inquiry();
+        inquiry.setTitle(createInquiryDTO.getTitle());
+        inquiry.setContent(createInquiryDTO.getContent());
+        inquiry.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        inquiry.setComments(0L);
+        inquiry.setUser(createInquiryDTO.getUser());
+
+        inquiryRepository.save(inquiry);
     }
 
     public Page<InquiryListDTO> searchInquiryByTitle(String title,Long userId, Pageable pageable) {
