@@ -8,6 +8,7 @@ import com.threeping.mudium.inquiry.aggregate.enumerate.SearchType;
 import com.threeping.mudium.inquiry.dto.CreateInquiryDTO;
 import com.threeping.mudium.inquiry.dto.InquiryDetailDTO;
 import com.threeping.mudium.inquiry.dto.InquiryListDTO;
+import com.threeping.mudium.inquiry.dto.UpdateInquiryDTO;
 import com.threeping.mudium.inquiry.repository.InquiryRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -97,6 +98,23 @@ public class InquiryServiceImpl implements InquiryService{
         inquiry.setUser(createInquiryDTO.getUser());
 
         inquiryRepository.save(inquiry);
+    }
+
+    @Override
+    public void updateInquiry(UpdateInquiryDTO updateInquiryDTO) {
+        Inquiry inquiry = inquiryRepository
+                .findByInquiryIdAndUser_userId(updateInquiryDTO.getInquiryId(),updateInquiryDTO.getUserId());
+        inquiry.setTitle(updateInquiryDTO.getTitle());
+        inquiry.setContent(updateInquiryDTO.getContent());
+        inquiry.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        inquiryRepository.save(inquiry);
+    }
+
+    @Override
+    public void deleteInquiry(Long userId, Long inquiryId) {
+        Inquiry inquiry = inquiryRepository
+                .findByInquiryIdAndUser_userId(inquiryId,userId);
+        inquiryRepository.delete(inquiry);
     }
 
     public Page<InquiryListDTO> searchInquiryByTitle(String title,Long userId, Pageable pageable) {

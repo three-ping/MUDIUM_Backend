@@ -5,6 +5,7 @@ import com.threeping.mudium.inquiry.aggregate.entity.Inquiry;
 import com.threeping.mudium.inquiry.dto.CreateInquiryDTO;
 import com.threeping.mudium.inquiry.dto.InquiryDetailDTO;
 import com.threeping.mudium.inquiry.dto.InquiryListDTO;
+import com.threeping.mudium.inquiry.dto.UpdateInquiryDTO;
 import com.threeping.mudium.inquiry.repository.InquiryRepository;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
@@ -85,5 +86,59 @@ class InquiryServiceImplTests {
         assertEquals(title,createdInquiry.getTitle());
         assertEquals(content,createdInquiry.getContent());
 
+    }
+
+    @DisplayName("게시글을 수정한다.")
+    @Test
+    void inquiryUpdateTest(){
+        Long userId = 1L;
+        String title = "테스트용 문의";
+        String content = "테스트용 문의 내용";
+        UserEntity user = new UserEntity();
+        user.setUserId(userId);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+
+        CreateInquiryDTO createInquiryDTO = new CreateInquiryDTO(
+                title,content,new Timestamp(System.currentTimeMillis()),user);
+
+        inquiryService.createInquiry(createInquiryDTO);
+
+        Inquiry createdInquiry = inquiryRepository.findByUser_userId(userId,pageable).getContent().get(0);
+
+        String updatedTitle = "수정된 문의";
+        String updatedContent = "수정된 내용";
+        UpdateInquiryDTO updateInquiryDTO = new UpdateInquiryDTO(
+                userId,createdInquiry.getInquiryId(),updatedTitle,updatedContent
+                ,new Timestamp(System.currentTimeMillis()));
+
+        inquiryService.updateInquiry(updateInquiryDTO);
+
+        Inquiry updatedInquiry = inquiryRepository.findById(createdInquiry.getInquiryId()).orElseThrow();
+
+        assertEquals(updatedTitle,updatedInquiry.getTitle());
+        assertEquals(updatedContent,updatedInquiry.getContent());
+    }
+
+    @DisplayName("게시글을 삭제한다.")
+    @Test
+    void deleteInquiryTest(){
+        Long userId = 1L;
+        String title = "테스트용 문의";
+        String content = "테스트용 문의 내용";
+        UserEntity user = new UserEntity();
+        user.setUserId(userId);
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+
+        CreateInquiryDTO createInquiryDTO = new CreateInquiryDTO(
+                title,content,new Timestamp(System.currentTimeMillis()),user);
+
+        inquiryService.createInquiry(createInquiryDTO);
+
+        Inquiry createdInquiry = inquiryRepository.findByUser_userId(userId,pageable).getContent().get(0);
+
+        inquiryService.deleteInquiry(userId,createdInquiry.getInquiryId());
+
+assertThrows(CommonException.class,
+                ()->inquiryService.viewInquiry(createdInquiry.getInquiryId(),userId));
     }
 }
