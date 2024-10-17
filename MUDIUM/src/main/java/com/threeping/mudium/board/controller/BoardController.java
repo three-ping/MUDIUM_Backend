@@ -7,11 +7,13 @@ import com.threeping.mudium.board.dto.RegistBoardDTO;
 import com.threeping.mudium.board.dto.UpdateBoardDTO;
 import com.threeping.mudium.board.service.BoardService;
 import com.threeping.mudium.common.ResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/board")
 public class BoardController {
@@ -68,4 +70,12 @@ public class BoardController {
         updateBoardDTO.setUserId(userId);
         boardService.deleteBoard(updateBoardDTO);
         return ResponseDTO.ok(null);
-    }}
+    }
+
+    @PutMapping("{boardId}/count")
+    private ResponseDTO<?> plusBoardViewCount(@PathVariable Long boardId){
+        boardService.plusBoardViewCount(boardId);
+        return ResponseDTO.ok(null);
+
+    }
+}

@@ -37,7 +37,7 @@ class BoardServiceImplTests {
     @DisplayName("게시글 리스트를 페이지로 조회한다.")
     @Test
     void boardPageViewTest(){
-        Pageable pageable = PageRequest.of(9999,10, Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(1,10, Sort.by("createdAt").descending());
 
         Page<BoardListDTO> boardDTOPage = boardService.viewBoardList(pageable);
 
@@ -50,7 +50,13 @@ class BoardServiceImplTests {
     @DisplayName("게시글 상세 정보를 조회한다.")
     @Test
     void boardDetailViewTest(){
-        Long boardId = 1L;
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
+        boardService.createBoard(registBoardDTO);
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        Long boardId = savedBoard.getBoardId();
         Long invalidBoardId = -1L;
 
         BoardDetailDTO firstBoardDetail = boardService.viewBoard(boardId);
@@ -58,7 +64,7 @@ class BoardServiceImplTests {
         assertNotNull(firstBoardDetail,"조회된 게시글은 null이 아니다.");
         assertEquals(boardId,firstBoardDetail.getId(),"조회된 게시글 ID는 요청된 ID와 일치한다.");
         Exception exception = assertThrows(CommonException.class,
-                ()->{boardService.viewBoard(invalidBoardId);});
+                ()->boardService.viewBoard(invalidBoardId));
         assertEquals("잘못된 자유게시글 번호입니다.",exception.getMessage());
 
     }
@@ -99,8 +105,8 @@ class BoardServiceImplTests {
         String updatedTitle = "수정할제목";
         String updatedContent = "수정할내용";
         UpdateBoardDTO updateBoardDTO = new UpdateBoardDTO(
-                updatedTitle,updatedContent,1L,Long.valueOf(savedBoard.getBoardId()));
-        Board updatedBoard = boardRepository.findById(Long.valueOf(savedBoard.getBoardId())).orElseThrow();
+                updatedTitle,updatedContent,1L,savedBoard.getBoardId(),0L);
+        Board updatedBoard = boardRepository.findById(savedBoard.getBoardId()).orElseThrow();
         boardService.updateBoard(updateBoardDTO);
         assertEquals(updatedTitle, updatedBoard.getTitle());
         assertEquals(updatedContent, updatedBoard.getContent());
@@ -119,10 +125,29 @@ class BoardServiceImplTests {
 
         Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
         UpdateBoardDTO boardDTO = new UpdateBoardDTO();
-        boardDTO.setBoardId(Long.valueOf(savedBoard.getBoardId()));
+        boardDTO.setBoardId(savedBoard.getBoardId());
         boardDTO.setUserId(savedBoard.getUser().getUserId());
         boardService.deleteBoard(boardDTO);
 
         assertEquals(savedBoard.getActiveStatus(),ActiveStatus.INACTIVE);
+    }
+
+    @Test
+    @DisplayName("게시글을 조회시 조회수를 1 증가시킨다.")
+    void plusBoardViewCountTest(){
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
+        boardService.createBoard(registBoardDTO);
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        Long oldViewCount = savedBoard.getViewCount();
+        Long boardId = savedBoard.getBoardId();
+
+        boardService.plusBoardViewCount(boardId);
+        Board plusedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+
+        assertEquals(oldViewCount+1,plusedBoard.getViewCount(),
+                "조회된 게시글의 조회수는 1 증가한다.");
     }
 }

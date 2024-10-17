@@ -1,6 +1,8 @@
 package com.threeping.mudium.notice.service;
 
 import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.notice.aggregate.entity.Notice;
+import com.threeping.mudium.notice.dto.CreateNoticeDTO;
 import com.threeping.mudium.notice.dto.NoticeDetailDTO;
 import com.threeping.mudium.notice.dto.NoticeListDTO;
 import com.threeping.mudium.notice.repository.NoticeRepository;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,7 +58,32 @@ class NoticeServiceImplTests {
         assertEquals(noticeId, firstNoticeDetail.getNoticeId(), "조회된 공지사항 ID는 요청된 ID와 일치한다.");
 
         Exception exception = assertThrows(CommonException.class,
-                () -> { noticeService.viewNotice(invalidNoticeId); });
+                () ->  noticeService.viewNotice(invalidNoticeId));
         assertEquals("잘못된 공지게시글 번호입니다.", exception.getMessage());
+    }
+
+    @DisplayName("공지 게시글을 작성한다.")
+    @Test
+    void createNoticeTest() {
+        Long memberId = 2L;
+        Long adminId = 3L;
+        String title = "테스트 타이틀";
+        String content = "테스트 콘텐트";
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        CreateNoticeDTO createNoticeDTO = new CreateNoticeDTO(
+                adminId, title, content, currentTimestamp, currentTimestamp
+        );
+        CreateNoticeDTO unValidNoticeDTO = new CreateNoticeDTO(
+                memberId, title, content, currentTimestamp, currentTimestamp
+        );
+
+        noticeService.createNotice(createNoticeDTO);
+
+        assertThrows(CommonException.class,()->noticeService.createNotice(unValidNoticeDTO));
+        Notice createdNotice = noticeRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        assertNotNull(createdNotice, "공지사항은 데이터베이스에 존재해야 한다.");
+        assertEquals(title, createdNotice.getTitle(), "저장된 타이틀은 입력된 타이틀과 일치해야 한다.");
+        assertEquals(content, createdNotice.getContent(), "저장된 콘텐츠는 입력된 콘텐츠와 일치해야 한다.");
+        assertEquals(adminId, createdNotice.getUser().getUserId(), "저장된 작성자 ID는 입력된 작성자와 일치해야 한다.");
     }
 }

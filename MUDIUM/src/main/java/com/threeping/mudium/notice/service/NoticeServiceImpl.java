@@ -4,18 +4,24 @@ import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.notice.aggregate.enumerate.SearchType;
 import com.threeping.mudium.notice.aggregate.entity.Notice;
+import com.threeping.mudium.notice.dto.CreateNoticeDTO;
 import com.threeping.mudium.notice.dto.NoticeDetailDTO;
 import com.threeping.mudium.notice.dto.NoticeListDTO;
 import com.threeping.mudium.notice.repository.NoticeRepository;
+import com.threeping.mudium.user.aggregate.entity.UserRole;
 import com.threeping.mudium.user.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class NoticeServiceImpl implements NoticeService {
 
@@ -72,6 +78,19 @@ public class NoticeServiceImpl implements NoticeService {
                 (()->new CommonException(ErrorCode.INVALID_NOTICE_ID));
         NoticeDetailDTO noticeDetailDTO = modelMapper.map(notice,NoticeDetailDTO.class);
         return noticeDetailDTO;
+    }
+
+    @Override
+    @Transactional
+    public void createNotice(CreateNoticeDTO createNoticeDTO) {
+        Long userId = createNoticeDTO.getUserId();
+        UserRole userRole = userRepository.findByUserId(userId).getUserRole();
+        if(userRole.equals(UserRole.ROLE_MEMBER)) throw new CommonException(ErrorCode.INVALID_USER_ROLE);
+
+        createNoticeDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        Notice notice = modelMapper.map(createNoticeDTO,Notice.class);
+        notice.setViewCount(0L);
+        noticeRepository.save(notice);
     }
 
     public Page<NoticeListDTO> searchNoticeByTitle(String title, Pageable pageable) {
