@@ -114,7 +114,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         // 사용자 인증 정보 및 식별자 생성
         String userAuthId = ((User) authResult.getPrincipal()).getUsername();
         SignupPath signupPath = ((RequestLoginVO) authResult.getDetails()).getSignupPath();
-        String userIdentifier = signupPath + "_" + userAuthId;
+        String userIdentifier = userAuthId;
 
         // Claims 및 역할 정보 설정
         Claims claims = Jwts.claims().setSubject(userIdentifier);
