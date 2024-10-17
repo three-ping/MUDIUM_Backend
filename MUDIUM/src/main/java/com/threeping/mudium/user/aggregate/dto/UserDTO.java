@@ -27,8 +27,7 @@ public class UserDTO {
     @JsonProperty("email")
     private String email;
 
-    @JsonProperty("user_auth_id")
-    private String userAuthId; // 신규 추가, 일반 로그인 ID 또는 소셜 로그인 고유번호
+
 
     @JsonProperty("user_status")
     private ActiveStatus userStatus;
@@ -63,7 +62,7 @@ public class UserDTO {
         private String password;
         private String nickname;
         private String email;
-        private String userAuthId; // 추가
+//        private String userAuthId; // 추가
         private ActiveStatus userStatus;
         private LocalDateTime createdAt;
         private LocalDateTime withdrawnAt;
@@ -97,10 +96,10 @@ public class UserDTO {
             return this;
         }
 
-        public UserDTOBuilder userAuthId(String userAuthId) { // 추가
-            this.userAuthId = userAuthId;
-            return this;
-        }
+//        public UserDTOBuilder userAuthId(String userAuthId) { // 추가
+//            this.userAuthId = userAuthId;
+//            return this;
+//        }
 
         public UserDTOBuilder userStatus(ActiveStatus userStatus) {
             this.userStatus = userStatus;
@@ -144,7 +143,7 @@ public class UserDTO {
             userDTO.password = this.password;
             userDTO.nickname = this.nickname;
             userDTO.email = this.email;
-            userDTO.userAuthId = this.userAuthId; // 추가
+//            userDTO.userAuthId = this.userAuthId; // 추가
             userDTO.userStatus = this.userStatus;
             userDTO.createdAt = this.createdAt;
             userDTO.withdrawnAt = this.withdrawnAt;

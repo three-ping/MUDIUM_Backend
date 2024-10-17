@@ -64,7 +64,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        return new User(loginUser.getUserAuthId()
+        return new User(loginUser.getUserIdentifier()
                 , encryptedPwd
                 , true
                 , true
@@ -98,7 +98,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             RequestRegistUserVO newUser = new RequestRegistUserVO();
             newUser.setEmail(email);
             newUser.setUserName(name != null ? name : "KakaoUser");
-            newUser.setUserAuthId(kakaoId);
+//            newUser.setUserAuthId(kakaoId);
             newUser.setPassword(UUID.randomUUID().toString());
             newUser.setSignupPath(SignupPath.KAKAO);
             newUser.setNickname("Kakao@"+kakaoId);

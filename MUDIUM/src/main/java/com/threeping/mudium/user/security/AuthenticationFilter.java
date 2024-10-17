@@ -72,7 +72,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         try {
             RequestLoginVO creds = new ObjectMapper().readValue(request.getInputStream(), RequestLoginVO.class);
 
-            String userIdentifier = creds.getSignupPath() + "_" + creds.getUserAuthId();
+            String userIdentifier = creds.getSignupPath() + "_" + creds.getEmail();
 
             //필기. 검증 사용자 아이디 비번 실패시 핸들링
             UserEntity loginUser = userService.findByUserIdentifier(userIdentifier);

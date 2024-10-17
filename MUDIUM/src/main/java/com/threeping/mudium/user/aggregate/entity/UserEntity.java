@@ -29,8 +29,7 @@ public class UserEntity {
     @Column(name = "email", length = 255)
     private String email;
 
-    @Column(name = "user_auth_id", nullable = false, length = 255)
-    private String userAuthId;
+
 
     @Enumerated(EnumType.STRING)
     @Column(name = "user_status", nullable = false, length = 255)
@@ -62,7 +61,7 @@ public class UserEntity {
 
     @PrePersist
     public void prePersist () {
-        this.userIdentifier = this.signupPath + "_" + this.userAuthId;
+        this.userIdentifier = this.signupPath + "_" + this.email;
     }
 
     public void deactivateUser () {
