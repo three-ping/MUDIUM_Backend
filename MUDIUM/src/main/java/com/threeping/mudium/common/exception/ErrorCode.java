@@ -88,7 +88,9 @@ public enum ErrorCode {
     INVALID_BOARD_USER_ID(4002102,HttpStatus.BAD_REQUEST,"수정 권한이 없는 게시글입니다."),
     //Notice
     INVALID_NOTICE_ID(4002201,HttpStatus.BAD_REQUEST ,"잘못된 공지게시글 번호입니다." ),
-    INVALID_USER_ROLE(4002202,HttpStatus.BAD_REQUEST ,"공지 게시글은 관리자만 관리할 수 있습니다." );
+    INVALID_USER_ROLE(4002202,HttpStatus.BAD_REQUEST ,"공지 게시글은 관리자만 관리할 수 있습니다." ),
+    //Inquiry
+    NOT_FOUND_USER_INQUIRY(4012301,HttpStatus.NOT_FOUND ,"해당 문의를 찾을 수 없습니다." );
 
     private final Integer code;
     private final HttpStatus httpStatus;
