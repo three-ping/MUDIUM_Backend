@@ -1,10 +1,12 @@
 package com.threeping.mudium.notice.service;
 
 import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.notice.aggregate.entity.Notice;
 import com.threeping.mudium.notice.dto.CreateNoticeDTO;
 import com.threeping.mudium.notice.dto.NoticeDetailDTO;
 import com.threeping.mudium.notice.dto.NoticeListDTO;
+import com.threeping.mudium.notice.dto.UpdateNoticeDTO;
 import com.threeping.mudium.notice.repository.NoticeRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +41,7 @@ class NoticeServiceImplTests {
     void noticePageViewTest() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 
-        Page<NoticeListDTO> noticeDTOPage = noticeService.viewBoardList(pageable);
+        Page<NoticeListDTO> noticeDTOPage = noticeService.viewNoticeList(pageable);
 
         assertNotNull(noticeDTOPage, "조회된 페이지는 null이 아니다.");
         assertTrue(noticeDTOPage.hasContent(), "조회된 페이지는 내용이 있다.");
@@ -49,7 +51,16 @@ class NoticeServiceImplTests {
     @DisplayName("공지 게시글 상세 정보를 조회한다.")
     @Test
     void noticeDetailViewTest() {
-        Long noticeId = 1L;
+        Long adminId = 3L;
+        String title = "테스트 타이틀";
+        String content = "테스트 콘텐트";
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        CreateNoticeDTO createNoticeDTO = new CreateNoticeDTO(
+                adminId, title, content, currentTimestamp, currentTimestamp
+        );
+        noticeService.createNotice(createNoticeDTO);
+        Notice createdNotice = noticeRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        Long noticeId = createdNotice.getNoticeId();
         Long invalidNoticeId = -1L;
 
         NoticeDetailDTO firstNoticeDetail = noticeService.viewNotice(noticeId);
@@ -85,5 +96,63 @@ class NoticeServiceImplTests {
         assertEquals(title, createdNotice.getTitle(), "저장된 타이틀은 입력된 타이틀과 일치해야 한다.");
         assertEquals(content, createdNotice.getContent(), "저장된 콘텐츠는 입력된 콘텐츠와 일치해야 한다.");
         assertEquals(adminId, createdNotice.getUser().getUserId(), "저장된 작성자 ID는 입력된 작성자와 일치해야 한다.");
+    }
+
+    @DisplayName("공지 게시글을 수정한다.")
+    @Test
+    void updateNoticeTest(){
+        Long memberId = 2L;
+        Long adminId = 3L;
+        String title = "테스트 타이틀";
+        String content = "테스트 콘텐트";
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        CreateNoticeDTO createNoticeDTO = new CreateNoticeDTO(
+                adminId, title, content, currentTimestamp, currentTimestamp
+        );
+        noticeService.createNotice(createNoticeDTO);
+        Notice createdNotice = noticeRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        Long noticeId = createdNotice.getNoticeId();
+
+        String updatedTitle = "수정된 테스트 타이틀";
+        String updatedContent = "수정된 테스트 콘텐트";
+        UpdateNoticeDTO updateNoticeDTO = new UpdateNoticeDTO(
+                noticeId,adminId,updatedTitle,updatedContent,new Timestamp(System.currentTimeMillis()));
+        UpdateNoticeDTO unValidNoticeDTO = new UpdateNoticeDTO(
+                noticeId,memberId,updatedTitle,updatedContent,new Timestamp(System.currentTimeMillis()));
+        noticeService.updateNotice(updateNoticeDTO);
+        Notice updatedNotice = noticeRepository.findById(noticeId).orElseThrow(
+                ()->new CommonException(ErrorCode.INVALID_BOARD_ID));
+
+
+        assertThrows(CommonException.class,
+                ()->noticeService.updateNotice(unValidNoticeDTO),
+                "공지 게시글은 관리자만 수정한다.");
+        assertEquals(updatedTitle,updatedNotice.getTitle(),"수정된 게시글 제목이 일치한다.");
+        assertEquals(updatedContent,updatedNotice.getContent(),"수정된 게시글 내용이 일치한다.");
+    }
+
+    @DisplayName("공지 게시글을 삭제한다.")
+    @Test
+    void deleteNoticeTest(){
+        Long memberId = 2L;
+        Long adminId = 3L;
+        String title = "테스트 타이틀";
+        String content = "테스트 콘텐트";
+        Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
+        CreateNoticeDTO createNoticeDTO = new CreateNoticeDTO(
+                adminId, title, content, currentTimestamp, currentTimestamp
+        );
+        noticeService.createNotice(createNoticeDTO);
+        Notice createdNotice = noticeRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        Long noticeId = createdNotice.getNoticeId();
+
+        Exception roleException = assertThrows(CommonException.class,()->noticeService.deleteNotice(noticeId,memberId),
+                "공지 게시글은 관리자만 삭제한다.");
+        assertEquals("공지 게시글은 관리자만 관리할 수 있습니다.",roleException.getMessage());
+
+        noticeService.deleteNotice(noticeId,adminId);
+        Exception unFoundexception = assertThrows(CommonException.class,()->noticeService.viewNotice(noticeId),
+                "삭제된 공지 게시글은 조회할 수 없다.");
+        assertEquals("잘못된 공지게시글 번호입니다.",unFoundexception.getMessage());
     }
 }
