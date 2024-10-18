@@ -11,6 +11,7 @@ import com.threeping.mudium.user.repository.UserRepository;
 import com.threeping.mudium.user.security.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,16 +35,18 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final RestTemplate restTemplate;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public OAuth2UserServiceImpl(UserRepository userRepository
             , UserService userService
             , JwtUtil jwtUtil
-    , RestTemplate restTemplate) {
+    , RestTemplate restTemplate, ModelMapper modelMapper) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.restTemplate = restTemplate;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -108,14 +111,14 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             userEntity = userRepository.findByUserIdentifier("KAKAO_" + email);
 
         }
-        OAuth2LoginVO user = new OAuth2LoginVO();
+        OAuth2LoginVO user = modelMapper.map(userEntity, OAuth2LoginVO.class);
+
         user.setAccessToken(accessToken);
 
         log.info("userEntity: {}", userEntity);
         String refreshToken = jwtUtil.generateRefreshToken(userEntity, new ArrayList<>());
         log.info("refreshToken: {}", refreshToken);
         user.setRefreshToken(refreshToken);
-        
 
         return user;
     }

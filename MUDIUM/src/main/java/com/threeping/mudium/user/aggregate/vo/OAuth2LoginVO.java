@@ -6,8 +6,11 @@ import lombok.Data;
 public class OAuth2LoginVO {
     private String id;
     private String userName;
+    private String nickname;
     private String email;
     private String pwd;
     private String accessToken;
     private String refreshToken;
+    private String profileImage;
+    private String signupPath;
 }
