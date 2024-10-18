@@ -12,4 +12,6 @@ public class AverageScopeDTO {
     private Double scope;
 
     private String people;
+
+    private Long musicalId;
 }

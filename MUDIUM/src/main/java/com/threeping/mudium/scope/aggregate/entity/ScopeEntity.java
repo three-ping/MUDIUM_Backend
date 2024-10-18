@@ -25,7 +25,7 @@ public class ScopeEntity {
     private Long userId;
 
     @Column(name="scope", nullable=false)
-    private byte scope;
+    private Double scope;
 
     @Column(name="created_at", nullable=false)
     private Timestamp createdAt;

@@ -1,23 +1,18 @@
     package com.threeping.mudium.scope.service;
 
-    import com.threeping.mudium.common.exception.CommonException;
-    import com.threeping.mudium.common.exception.ErrorCode;
     import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
     import com.threeping.mudium.scope.aggregate.entity.ScopeId;
     import com.threeping.mudium.scope.dto.AverageScopeDTO;
     import com.threeping.mudium.scope.dto.ScopeDTO;
     import com.threeping.mudium.scope.repository.ScopeRepository;
     import com.threeping.mudium.scope.vo.ScopeVO;
-    import com.threeping.mudium.user.aggregate.entity.UserEntity;
     import com.threeping.mudium.user.service.UserService;
     import org.springframework.stereotype.Service;
     import org.springframework.transaction.annotation.Transactional;
 
     import java.sql.Timestamp;
     import java.time.LocalDateTime;
-    import java.util.HashMap;
     import java.util.List;
-    import java.util.Map;
     import java.util.stream.Collectors;
 
     @Service
@@ -38,11 +33,11 @@
 
             // 특정 뮤지컬에 대한 모든 별점을 보며울 때 줄 거 = 뮤지컬 id, user 정보(닉네임), 별점
             List<ScopeDTO> dtoList = entityList.stream()
-                    .map(scopeEntity -> {
+                    .map(scopeDTO -> {
                         ScopeDTO dto = new ScopeDTO();
-                        dto.setMusicalId(scopeEntity.getMusicalId());
-                        dto.setScope(scopeEntity.getScope());
-                        dto.setNickName(scopeEntity.getUserNickname());
+                        dto.setMusicalId(scopeDTO.getMusicalId());
+                        dto.setScope(scopeDTO.getScope());
+                        dto.setNickName(scopeDTO.getUserNickname());
                         return dto;
                     }).collect(Collectors.toList());
 
@@ -63,6 +58,7 @@
             Double average = peopleCount > 0 ? sum / peopleCount : 0;
             average = Math.round(average * 10.0) / 10.0;
             AverageScopeDTO dto = new AverageScopeDTO();
+            dto.setMusicalId(musicalId);
             dto.setScope(average);
             dto.setPeople(people);
 

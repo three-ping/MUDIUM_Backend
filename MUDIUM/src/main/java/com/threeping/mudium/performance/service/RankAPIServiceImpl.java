@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -74,69 +76,12 @@ public class RankAPIServiceImpl implements RankAPIService {
             RankItem MonthItem = itemList.get(i);
             String title = normalizeTitle(MonthItem.getTitle());
             log.info("api가 가져온 제목: " + title);
-            String area = MonthItem.getArea();
+            String area = normalizeArea(MonthItem.getTitle());
             log.info("api가 가져온 지역: " + area);
-            String region;
-            switch (area) {
-                case "서울":
-                    region = "서울특별시";
-                    break;
-                case "경기":
-                    region = "경기도";
-                    break;
-                case "인천":
-                    region = "인천광역시";
-                    break;
-                case "세종":
-                    region = "세종특별자치시";
-                    break;
-                case "대전":
-                    region = "대전광역시";
-                    break;
-                case "대구":
-                    region = "대구광역시";
-                    break;
-                case "광주":
-                    region = "광주광역시";
-                    break;
-                case "부산":
-                    region = "부산광역시";
-                    break;
-                case "울산":
-                    region = "울산광역시";
-                    break;
-                case "강원":
-                    region = "강원도";
-                    break;
-                case "충북":
-                    region = "충청북도";
-                    break;
-                case "충남":
-                    region = "충청남도";
-                    break;
-                case "전북":
-                    region = "전라북도";
-                    break;
-                case "전남":
-                    region = "전라남도";
-                    break;
-                case "경북":
-                    region = "경상북도";
-                    break;
-                case "경남":
-                    region = "경상남도";
-                    break;
-                case "제주":
-                    region = "제주특별자치도";
-                    break;
-                default:
-                    region = area; // 일치하는 케이스가 없을 경우 원래 값을 유지
-                    break;
-            }
             MusicalDTO musicalDTO = musicalService.findMusicalDetailByName(title);
             log.info("찾아온 musicalDTO: " + musicalDTO);
             PerformanceDTO performanceDTO =
-                    performanceService.findPerformanceByMusicalIdAndRegion(musicalDTO.getMusicalId(), region);
+                    performanceService.findPerformanceByMusicalIdAndRegion(musicalDTO.getMusicalId(), area);
             log.info("찾아온 performanceDTO: " + performanceDTO);
 
             PerformanceRank performanceRank = new PerformanceRank();
@@ -173,70 +118,13 @@ public class RankAPIServiceImpl implements RankAPIService {
             RankItem DayItem = itemList.get(i);
             String title = normalizeTitle(DayItem.getTitle());
             log.info("파싱된 title: " + title);
-            String area = DayItem.getArea();
+            String area = normalizeArea(DayItem.getTitle());
             log.info("api가 가져온 지역: " + area);
-            String region;
-            switch (area) {
-                case "서울":
-                    region = "서울특별시";
-                    break;
-                case "경기":
-                    region = "경기도";
-                    break;
-                case "인천":
-                    region = "인천광역시";
-                    break;
-                case "세종":
-                    region = "세종특별자치시";
-                    break;
-                case "대전":
-                    region = "대전광역시";
-                    break;
-                case "대구":
-                    region = "대구광역시";
-                    break;
-                case "광주":
-                    region = "광주광역시";
-                    break;
-                case "부산":
-                    region = "부산광역시";
-                    break;
-                case "울산":
-                    region = "울산광역시";
-                    break;
-                case "강원":
-                    region = "강원도";
-                    break;
-                case "충북":
-                    region = "충청북도";
-                    break;
-                case "충남":
-                    region = "충청남도";
-                    break;
-                case "전북":
-                    region = "전라북도";
-                    break;
-                case "전남":
-                    region = "전라남도";
-                    break;
-                case "경북":
-                    region = "경상북도";
-                    break;
-                case "경남":
-                    region = "경상남도";
-                    break;
-                case "제주":
-                    region = "제주특별자치도";
-                    break;
-                default:
-                    region = area; // 일치하는 케이스가 없을 경우 원래 값을 유지
-                    break;
-            }
             MusicalDTO musicalDTO = musicalService.findMusicalDetailByName(title);
             log.info("찾아온 musicalDTO: " + musicalDTO);
 
             PerformanceDTO performanceDTO =
-                    performanceService.findPerformanceByMusicalIdAndRegion(musicalDTO.getMusicalId(), region);
+                    performanceService.findPerformanceByMusicalIdAndRegion(musicalDTO.getMusicalId(), area);
             log.info("찾아온 performanceDTO: " + performanceDTO);
 
             PerformanceRank performanceRank = new PerformanceRank();
@@ -257,6 +145,27 @@ public class RankAPIServiceImpl implements RankAPIService {
                 .replaceAll("\\s+", "")       // 모든 공백 제거
                 .toLowerCase()                // 소문자로 변환
                 .trim();               // 소문자로 변환
+    }
+
+    private String normalizeArea(String title) {
+        // 대괄호 안의 내용을 찾습니다.
+        String areaPattern = "\\[(.*?)]";
+        Pattern pattern = Pattern.compile(areaPattern);
+        Matcher matcher = pattern.matcher(title);
+
+        if (matcher.find()) {
+            String area = matcher.group(1);
+            // 소괄호와 그 내용을 제거합니다.
+            area = area.replaceAll("\\(.*?\\)", "");
+            // 모든 공백을 제거합니다.
+            area = area.replaceAll("\\s+", "");
+            if(area.equals("세종시")) area ="세종";
+            if(area.equals("인천청라")) area = "인천";
+            return area;
+        } else {
+            // 대괄호가 없는 경우 "서울"을 반환합니다.
+            return "서울";
+        }
     }
 
     private Timestamp timeStampConverter(String Date) {

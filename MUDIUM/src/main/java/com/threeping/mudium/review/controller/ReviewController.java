@@ -3,6 +3,7 @@ package com.threeping.mudium.review.controller;
 import com.threeping.mudium.common.ResponseDTO;
 import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
 import com.threeping.mudium.review.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +24,9 @@ public class ReviewController {
     // 리뷰 전체 조회
     @GetMapping("/{musicalId}")
     private ResponseDTO<?> findReviewByMusicalId(@PathVariable Long musicalId) {
-        List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalId(musicalId);
+        List<ReviewWithScopeDTO> dtoList = reviewService.findReviewsWithRatingsByMusicalId(musicalId);
 
-        return ResponseDTO.ok(reviewResponseDTO);
+        return ResponseDTO.ok(dtoList);
     }
 
     // 리뷰 상세 조회
