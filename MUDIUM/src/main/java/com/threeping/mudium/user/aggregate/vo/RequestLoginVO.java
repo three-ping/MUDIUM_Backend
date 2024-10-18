@@ -15,4 +15,6 @@ public class RequestLoginVO {
 
     @JsonProperty("signup_path")
     private SignupPath signupPath; // 신규 추가
+
+
 }

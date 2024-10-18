@@ -29,4 +29,7 @@ public class ResponseNormalLoginVO {
 
     @JsonProperty("user_identifier")
     private String userIdentifier;
+
+    @JsonProperty("user_id")
+    private Long userId;
 }
