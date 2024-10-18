@@ -2,6 +2,7 @@ package com.threeping.mudium.review.service;
 
 import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface ReviewService {
 
     // 리뷰 삭제
     void deleteReview(Long musicalId, Long reviewId, Long userId);
+
+    List<ReviewWithScopeDTO> findReviewsWithRatingsByMusicalId(Long musicalId);
 }

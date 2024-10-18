@@ -58,15 +58,15 @@ class PerformanceServiceImplTests {
     @Test
     void searchDayRank() {
         // When
-        List<PerformanceRankDTO> monthList = performanceService.findDayRank();
+        List<PerformanceRankDTO> dayList = performanceService.findDayRank();
 
-        for (PerformanceRankDTO dto : monthList) {
+        for (PerformanceRankDTO dto : dayList) {
             log.info("10개의 공연 순위 확인" + dto.toString());
         }
 
         // Then
-        assertNotNull(monthList, "조회된 일별 랭킹은 null이 아니다.");
-        assertTrue(monthList.size() == 10, "조회된 리스트의 공연 개수는 10개다.");
+        assertNotNull(dayList, "조회된 일별 랭킹은 null이 아니다.");
+        assertTrue(dayList.size() == 10, "조회된 리스트의 공연 개수는 10개다.");
     }
 
 }
