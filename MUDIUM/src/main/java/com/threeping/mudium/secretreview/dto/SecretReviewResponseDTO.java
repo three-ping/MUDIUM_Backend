@@ -18,4 +18,7 @@ public class SecretReviewResponseDTO {
     private ActiveStatus activeStatus;
     private Long musicalId;
     private Long userId;
+    private String userNickname;
+    private String userProfile;
+    private String musicalTitle;
 }
