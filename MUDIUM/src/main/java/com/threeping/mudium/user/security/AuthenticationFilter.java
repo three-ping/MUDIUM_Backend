@@ -150,7 +150,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 refreshToken,
                 new Date(refreshExpiration),
                 userIdentifier,
-                foundUser.getUserId()
+                foundUser.getUserId(),
+                foundUser.getUserName(),
+                foundUser.getNickname(),
+                foundUser.getEmail(),
+                foundUser.getProfileImage(),
+                foundUser.getSignupPath().toString()
                 );
 
         // ResponseDTO 객체 생성

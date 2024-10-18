@@ -32,4 +32,21 @@ public class ResponseNormalLoginVO {
 
     @JsonProperty("user_id")
     private Long userId;
+
+    @JsonProperty("user_name")
+    private String userName;
+
+    @JsonProperty("nickname")
+    private String nickname;
+
+    @JsonProperty("email")
+    private String email;
+
+    @JsonProperty("profile_iamge")
+    private String profileIamge;
+
+    @JsonProperty("signup_path")
+    private String signupPath;
+
+
 }
