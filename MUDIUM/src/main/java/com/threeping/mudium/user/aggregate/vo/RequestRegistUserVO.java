@@ -7,8 +7,8 @@ import lombok.Data;
 
 @Data
 public class RequestRegistUserVO {
-    @JsonProperty("user_auth_id")
-    private String userAuthId; // 사용자가 직접 입력하는 ID, 일반 로그인 시 유니크해야 함
+//    @JsonProperty("user_auth_id")
+//    private String userAuthId; // 사용자가 직접 입력하는 ID, 일반 로그인 시 유니크해야 함
 
     @JsonProperty("user_name")
     private String userName; // 사용자의 실제 이름으로 필드 이름 수정

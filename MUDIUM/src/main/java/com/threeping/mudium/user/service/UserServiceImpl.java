@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO registUser(RequestRegistUserVO newUser) {
-        UserEntity existingUser = userRepository.findByUserIdentifier(newUser.getSignupPath() +"_"+ newUser.getUserAuthId());
+        UserEntity existingUser = userRepository.findByUserIdentifier(newUser.getSignupPath() +"_"+ newUser.getEmail());
         /* 설명. ModelMapper는 경우에 따라 자의적인 판단으로 필드끼리 매핑하는 경우가 있어 정확히 일치되게 매칭하려면 strict 설정해야됨 */
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
         String defaultProfileImageUrl = "";
 
         UserDTO newUserDTO = UserDTO.builder()
-                .userAuthId(newUser.getUserAuthId())
+//                .userAuthId(newUser.getUserAuthId())
                 .userName(newUser.getUserName())
                 .email(newUser.getEmail())
                 .signupPath(newUser.getSignupPath())
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
                 .userStatus(ActiveStatus.ACTIVE)
                 .nickname(newUser.getNickname())
                 .profileImage(defaultProfileImageUrl)
-                .userIdentifier(newUser.getSignupPath()+ "_"+ newUser.getUserAuthId())
+//                .userIdentifier(newUser.getSignupPath()+ "_"+ newUser.getUserAuthId())
                 .build();
         log.info("newUserDTO: {}", newUserDTO);
         UserEntity userEntity = modelMapper.map(newUserDTO, UserEntity.class);
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        return new User(loginUser.getUserAuthId()
+        return new User(loginUser.getUserIdentifier()
                 , encryptedPwd
                 , true
                 , true
