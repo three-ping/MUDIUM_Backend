@@ -66,8 +66,6 @@ public class MusicalServiceImpl implements MusicalService {
                 .map(Musical::getMusicalId)
                 .collect(Collectors.toList());
 
-        Map<Long, String> averageScopes = scopeService.calculateAverageScopeBatch(musicalIds);
-
         List<MusicalListDTO> dtoList = musicalPage.getContent().stream()
                 .map(musical -> {
                     MusicalListDTO dto = new MusicalListDTO();
@@ -75,7 +73,6 @@ public class MusicalServiceImpl implements MusicalService {
                     dto.setMusicalId(musical.getMusicalId());
                     dto.setPoster(musical.getPoster());
                     dto.setTitle(musical.getTitle());
-                    dto.setAverageScope(averageScopes.get(musical.getMusicalId()));
                     return dto;
                 }).collect(Collectors.toList());
         // 전체 데이터셋의 총 항목 수를 나타냄.
