@@ -11,7 +11,7 @@ public class ScopeDTO {
 
     private Long musicalId;
 
-    private byte scope;
+    private Double scope;
 
     private String nickName;
 }

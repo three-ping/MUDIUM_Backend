@@ -11,6 +11,7 @@ import com.threeping.mudium.user.repository.UserRepository;
 import com.threeping.mudium.user.security.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,16 +35,18 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
     private final RestTemplate restTemplate;
+    private final ModelMapper modelMapper;
 
     @Autowired
     public OAuth2UserServiceImpl(UserRepository userRepository
             , UserService userService
             , JwtUtil jwtUtil
-    , RestTemplate restTemplate) {
+    , RestTemplate restTemplate, ModelMapper modelMapper) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.restTemplate = restTemplate;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -64,7 +67,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_MEMBER"));
 
-        return new User(loginUser.getUserAuthId()
+        return new User(loginUser.getUserIdentifier()
                 , encryptedPwd
                 , true
                 , true
@@ -90,7 +93,7 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             email = kakaoId + "@kakao.com";
         }
 
-        UserEntity userEntity = userRepository.findByUserIdentifier("KAKAO_" + name);
+        UserEntity userEntity = userRepository.findByUserIdentifier("KAKAO_" + email);
 
         if (userEntity == null) {
             log.info("regist new Kakao User: {}", name);
@@ -98,24 +101,24 @@ public class OAuth2UserServiceImpl implements OAuth2UserService {
             RequestRegistUserVO newUser = new RequestRegistUserVO();
             newUser.setEmail(email);
             newUser.setUserName(name != null ? name : "KakaoUser");
-            newUser.setUserAuthId(kakaoId);
+//            newUser.setUserAuthId(kakaoId);
             newUser.setPassword(UUID.randomUUID().toString());
             newUser.setSignupPath(SignupPath.KAKAO);
-            newUser.setNickname(name);
+            newUser.setNickname("Kakao@"+kakaoId);
             log.info("regist newUser: {}", newUser);
             userService.registUser(newUser);
 
-            userEntity = userRepository.findByUserIdentifier("KAKAO_" + kakaoId);
+            userEntity = userRepository.findByUserIdentifier("KAKAO_" + email);
 
         }
-        OAuth2LoginVO user = new OAuth2LoginVO();
+        OAuth2LoginVO user = modelMapper.map(userEntity, OAuth2LoginVO.class);
+
         user.setAccessToken(accessToken);
 
         log.info("userEntity: {}", userEntity);
         String refreshToken = jwtUtil.generateRefreshToken(userEntity, new ArrayList<>());
         log.info("refreshToken: {}", refreshToken);
         user.setRefreshToken(refreshToken);
-        
 
         return user;
     }

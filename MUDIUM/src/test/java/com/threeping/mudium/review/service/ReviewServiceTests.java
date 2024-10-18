@@ -2,8 +2,11 @@ package com.threeping.mudium.review.service;
 
 import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
+import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class ReviewServiceTests {
 
+    private static final Logger log = LoggerFactory.getLogger(ReviewServiceTests.class);
     @Autowired
     ReviewService reviewService;
 
@@ -26,15 +30,19 @@ class ReviewServiceTests {
         Long musicalId = 1L;
 
         // When
-        List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalId(musicalId);
+        List<ReviewWithScopeDTO> dtoList = reviewService.findReviewsWithRatingsByMusicalId(musicalId);
+
+        for (ReviewWithScopeDTO dto : dtoList) {
+            log.info("별점과 함께 넘어온 리뷰" + dto.toString());
+        }
 
         // Then
-        assertNotNull(reviewResponseDTO);   // 반환된 리스트가 null이 아닌지 확인
-        assertFalse(reviewResponseDTO.isEmpty());   // 적어도 하나의 리뷰가 존재하는지 확인
+        assertNotNull(dtoList);   // 반환된 리스트가 null이 아닌지 확인
+        assertFalse(dtoList.isEmpty());   // 적어도 하나의 리뷰가 존재하는지 확인
 
         // 추가적인 검증
-        ReviewResponseDTO firstReview = reviewResponseDTO.get(0);
-        assertEquals(musicalId, firstReview.getMusicalId());    // 뮤지컬 ID가 일치하는지 확인
+        ReviewWithScopeDTO dto = dtoList.get(0);
+        assertEquals(musicalId, dto.getMusicalId());    // 뮤지컬 ID가 일치하는지 확인
     }
 
     @DisplayName("리뷰 상세 조회한다.")

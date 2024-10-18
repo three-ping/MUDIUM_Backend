@@ -1,15 +1,15 @@
 package com.threeping.mudium.musical.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class MusicalDTO {
+
+    private Long musicalId;
 
     private String title;
 

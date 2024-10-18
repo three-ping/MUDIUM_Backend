@@ -66,15 +66,13 @@ public class MusicalServiceImpl implements MusicalService {
                 .map(Musical::getMusicalId)
                 .collect(Collectors.toList());
 
-        Map<Long, String> averageScopes = scopeService.calculateAverageScopeBatch(musicalIds);
-
         List<MusicalListDTO> dtoList = musicalPage.getContent().stream()
                 .map(musical -> {
                     MusicalListDTO dto = new MusicalListDTO();
                     dto.setMusicalId(musical.getMusicalId());
+                    dto.setMusicalId(musical.getMusicalId());
                     dto.setPoster(musical.getPoster());
                     dto.setTitle(musical.getTitle());
-                    dto.setAverageScope(averageScopes.get(musical.getMusicalId()));
                     return dto;
                 }).collect(Collectors.toList());
         // 전체 데이터셋의 총 항목 수를 나타냄.
@@ -95,6 +93,7 @@ public class MusicalServiceImpl implements MusicalService {
         MusicalDTO musicalDTO = new MusicalDTO();
         Musical musical = musicalRepository.findMusicalByMusicalId(musicalId)
                 .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_ID));
+        musicalDTO.setMusicalId(musical.getMusicalId());
         musicalDTO.setTitle(musical.getTitle());
         musicalDTO.setRating(musical.getRating());
         musicalDTO.setPoster(musical.getPoster());
@@ -109,25 +108,11 @@ public class MusicalServiceImpl implements MusicalService {
     }
 
     @Override
-    public MusicalDTO findMusicalByMusicalId(Long musicalId) {
-        Musical musical = musicalRepository.findMusicalByMusicalId(musicalId)
-                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_ID));
-        MusicalDTO musicalDTO = new MusicalDTO();
-        musicalDTO.setTitle(musical.getTitle());
-        musicalDTO.setReviewVideos(musical.getReviewVideo());
-        musicalDTO.setPoster(musical.getPoster());
-        musicalDTO.setProduction(musical.getProduction());
-        musicalDTO.setSynopsys(musical.getSynopsys());
-        musicalDTO.setViewCount(musical.getViewCount());
-        musicalDTO.setRating(musical.getRating());
-        return musicalDTO;
-    }
-
-    @Override
     public MusicalDTO findMusicalDetailByName(String title) {
         Musical musical = musicalRepository.findMusicalByExactTitle(title)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_MUSICAL));
         MusicalDTO musicalDTO = new MusicalDTO();
+        musicalDTO.setMusicalId(musical.getMusicalId());
         musicalDTO.setTitle(musical.getTitle());
         musicalDTO.setReviewVideos(musical.getReviewVideo());
         musicalDTO.setPoster(musical.getPoster());

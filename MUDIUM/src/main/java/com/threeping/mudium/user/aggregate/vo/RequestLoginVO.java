@@ -7,12 +7,14 @@ import lombok.Data;
 @Data
 public class RequestLoginVO {
 
-    @JsonProperty("user_auth_id")
-    private String userAuthId;
+    @JsonProperty("email")
+    private String email;
 
     @JsonProperty("password")
     private String password;
 
     @JsonProperty("signup_path")
     private SignupPath signupPath; // 신규 추가
+
+
 }

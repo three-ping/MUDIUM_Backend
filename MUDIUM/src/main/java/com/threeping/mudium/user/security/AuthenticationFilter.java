@@ -1,4 +1,5 @@
 package com.threeping.mudium.user.security;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.threeping.mudium.common.ResponseDTO;
@@ -72,7 +73,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         try {
             RequestLoginVO creds = new ObjectMapper().readValue(request.getInputStream(), RequestLoginVO.class);
 
-            String userIdentifier = creds.getSignupPath() + "_" + creds.getUserAuthId();
+            String userIdentifier = creds.getSignupPath() + "_" + creds.getEmail();
 
             //필기. 검증 사용자 아이디 비번 실패시 핸들링
             UserEntity loginUser = userService.findByUserIdentifier(userIdentifier);
@@ -114,7 +115,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         // 사용자 인증 정보 및 식별자 생성
         String userAuthId = ((User) authResult.getPrincipal()).getUsername();
         SignupPath signupPath = ((RequestLoginVO) authResult.getDetails()).getSignupPath();
-        String userIdentifier = signupPath + "_" + userAuthId;
+
+        String userIdentifier = userAuthId;
 
         // Claims 및 역할 정보 설정
         Claims claims = Jwts.claims().setSubject(userIdentifier);
@@ -140,15 +142,21 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .setExpiration(new Date(refreshExpiration))
                 .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
                 .compact();
-
+        UserEntity foundUser = userService.findByUserIdentifier(userIdentifier);
         //  ResponseNormalLoginVO 객체 생성
         ResponseNormalLoginVO loginResponseVO = new ResponseNormalLoginVO(
                 accessToken,
                 new Date(accessExpiration),
                 refreshToken,
                 new Date(refreshExpiration),
-                userIdentifier
-        );
+                userIdentifier,
+                foundUser.getUserId(),
+                foundUser.getUserName(),
+                foundUser.getNickname(),
+                foundUser.getEmail(),
+                foundUser.getProfileImage(),
+                foundUser.getSignupPath().toString()
+                );
 
         // ResponseDTO 객체 생성
         ResponseDTO<ResponseNormalLoginVO> responseDTO = ResponseDTO.ok(loginResponseVO);

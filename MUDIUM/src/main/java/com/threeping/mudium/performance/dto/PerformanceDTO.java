@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 @ToString
 public class PerformanceDTO {
 
+    private Long performanceId;
+
     private String theater;
 
     private String region;
@@ -18,5 +20,7 @@ public class PerformanceDTO {
     private Timestamp startDate;
 
     private Timestamp endDate;
+
+    private Long musicalId;
 
 }

@@ -1,6 +1,8 @@
 package com.threeping.mudium.scope.controller;
 
+import com.threeping.mudium.common.ResponseDTO;
 import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
+import com.threeping.mudium.scope.dto.AverageScopeDTO;
 import com.threeping.mudium.scope.service.ScopeService;
 import com.threeping.mudium.scope.vo.ScopeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +45,16 @@ public class ScopeController {
                                             @PathVariable("musicalId") Long musicalId) {
         scopeService.deleteScope(musicalId, userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/{musicalId}")
+    public ResponseDTO<?> getAverageScope(@PathVariable("musicalId") Long musicalId) {
+        AverageScopeDTO dto = scopeService.calculateAverageScope(musicalId);
+
+        ResponseDTO<AverageScopeDTO> responseDTO = new ResponseDTO<>();
+        responseDTO.setData(dto);
+        responseDTO.setSuccess(true);
+        responseDTO.setHttpStatus(HttpStatus.OK);
+        return responseDTO;
     }
 }

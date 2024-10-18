@@ -8,7 +8,9 @@ import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.aggregate.entity.ActiveStatus;
 import com.threeping.mudium.review.aggregate.entity.Review;
+import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
 import com.threeping.mudium.review.repository.ReviewRepository;
+import com.threeping.mudium.scope.service.ScopeService;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +32,19 @@ public class ReviewServiceImpl implements ReviewService {
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
     private final MusicalRepository musicalRepository;
+    private final ScopeService scopeService;
 
     @Autowired
     public ReviewServiceImpl(ReviewRepository reviewRepository,
-                             ModelMapper modelMapper, UserRepository userRepository, MusicalRepository musicalRepository) {
+                             ModelMapper modelMapper,
+                             UserRepository userRepository,
+                             MusicalRepository musicalRepository,
+                             ScopeService scopeService) {
         this.reviewRepository = reviewRepository;
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
         this.musicalRepository = musicalRepository;
+        this.scopeService = scopeService;
     }
 
     // 리뷰 전체 조회
@@ -54,6 +61,11 @@ public class ReviewServiceImpl implements ReviewService {
 //
 //        return reviewResponseDTO;
         return reviews.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ReviewWithScopeDTO> findReviewsWithRatingsByMusicalId(Long musicalId) {
+        return reviewRepository.findReviewsWithRatingsByMusicalId(musicalId);
     }
 
     private ReviewResponseDTO convertToDTO(Review review) {
@@ -172,5 +184,11 @@ public class ReviewServiceImpl implements ReviewService {
         newReview.deactivateReview();
 
         reviewRepository.save(newReview);
+    }
+
+    @Override
+    public boolean existingCheck(Long reviewId) {
+
+        return reviewRepository.findReviewByReviewIdAndActiveStatus(reviewId, ActiveStatus.ACTIVE).isPresent();
     }
 }

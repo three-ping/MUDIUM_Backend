@@ -66,11 +66,13 @@ public enum ErrorCode {
 
     MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
     NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
+    NOT_FOUND_REVIEW_COMMENT(4041003, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
 
     //
     SCOPE_NOT_FOUND(4041003, HttpStatus.NOT_FOUND, "별점이 존재하지 않습니다."),
 
     // Musical
+    JAXB_MANAGER_ERROR(5001300, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB MANAGER 생성에 실패했습니다."),
     JAXB_CONTEXT_ERROR(5001301, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
     API_LIST_BAD_REQUEST(4001302, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
     API_DETAIL_BAD_REQUEST(4001303, HttpStatus.BAD_REQUEST, "상세정보 API 통신에 실패했습니다."),
@@ -82,6 +84,7 @@ public enum ErrorCode {
     MISSING_REQUIRED_CONTENT(4001308, HttpStatus.BAD_REQUEST, "필수 내용이 누락되었습니다."),
     NOT_FOUND_COMMENT(4001309, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
     NOT_FOUND_REPLY(4001310, HttpStatus.NOT_FOUND, "대댓글이 존재하지 않습니다."),
+    API_RANK_BAD_REQUEST(4001310, HttpStatus.BAD_REQUEST, "공연 순위 API 통신에 실패했습니다.."),
 
 
     //Board

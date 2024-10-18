@@ -6,6 +6,8 @@ import com.threeping.mudium.musical.dto.MusicalItem;
 import com.threeping.mudium.musical.dto.MusicalListResponse;
 import com.threeping.mudium.performance.dto.PerformanceItem;
 import com.threeping.mudium.performance.dto.PerformanceResponse;
+import com.threeping.mudium.performance.dto.RankItem;
+import com.threeping.mudium.performance.dto.RankResponse;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -20,19 +22,22 @@ public class JAXBManager {
     private static final JAXBManager INSTANCE = new JAXBManager();
     private final JAXBContext musicalContext;
     private final JAXBContext performanceContext;
+    private final JAXBContext rankContext;
 
     private JAXBManager() {
         try {
             this.musicalContext = JAXBContext.newInstance(
                     MusicalListResponse.class,
                     MusicalItem.class);
-            log.info("JAXBManager MusicalList Mapping Context 싱글톤 객체 생성 성공");
             this.performanceContext = JAXBContext.newInstance(
                     PerformanceResponse.class,
                     PerformanceItem.class);
-            log.info("JAXBManager Performance Mapping Context 싱글톤 객체 생성 성공");
+            this.rankContext = JAXBContext.newInstance(
+                    RankResponse.class,
+                    RankItem.class);
+            log.info("JAXBManager 싱글톤 객체 생성 성공");
         } catch (JAXBException e) {
-            throw new CommonException(ErrorCode.JAXB_CONTEXT_ERROR);
+            throw new CommonException(ErrorCode.JAXB_MANAGER_ERROR);
         }
     }
 
@@ -48,6 +53,10 @@ public class JAXBManager {
 
     public <T> T unmarshalPerformance(String xml, Class<T> clazz) throws JAXBException {
         return unmarshal(xml, clazz, performanceContext);
+    }
+
+    public <T> T unmarshalRank(String xml, Class<T> clazz) throws JAXBException {
+        return unmarshal(xml, clazz, rankContext);
     }
 
     private <T> T unmarshal(String xml, Class<T> clazz, JAXBContext context) throws JAXBException {

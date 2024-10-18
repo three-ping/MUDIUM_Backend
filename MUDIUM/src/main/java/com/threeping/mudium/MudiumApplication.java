@@ -6,7 +6,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /* 설명. security ON/OFF */
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
+//@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableScheduling
 //@SpringBootApplication
 public class MudiumApplication {

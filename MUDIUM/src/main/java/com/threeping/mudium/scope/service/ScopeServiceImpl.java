@@ -1,22 +1,18 @@
     package com.threeping.mudium.scope.service;
 
-    import com.threeping.mudium.common.exception.CommonException;
-    import com.threeping.mudium.common.exception.ErrorCode;
     import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
     import com.threeping.mudium.scope.aggregate.entity.ScopeId;
+    import com.threeping.mudium.scope.dto.AverageScopeDTO;
     import com.threeping.mudium.scope.dto.ScopeDTO;
     import com.threeping.mudium.scope.repository.ScopeRepository;
     import com.threeping.mudium.scope.vo.ScopeVO;
-    import com.threeping.mudium.user.aggregate.entity.UserEntity;
     import com.threeping.mudium.user.service.UserService;
     import org.springframework.stereotype.Service;
     import org.springframework.transaction.annotation.Transactional;
 
     import java.sql.Timestamp;
     import java.time.LocalDateTime;
-    import java.util.HashMap;
     import java.util.List;
-    import java.util.Map;
     import java.util.stream.Collectors;
 
     @Service
@@ -37,42 +33,47 @@
 
             // 특정 뮤지컬에 대한 모든 별점을 보며울 때 줄 거 = 뮤지컬 id, user 정보(닉네임), 별점
             List<ScopeDTO> dtoList = entityList.stream()
-                    .map(scopeEntity -> {
+                    .map(scopeDTO -> {
                         ScopeDTO dto = new ScopeDTO();
-                        dto.setMusicalId(scopeEntity.getMusicalId());
-                        dto.setScope(scopeEntity.getScope());
-                        dto.setNickName(scopeEntity.getUserNickname());
+                        dto.setMusicalId(scopeDTO.getMusicalId());
+                        dto.setScope(scopeDTO.getScope());
+                        dto.setNickName(scopeDTO.getUserNickname());
                         return dto;
                     }).collect(Collectors.toList());
 
             return dtoList;
         }
 
+        // 평균 별점 계산 서비스 메서드
+        // 뮤지컬 번호로 별점를 다 가져와서 계산(평균 별점은 소수점 한 자리까지 제공하고, 추가 평가한 사람 수를 만명 단위로 자르고 '명'을 붙여줍니다.
         @Override
-        @Transactional(readOnly = true)
-        public Map<Long, String> calculateAverageScopeBatch(List<Long> musicalIds) {
-            List<Object[]> results = scopeRepository.findAverageScopesByMusicalIds(musicalIds);
-            Map<Long, String> averageScopes = new HashMap<>();
-
-            for (Object[] r : results) {
-                Long musicalId = (Long) r[0];
-                Double averageScope = (Double) r[1];
-                averageScopes.put(musicalId, averageConverter(averageScope));
+        public AverageScopeDTO calculateAverageScope(Long musicalId) {
+            List<ScopeEntity> entityList = scopeRepository.findAllScopeByMusicalId(musicalId);
+            Double sum = 0D;
+            Long peopleCount = Long.valueOf(entityList.size());
+            for (ScopeEntity e : entityList) {
+                sum += Double.valueOf(e.getScope());
             }
+            String people = formatPeopleCount(peopleCount);
+            Double average = peopleCount > 0 ? sum / peopleCount : 0;
+            average = Math.round(average * 10.0) / 10.0;
+            AverageScopeDTO dto = new AverageScopeDTO();
+            dto.setMusicalId(musicalId);
+            dto.setScope(average);
+            dto.setPeople(people);
 
-            // 결과에 포함되지 않은 뮤지컬은 평균 별점을 모두 0점으로 세팅
-            for (Long musicalId : musicalIds) {
-                averageScopes.putIfAbsent(musicalId, "0점");
-            }
-
-            return averageScopes;
+            return dto;
         }
 
-        private String averageConverter(Double average) {
-
-            double roundedScope = Math.ceil(average * 100) / 100.0;
-
-            return String.format("%.1f", roundedScope);
+        private String formatPeopleCount(long count) {
+            if (count < 10000) {
+                return count + "명";
+            } else {
+                double manCount = count / 10000.0;
+                // 소수점 한 자리까지 반올림
+                manCount = Math.round(manCount * 10.0) / 10.0;
+                return manCount + "만명";
+            }
         }
 
         //        // 별점 추가
