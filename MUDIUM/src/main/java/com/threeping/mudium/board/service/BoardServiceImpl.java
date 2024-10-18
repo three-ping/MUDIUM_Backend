@@ -173,6 +173,9 @@ public class BoardServiceImpl implements BoardService {
         boardListDTO.setCreatedAt(board.getCreatedAt());
         boardListDTO.setNickname(board.getUser().getNickname());
         boardListDTO.setUserId(board.getUser().getUserId());
+        boardListDTO.setComments(board.getComments());
+        boardListDTO.setBoardLike(board.getBoardLike());
+        boardListDTO.setViewCount(board.getViewCount());
         return boardListDTO;
     }
 }

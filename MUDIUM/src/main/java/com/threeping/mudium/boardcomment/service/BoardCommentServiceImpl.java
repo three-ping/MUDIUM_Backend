@@ -35,11 +35,11 @@ public class BoardCommentServiceImpl implements BoardCommentService{
     public Page<BoardCommentDTO> viewBoardComment(Long boardId, Pageable pageable) {
         int pageNumber = pageable.getPageNumber() > 0 ? pageable.getPageNumber() - 1 : 0;
         int pageSize = pageable.getPageSize();
-        Sort pageSort = Sort.by("createdAt").descending();
+        Sort pageSort = Sort.by("createdAt").ascending();
         Pageable boardCommentPageable = PageRequest.of(pageNumber,pageSize,pageSort);
 
         Page<BoardComment> comments = boardCommentRepository
-                .findByBoardIdAndActiveStatus(boardId,ActiveStatus.ACTIVE,boardCommentPageable);
+                .findByBoardId(boardId,boardCommentPageable);
 
         List<BoardCommentDTO> boardCommentDTOList = comments.stream()
                 .map(boardComment -> {
