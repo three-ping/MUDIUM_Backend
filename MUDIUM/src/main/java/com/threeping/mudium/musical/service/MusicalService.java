@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 public interface MusicalService {
     MusicalDTO findMusicalDetail(Long musicId);
 
-    MusicalDTO findMusicalByMusicalId(Long musicalId);
-
     Page<MusicalListDTO> findByName(String title,Pageable pageable);
 
     MusicalDTO findMusicalDetailByName(String title);
