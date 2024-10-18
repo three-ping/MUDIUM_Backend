@@ -39,4 +39,20 @@ public class BoardCommentController {
         return ResponseDTO.ok(null);
     }
 
+    @PutMapping("{boardCommentId}")
+    private ResponseDTO<?> updateBoardComment(@PathVariable Long boardCommentId,
+                                              @RequestBody BoardCommentDTO boardCommentDTO){
+        boardCommentDTO.setBoardCommentId(boardCommentId);
+        boardCommentService.updateBoardComment(boardCommentDTO);
+
+        return ResponseDTO.ok(null);
+    }
+
+    @DeleteMapping("{boardCommentId}")
+    private ResponseDTO<?> deleteBoardComment(@PathVariable Long boardCommentId) {
+        boardCommentService.deleteBoardComment(boardCommentId);
+
+        return ResponseDTO.ok(null);
+    }
+
 }

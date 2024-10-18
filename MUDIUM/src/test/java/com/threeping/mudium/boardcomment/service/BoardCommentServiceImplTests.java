@@ -82,7 +82,6 @@ class BoardCommentServiceImplTests {
         RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
         boardService.createBoard(registBoardDTO);
         Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
-        log.info("{}",savedBoard);
         String commentContent = "테스트 댓글 내용";
         BoardCommentDTO boardCommentDTO = new BoardCommentDTO();
         boardCommentDTO.setBoardId(savedBoard.getBoardId());
@@ -91,7 +90,6 @@ class BoardCommentServiceImplTests {
         boardCommentDTO.setActiveStatus(ActiveStatus.ACTIVE);
         boardCommentDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         boardCommentService.createBoardComment(boardCommentDTO);
-        log.info("{}",boardCommentDTO);
 
         BoardComment boardComment = boardCommentRepository
                 .findByBoardIdAndActiveStatus(
@@ -102,6 +100,82 @@ class BoardCommentServiceImplTests {
 
         assertNotNull(boardComment,"생성된 댓글은 null이 아니다.");
         assertEquals(commentContent,boardComment.getContent());
+    }
+
+    @DisplayName("자유게시글 댓글을 수정한다.")
+    @Test
+    void updateBoardCommentTest(){
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
+        boardService.createBoard(registBoardDTO);
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        String commentContent = "테스트 댓글 내용";
+        BoardCommentDTO boardCommentDTO = new BoardCommentDTO();
+        boardCommentDTO.setBoardId(savedBoard.getBoardId());
+        boardCommentDTO.setUserId(userId);
+        boardCommentDTO.setContent(commentContent);
+        boardCommentDTO.setActiveStatus(ActiveStatus.ACTIVE);
+        boardCommentDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        boardCommentService.createBoardComment(boardCommentDTO);
+
+        BoardComment boardComment = boardCommentRepository
+                .findByBoardIdAndActiveStatus(
+                        savedBoard.getBoardId(), ActiveStatus.ACTIVE,
+                        PageRequest.of(0,
+                                10,
+                                Sort.by("createdAt").descending())).getContent().get(0);
+
+        String updateContent = "수정된 내용";
+        BoardCommentDTO updateCommentDTO = new BoardCommentDTO
+                (boardComment.getBoardCommentId(),
+                        updateContent,
+                        null,
+                        new Timestamp(System.currentTimeMillis()),
+                        null,
+                        null,
+                        null,
+                        null
+                );
+
+        boardCommentService.updateBoardComment(updateCommentDTO);
+
+        BoardComment updateComment = boardCommentRepository.findById(boardComment.getBoardCommentId()).orElseThrow();
+
+        assertEquals(updateContent,updateComment.getContent(),"댓글 내용이 수정된다.");
+    }
+
+    @DisplayName("자유게시글 댓글을 삭제한다.")
+    @Test
+    void deleteBoardCommentTest(){
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        Long userId = 1L;
+        RegistBoardDTO registBoardDTO = new RegistBoardDTO(userId,title,content);
+        boardService.createBoard(registBoardDTO);
+        Board savedBoard = boardRepository.findAll(Sort.by("createdAt").descending()).get(0);
+        String commentContent = "테스트 댓글 내용";
+        BoardCommentDTO boardCommentDTO = new BoardCommentDTO();
+        boardCommentDTO.setBoardId(savedBoard.getBoardId());
+        boardCommentDTO.setUserId(userId);
+        boardCommentDTO.setContent(commentContent);
+        boardCommentDTO.setActiveStatus(ActiveStatus.ACTIVE);
+        boardCommentDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        boardCommentService.createBoardComment(boardCommentDTO);
+
+        BoardComment boardComment = boardCommentRepository
+                .findByBoardIdAndActiveStatus(
+                        savedBoard.getBoardId(), ActiveStatus.ACTIVE,
+                        PageRequest.of(0,
+                                10,
+                                Sort.by("createdAt").descending())).getContent().get(0);
+
+        boardCommentService.deleteBoardComment(boardComment.getBoardCommentId());
+
+        BoardComment deletedBoardComment = boardCommentRepository.findById(boardComment.getBoardCommentId()).orElseThrow();
+
+        assertEquals(ActiveStatus.INACTIVE,deletedBoardComment.getActiveStatus());
     }
 
 }
