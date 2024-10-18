@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class OAuth2LoginVO {
-    private String id;
+    private String userId;
     private String userName;
     private String nickname;
     private String email;
