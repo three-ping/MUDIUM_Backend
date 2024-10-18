@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
@@ -24,4 +25,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
             "LEFT OUTER JOIN ScopeEntity sc ON r.user.userId = sc.userId AND r.musical.musicalId = sc.musicalId " +
             "WHERE r.musical.musicalId = :musicalId AND r.activeStatus = 'ACTIVE'")
     List<ReviewWithScopeDTO> findReviewsWithRatingsByMusicalId(@Param("musicalId") Long musicalId);
+
+    Optional<Review> findReviewByReviewIdAndActiveStatus(Long reviewId, ActiveStatus activeStatus);
 }

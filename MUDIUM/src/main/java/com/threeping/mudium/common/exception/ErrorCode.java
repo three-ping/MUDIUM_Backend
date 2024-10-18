@@ -66,6 +66,7 @@ public enum ErrorCode {
 
     MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
     NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
+    NOT_FOUND_REVIEW_COMMENT(4041003, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
 
     //
     SCOPE_NOT_FOUND(4041003, HttpStatus.NOT_FOUND, "별점이 존재하지 않습니다."),

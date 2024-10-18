@@ -23,4 +23,6 @@ public interface ReviewService {
     void deleteReview(Long musicalId, Long reviewId, Long userId);
 
     List<ReviewWithScopeDTO> findReviewsWithRatingsByMusicalId(Long musicalId);
+
+    boolean existingCheck(Long reviewId);
 }

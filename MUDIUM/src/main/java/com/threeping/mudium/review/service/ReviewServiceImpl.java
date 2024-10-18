@@ -185,4 +185,10 @@ public class ReviewServiceImpl implements ReviewService {
 
         reviewRepository.save(newReview);
     }
+
+    @Override
+    public boolean existingCheck(Long reviewId) {
+
+        return reviewRepository.findReviewByReviewIdAndActiveStatus(reviewId, ActiveStatus.ACTIVE).isPresent();
+    }
 }

@@ -3,11 +3,10 @@ package com.threeping.mudium.reviewcomment.controller;
 import com.threeping.mudium.common.ResponseDTO;
 import com.threeping.mudium.reviewcomment.dto.ReviewCommentDTO;
 import com.threeping.mudium.reviewcomment.service.ReviewCommentService;
+import com.threeping.mudium.reviewcomment.vo.ReviewCommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,5 +30,37 @@ public class ReviewCommentController {
         responseDTO.setHttpStatus(HttpStatus.OK);
 
         return responseDTO;
+    }
+
+    @PostMapping("/{reviewId}")
+    public ResponseDTO<?> createReviewComment(@PathVariable Long reviewId, @RequestBody ReviewCommentVO commentVO) {
+        ReviewCommentDTO dto = new ReviewCommentDTO();
+        dto.setReviewId(reviewId);
+        dto.setContent(commentVO.getContent());
+
+        reviewCommentService.createReviewComment(commentVO.getUserId(), dto);
+
+        return ResponseDTO.ok("생성 성공");
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseDTO<?> updateReviewComment(@PathVariable Long commentId, @RequestBody ReviewCommentVO commentVO) {
+        ReviewCommentDTO dto = new ReviewCommentDTO();
+        dto.setCommentId(commentId);
+        dto.setContent(commentVO.getContent());
+
+        reviewCommentService.updateReviewComment(commentVO.getUserId(), dto);
+
+        return ResponseDTO.ok("수정 성공");
+    }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseDTO<?> deleteReviewComment(@PathVariable Long commentId, @RequestBody ReviewCommentVO commentVO) {
+        ReviewCommentDTO dto = new ReviewCommentDTO();
+        dto.setCommentId(commentId);
+
+        reviewCommentService.deleteReviewComment(commentVO.getUserId(), dto);
+
+        return ResponseDTO.ok("삭제 성공");
     }
 }

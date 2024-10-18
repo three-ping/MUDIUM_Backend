@@ -82,8 +82,8 @@ public class MusicalCommentServiceImpl implements MusicalCommentService {
         }
         Long commentId = commentDTO.getCommentId();
         MusicalComment beforeComment = musicalCommentRepository.
-                findMusicalCommentByMusicalBoardCommentIdAndUserIdAndMusicalPostIdAndActiveStatus(
-                        commentId, userId, commentDTO.getPostId(), ActiveStatus.ACTIVE)
+                findMusicalCommentByMusicalBoardCommentIdAndUserIdAndActiveStatus(
+                        commentId, userId, ActiveStatus.ACTIVE)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_COMMENT));
 
         beforeComment.setContent(content);
@@ -96,8 +96,8 @@ public class MusicalCommentServiceImpl implements MusicalCommentService {
     public void deleteComment(Long userId, MusicalCommentDTO commentDTO) {
         Long commentId = commentDTO.getCommentId();
         MusicalComment existingComment = musicalCommentRepository.
-                findMusicalCommentByMusicalBoardCommentIdAndUserIdAndMusicalPostIdAndActiveStatus(
-                        commentId, userId, commentDTO.getPostId(), ActiveStatus.ACTIVE)
+                findMusicalCommentByMusicalBoardCommentIdAndUserIdAndActiveStatus(
+                        commentId, userId, ActiveStatus.ACTIVE)
                 .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_COMMENT));
 
         existingComment.setActiveStatus(ActiveStatus.INACTIVE);
