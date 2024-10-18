@@ -1,4 +1,4 @@
-package com.threeping.mudium.musical.dto;
+package com.threeping.mudium.performance.dto;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class MusicalListDTO {
+public class PerformanceRankDTO {
 
     private Long musicalId;
 
@@ -15,4 +15,7 @@ public class MusicalListDTO {
 
     private String poster;
 
+    private String region;
+
+    private Integer rank;
 }
