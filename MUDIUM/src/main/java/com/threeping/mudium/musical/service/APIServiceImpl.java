@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,11 +35,12 @@ public class APIServiceImpl implements APIService {
     }
 
 //    @Scheduled(cron = "0 0 1 * * ?") 새벽 1시마다 db 자동 업데이트
-//    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
+    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
     @Transactional
     @Override
     public void updateMusicalData() {
         try {
+            log.info("Updating musical data...");
             List<MusicalItem> musicalItems = musicalAPIClient.fetchMusicalList();
             for (MusicalItem item : musicalItems) {
                 processMusicalItem(item);
@@ -52,7 +52,7 @@ public class APIServiceImpl implements APIService {
 
     private void processMusicalItem(MusicalItem item) {
         try {
-            String OriginTitle = parseTitle(item.getTitle());
+            String OriginTitle = normalizeTitle(item.getTitle());
             log.info("제목 파싱 확인: {}", OriginTitle);
             Musical musical = getOrCreatedMusical(OriginTitle);
             PerformanceItem performanceItem =
@@ -74,15 +74,27 @@ public class APIServiceImpl implements APIService {
     }
 
     private void updatePerformance(Performance performance, PerformanceItem performanceItem) {
-        performance.setActorList(performanceItem.getActorList());
-        performance.setTheater(performanceItem.getTheater());
-        performance.setEndDate(timeStampConverter(performanceItem.getEndDate()));
-        performance.setStartDate(timeStampConverter(performanceItem.getStartDate()));
-        performance.setRunTime(performanceItem.getRunTime());
-        performance.setPoster(performanceItem.getPoster());
+        if (performance.getActorList() == null || performance.getActorList().isEmpty())
+            performance.setActorList(performanceItem.getActorList());
+
+        if (performance.getTheater() == null || performance.getTheater().isEmpty())
+            performance.setTheater(performanceItem.getTheater());
+
+        if (performance.getEndDate() == null)
+            performance.setEndDate(timeStampConverter(performanceItem.getEndDate()));
+
+        if (performance.getStartDate() == null)
+            performance.setStartDate(timeStampConverter(performanceItem.getStartDate()));
+
+        if (performance.getRunTime() == null || performance.getRunTime().isEmpty())
+            performance.setRunTime(performanceItem.getRunTime());
+
+        if (performance.getPoster() == null || performance.getPoster().isEmpty())
+            performance.setPoster(performanceItem.getPoster());
     }
 
     private void updateMusicalInfo(Musical musical, PerformanceItem performanceItem) {
+        if(musical.getRating() == null || musical.getRating().isEmpty())
         musical.setRating(performanceItem.getAge());
         if(musical.getPoster() == null)
             musical.setPoster(performanceItem.getPoster());
@@ -110,8 +122,12 @@ public class APIServiceImpl implements APIService {
         });
     }
 
-    private String parseTitle(String title) {
-        return title.replaceAll("\\[.*?\\]", "").trim();
+    private String normalizeTitle(String title) {
+        return title.replaceAll("\\[.*?\\]", "")  // 대괄호와 그 내용 제거 (지역 정보)
+                .replaceAll("\\(.*?\\)", "")  // 소괄호와 그 내용 제거
+                .replaceAll("\\s+", "")       // 모든 공백 제거
+                .toLowerCase()                // 소문자로 변환
+                .trim();               // 소문자로 변환
     }
 
     private Timestamp timeStampConverter(String Date) {

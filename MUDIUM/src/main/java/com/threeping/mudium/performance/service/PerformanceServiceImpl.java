@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PerformanceServiceImpl implements PerformanceService {
 
     private final PerformanceRepository performanceRepository;
@@ -23,7 +24,7 @@ public class PerformanceServiceImpl implements PerformanceService {
         this.performanceRepository = performanceRepository;
     }
 
-    @Transactional
+
     @Override
     public List<PerformanceDTO> findPerformances(Long musicalId) {
         List<Performance> performanceList = performanceRepository.findAllByMusicalId(musicalId);
@@ -40,5 +41,21 @@ public class PerformanceServiceImpl implements PerformanceService {
                     return dto;
                 }).collect(Collectors.toList());
         return dtoList;
+    }
+
+    @Override
+    public PerformanceDTO findPerformanceByMusicalIdAndRegion(Long musicalId, String region) {
+        Performance performance = performanceRepository.findPerformanceByMusicalIdAndRegion(musicalId, region)
+                .orElseThrow(() -> new CommonException(ErrorCode.INVALID_MUSICAL_ID));
+
+        PerformanceDTO dto = new PerformanceDTO();
+        dto.setPerformanceId(performance.getPerformanceId());
+        dto.setMusicalId(performance.getMusicalId());
+        dto.setRegion(region);
+        dto.setTheater(performance.getTheater());
+        dto.setEndDate(performance.getEndDate());
+        dto.setStartDate(performance.getStartDate());
+
+        return dto;
     }
 }
