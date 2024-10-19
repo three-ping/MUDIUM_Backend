@@ -15,4 +15,6 @@ public interface UserService extends UserDetailsService {
     UserDTO findByUserId(Long userId);
 
     boolean checkUniqueNickname(String nickname);
+
+    boolean checkIfEmailAlreadyUsed(String email);
 }

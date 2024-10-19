@@ -42,6 +42,7 @@ public enum ErrorCode {
     EXIST_USER_ID(4010012, HttpStatus.UNAUTHORIZED, "이미 회원가입한 회원입니다."),
     DUPLICATE_NICKNAME(4010013, HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
     DUPLICATE_NICKNAME_EXISTS(4010014, HttpStatus.BAD_REQUEST, "중복된 닉네임입니다."),
+    DUPLICATE_EMAIL_EXISTS(4010015,HttpStatus.UNAUTHORIZED,"이미 존재하는 이메일입니다."),
     INVALID_PASSWORD(4010008, HttpStatus.UNAUTHORIZED, "잘못된 비밀번호입니다"),
     //403
     FORBIDDEN_ROLE(4030000, HttpStatus.FORBIDDEN, "권한이 존재하지 않습니다."),

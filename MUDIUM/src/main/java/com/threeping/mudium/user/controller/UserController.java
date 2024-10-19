@@ -38,6 +38,8 @@ public class UserController {
 
     @PostMapping("/send-verification")
     public ResponseDTO<?> sendVerificationEmail(@RequestParam String email) {
+
+        userService.checkIfEmailAlreadyUsed(email);
         emailVerificationService.sendVerificationCode(email);
         return ResponseDTO.ok("이메일 인증 코드가 전송되었습니다.");
     }
