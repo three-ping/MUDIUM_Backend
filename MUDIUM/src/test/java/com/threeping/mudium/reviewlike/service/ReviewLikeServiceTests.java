@@ -52,6 +52,19 @@ class ReviewLikeServiceTests {
         assertNotNull(reviewLike, "좋아요가 저장되어 있어야 한다.");
     }
 
+    @Test
+    @DisplayName("리뷰 좋아요를 삭제한다.")
+    void deleteReviewLikeTest() {
+        Long reviewId = -1L;
+        Long userId = -1L;
+
+        reviewLikeService.createReviewLike(reviewId, userId);
+        reviewLikeService.deleteReviewLike(reviewId, userId);
+
+        ReviewLikePK reviewLikePK = new ReviewLikePK(reviewId, userId);
+        ReviewLike reviewLike = reviewLikeRepository.findById(reviewLikePK).orElse(null);
+        assertNull(reviewLike, "좋아요가 삭제되어 있어야 한다.");
+    }
 
 
 }
