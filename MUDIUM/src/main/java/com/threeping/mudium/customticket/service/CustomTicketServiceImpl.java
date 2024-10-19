@@ -122,5 +122,3 @@ public class CustomTicketServiceImpl implements CustomTicketService {
                 .collect(Collectors.toList());
     }
 }
-
-

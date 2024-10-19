@@ -35,12 +35,20 @@ public class CustomTicketController {
     }
 
 
-    // 커스텀 티켓 삭제
-    @DeleteMapping("/delete/{ticketId}")
+//    // 커스텀 티켓 삭제
+//    @DeleteMapping("/delete/{ticketId}")
+//    public ResponseDTO<?> deleteCustomTicket(@PathVariable Long ticketId,
+//                                             @RequestBody CustomTicketDTO customTicketDTO) {
+//        System.out.println("userId: " + customTicketDTO.getUserId());
+//        customTicketService.deleteCustomTicket(ticketId, customTicketDTO.getUserId());
+//        return ResponseDTO.ok(null);
+//    }
+
+    @DeleteMapping("/delete/{ticketId}/{userId}")
     public ResponseDTO<?> deleteCustomTicket(@PathVariable Long ticketId,
-                                             @RequestBody CustomTicketDTO customTicketDTO) {
-        System.out.println("userId: " + customTicketDTO.getUserId());
-        customTicketService.deleteCustomTicket(ticketId, customTicketDTO.getUserId());
+                                             @PathVariable Long userId) {
+        System.out.println("userId: " + userId);
+        customTicketService.deleteCustomTicket(ticketId, userId);
         return ResponseDTO.ok(null);
     }
 
