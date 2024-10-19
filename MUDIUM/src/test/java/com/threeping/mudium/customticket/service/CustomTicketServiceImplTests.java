@@ -1,15 +1,20 @@
 package com.threeping.mudium.customticket.service;
 
 import com.threeping.mudium.customticket.aggregate.dto.CustomTicketDTO;
+import com.threeping.mudium.customticket.aggregate.entity.CustomTicketEntity;
 import com.threeping.mudium.customticket.repository.CustomTicketRepository;
-import com.threeping.mudium.musical.aggregate.Musical;
-import com.threeping.mudium.musical.repository.MusicalRepository;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
+import com.threeping.mudium.user.aggregate.entity.UserRole;
+import com.threeping.mudium.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.List;
 
 @SpringBootTest
 @Transactional
@@ -22,86 +27,97 @@ class CustomTicketServiceImplTests {
     private CustomTicketRepository customTicketRepository;
 
     @Autowired
-    private MusicalRepository musicalRepository;
+    private UserRepository userRepository;
 
-    // **1. 커스텀 티켓 생성 테스트**
-    @Test
-    public void testCreateCustomTicket() {
-        // 테스트용 뮤지컬 생성 및 저장
-        Musical musical = new Musical(1L, "Test Musical", "전체관람가", "url", "poster", 1L, "production", "synopsys");
-        musical = musicalRepository.save(musical); // 저장된 뮤지컬 객체
+    private CustomTicketDTO customTicketDTO;
+    private UserEntity userEntity;
 
-        // 커스텀 티켓 생성
-        CustomTicketDTO customTicketDTO = new CustomTicketDTO(
-                null,
-                "https://example.com/ticket.jpg",
-                "테마 이름",
-                musical.getMusicalId()
-        );
+    @BeforeEach
+    void setUp() {
+        // 사용자 데이터 생성
+        userEntity = new UserEntity();
+        userEntity.setUserName("Test User");
+        userEntity.setEncryptedPwd("password123");
+        userEntity.setNickname("test_nickname");
+        userEntity.setUserRole(UserRole.ROLE_MEMBER);
+        userRepository.save(userEntity); // 사용자 저장
 
-        // 생성 및 검증
-        CustomTicketDTO createdTicket = customTicketService.createCustomTicket(customTicketDTO);
-        assertNotNull(createdTicket);
-        assertNotNull(createdTicket.getCustomTicketId());
-        assertEquals("테마 이름", createdTicket.getThemeName());
+        // 커스텀 티켓 DTO 설정
+        customTicketDTO = new CustomTicketDTO();
+        customTicketDTO.setTicketImage("data:image/jpeg;base64,test-image");
+        customTicketDTO.setHologramColor1("#ffdb70");
+        customTicketDTO.setHologramColor2("#8432ff");
+        customTicketDTO.setComment("Test comment");
+        customTicketDTO.setUserId(userEntity.getUserId());
     }
 
-    // **2. 커스텀 티켓 수정 테스트**
     @Test
-    public void testUpdateCustomTicket() {
-        // 먼저 생성된 뮤지컬과 티켓 저장
-        Musical musical = new Musical(1L, "Test Musical", "전체관람가", "url", "poster", 1L, "production", "synopsys");
-        musical = musicalRepository.save(musical);
+    void testCreateCustomTicket() {
+        // 커스텀 티켓 생성
+        CustomTicketDTO createdTicket = customTicketService.createCustomTicket(customTicketDTO, userEntity.getUserId());
 
-        CustomTicketDTO customTicketDTO = new CustomTicketDTO(
-                null,
-                "https://example.com/ticket.jpg",
-                "테마 이름",
-                musical.getMusicalId()
-        );
+        assertNotNull(createdTicket);
+        assertEquals(customTicketDTO.getTicketImage(), createdTicket.getTicketImage());
+        assertEquals(customTicketDTO.getHologramColor1(), createdTicket.getHologramColor1());
+        assertEquals(customTicketDTO.getHologramColor2(), createdTicket.getHologramColor2());
+        assertEquals(customTicketDTO.getComment(), createdTicket.getComment());
 
-        // 티켓 생성
-        CustomTicketDTO createdTicket = customTicketService.createCustomTicket(customTicketDTO);
+        // DB에 생성된 티켓 확인
+        CustomTicketEntity savedTicket = customTicketRepository.findById(createdTicket.getCustomTicketId()).orElse(null);
+        assertNotNull(savedTicket);
+        assertEquals(userEntity, savedTicket.getUser());
+    }
 
-        // 수정할 내용 설정
-        CustomTicketDTO updatedDTO = new CustomTicketDTO(
-                createdTicket.getCustomTicketId(),
-                "https://example.com/updated.jpg",
-                "수정된 테마 이름",
-                musical.getMusicalId()
-        );
+    @Test
+    void testUpdateCustomTicket() {
+        // 커스텀 티켓 생성 후 업데이트
+        CustomTicketDTO createdTicket = customTicketService.createCustomTicket(customTicketDTO, userEntity.getUserId());
 
-        // 티켓 수정 및 검증
-        CustomTicketDTO updatedTicket = customTicketService.updateCustomTicket(
-                createdTicket.getCustomTicketId(), updatedDTO);
+        CustomTicketDTO updateDTO = new CustomTicketDTO();
+        updateDTO.setTicketImage("data:image/jpeg;base64,updated-image");
+        updateDTO.setHologramColor1("#ffffff");
+        updateDTO.setHologramColor2("#000000");
+        updateDTO.setComment("Updated comment");
+
+        // 커스텀 티켓 업데이트
+        CustomTicketDTO updatedTicket = customTicketService.updateCustomTicket(createdTicket.getCustomTicketId(), updateDTO, userEntity.getUserId());
 
         assertNotNull(updatedTicket);
-        assertEquals("수정된 테마 이름", updatedTicket.getThemeName());
-        assertEquals("https://example.com/updated.jpg", updatedTicket.getTicketImage());
+        assertEquals("data:image/jpeg;base64,updated-image", updatedTicket.getTicketImage());
+        assertEquals("#ffffff", updatedTicket.getHologramColor1());
+        assertEquals("#000000", updatedTicket.getHologramColor2());
+        assertEquals("Updated comment", updatedTicket.getComment());
     }
 
-    // **3. 커스텀 티켓 삭제 테스트**
     @Test
-    public void testDeleteCustomTicket() {
-        // 먼저 생성된 뮤지컬과 티켓 저장
-        Musical musical = new Musical(1L, "Test Musical", "전체관람가", "url", "poster", 1L, "production", "synopsys");
-        musical = musicalRepository.save(musical);
+    void testDeleteCustomTicket() {
+        // 커스텀 티켓 생성 후 삭제
+        CustomTicketDTO createdTicket = customTicketService.createCustomTicket(customTicketDTO, userEntity.getUserId());
 
-        CustomTicketDTO customTicketDTO = new CustomTicketDTO(
-                null,
-                "https://example.com/ticket.jpg",
-                "테마 이름",
-                musical.getMusicalId()
-        );
+        customTicketService.deleteCustomTicket(createdTicket.getCustomTicketId(), userEntity.getUserId());
 
-        // 티켓 생성
-        CustomTicketDTO createdTicket = customTicketService.createCustomTicket(customTicketDTO);
+        // DB에서 티켓 삭제 확인
+        CustomTicketEntity deletedTicket = customTicketRepository.findById(createdTicket.getCustomTicketId()).orElse(null);
+        assertNull(deletedTicket); // 삭제 후 null 확인
+    }
 
-        // 티켓 삭제
-        customTicketService.deleteCustomTicket(createdTicket.getCustomTicketId());
+    @Test
+    void testGetAllCustomTickets() {
+        // 여러 개의 커스텀 티켓 생성
+        customTicketService.createCustomTicket(customTicketDTO, userEntity.getUserId());
+        CustomTicketDTO secondTicketDTO = new CustomTicketDTO();
+        secondTicketDTO.setTicketImage("data:image/jpeg;base64,second-image");
+        secondTicketDTO.setHologramColor1("#abc123");
+        secondTicketDTO.setHologramColor2("#def456");
+        secondTicketDTO.setComment("Second comment");
+        secondTicketDTO.setUserId(userEntity.getUserId());
 
-        // 삭제 후 확인
-        boolean isDeleted = customTicketRepository.findById(createdTicket.getCustomTicketId()).isEmpty();
-        assertTrue(isDeleted);
+        customTicketService.createCustomTicket(secondTicketDTO, userEntity.getUserId());
+
+        // 해당 유저의 모든 티켓 조회
+        List<CustomTicketDTO> tickets = customTicketService.getAllCustomTickets(userEntity.getUserId());
+
+        assertNotNull(tickets);
+        assertEquals(2, tickets.size());
     }
 }

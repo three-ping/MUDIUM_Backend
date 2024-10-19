@@ -3,6 +3,7 @@ package com.threeping.mudium.customticket.controller;
 import com.threeping.mudium.common.ResponseDTO;
 import com.threeping.mudium.customticket.aggregate.dto.CustomTicketDTO;
 import com.threeping.mudium.customticket.service.CustomTicketService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,26 +20,33 @@ public class CustomTicketController {
 
     // 티켓 생성
     @PostMapping("/create")
-    public ResponseDTO<?> createCustomTicket(@RequestBody CustomTicketDTO customTicketDTO) {
-        return ResponseDTO.ok(customTicketService.createCustomTicket(customTicketDTO));
+    public ResponseDTO<?> createCustomTicket(@RequestBody CustomTicketDTO customTicketDTO
+    ) { // 로그인된 사용자 ID를 전달
+        System.out.println("userId: " + customTicketDTO.getUserId());
+        return ResponseDTO.ok(customTicketService.createCustomTicket(customTicketDTO, customTicketDTO.getUserId()));
     }
 
-    // 커스텀 티켓 수정
+    // 수정
     @PutMapping("/update/{ticketId}")
     public ResponseDTO<?> updateCustomTicket(@PathVariable Long ticketId,
                                              @RequestBody CustomTicketDTO customTicketDTO) {
-        return ResponseDTO.ok(customTicketService.updateCustomTicket(ticketId, customTicketDTO));
+        System.out.println("userId: " + customTicketDTO.getUserId());
+        return ResponseDTO.ok(customTicketService.updateCustomTicket(ticketId, customTicketDTO, customTicketDTO.getUserId()));
     }
+
 
     // 커스텀 티켓 삭제
     @DeleteMapping("/delete/{ticketId}")
-    public ResponseDTO<?> deleteCustomTicket(@PathVariable Long ticketId) {
-        customTicketService.deleteCustomTicket(ticketId);
+    public ResponseDTO<?> deleteCustomTicket(@PathVariable Long ticketId,
+                                             @RequestBody CustomTicketDTO customTicketDTO) {
+        System.out.println("userId: " + customTicketDTO.getUserId());
+        customTicketService.deleteCustomTicket(ticketId, customTicketDTO.getUserId());
         return ResponseDTO.ok(null);
     }
 
-    @GetMapping("/all")
-    public ResponseDTO<?> getAllCustomTickets() {
-        return ResponseDTO.ok(customTicketService.getAllCustomTickets());
+    @GetMapping("/{userId}")
+    public ResponseDTO<?> getAllCustomTickets(@PathVariable Long userId) {
+        System.out.println("userId: " + userId);
+        return ResponseDTO.ok(customTicketService.getAllCustomTickets(userId));
     }
 }
