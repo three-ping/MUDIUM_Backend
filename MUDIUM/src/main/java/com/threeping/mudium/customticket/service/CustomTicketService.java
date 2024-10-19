@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface CustomTicketService {
 
-    CustomTicketDTO createCustomTicket(CustomTicketDTO customTicketDTO);
+    CustomTicketDTO createCustomTicket(CustomTicketDTO customTicketDTO, Long userId); // userId 추가
 
-    CustomTicketDTO updateCustomTicket(Long customTicketId, CustomTicketDTO customTicketDTO);
+    CustomTicketDTO updateCustomTicket(Long customTicketId, CustomTicketDTO customTicketDTO, Long userId); // userId 추가
 
-    void deleteCustomTicket(Long ticketId);
+    void deleteCustomTicket(Long ticketId, Long userId); // userId 추가
 
-    List<CustomTicketDTO> getAllCustomTickets();
+    List<CustomTicketDTO> getAllCustomTickets(Long userId); // userId 추가
 }
