@@ -68,6 +68,10 @@ public class UserController {
         return ResponseDTO.ok(userService.findByUserId(userId));
     }
 
+    @GetMapping("/check/{nickname}")
+    public ResponseDTO<?> checkNickName(@PathVariable String nickname){
+        return ResponseDTO.ok(userService.checkUniqueNickname(nickname));
+    }
 
 
 }

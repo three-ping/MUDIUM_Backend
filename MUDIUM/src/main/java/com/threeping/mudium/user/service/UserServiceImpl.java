@@ -60,8 +60,8 @@ public class UserServiceImpl implements UserService {
         if(newUser.getNickname() == null){
             throw new CommonException(ErrorCode.INVALID_INPUT_VALUE);
         }
-        Optional<UserEntity> existingUserWithSameNickname = userRepository.findByNickname(newUser.getNickname());
-        if(existingUserWithSameNickname.isPresent()){
+        UserEntity existingUserWithSameNickname = userRepository.findByNickname(newUser.getNickname());
+        if(existingUserWithSameNickname!=null){
             throw new CommonException(ErrorCode.DUPLICATE_NICKNAME_EXISTS);
         }
 
@@ -124,5 +124,14 @@ public class UserServiceImpl implements UserService {
             throw new CommonException(ErrorCode.NOT_FOUND_USER_ID);
         }
         return modelMapper.map(foundUser, UserDTO.class);
+    }
+
+    @Override
+    public boolean checkUniqueNickname(String nickname) {
+        UserEntity user = userRepository.findByNickname(nickname);
+        if(user == null){
+            return true;
+        }
+        return false;
     }
 }
