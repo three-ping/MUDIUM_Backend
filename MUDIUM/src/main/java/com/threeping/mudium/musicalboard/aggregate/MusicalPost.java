@@ -42,6 +42,9 @@ public class MusicalPost {
     @Column(name = "comments")
     private Long comments;
 
+//    @Column(name = "replys")
+//    private Long replys;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "active_status", nullable = false)
     private ActiveStatus activeStatus = ActiveStatus.ACTIVE;

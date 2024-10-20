@@ -1,5 +1,8 @@
 package com.threeping.mudium.musicalreply.service;
 
+import com.threeping.mudium.common.exception.CommonException;
+import com.threeping.mudium.common.exception.ErrorCode;
+import com.threeping.mudium.mucialcomment.service.MusicalCommentService;
 import com.threeping.mudium.musicalreply.aggregate.ActiveStatus;
 import com.threeping.mudium.musicalreply.aggregate.MusicalReply;
 import com.threeping.mudium.musicalreply.dto.MusicalReplyDTO;
@@ -9,18 +12,20 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
 public class MusicalReplyServiceImpl implements MusicalReplyService {
 
     private final MusicalReplyRepository musicalReplyRepository;
+    private final MusicalCommentService musicalCommentService;
 
     @Autowired
-    public MusicalReplyServiceImpl(MusicalReplyRepository musicalReplyRepository) {
+    public MusicalReplyServiceImpl(MusicalReplyRepository musicalReplyRepository, MusicalCommentService musicalCommentService) {
         this.musicalReplyRepository = musicalReplyRepository;
+        this.musicalCommentService = musicalCommentService;
     }
 
     @Override
@@ -48,6 +53,51 @@ public class MusicalReplyServiceImpl implements MusicalReplyService {
 
 
         return repliesDTO;
+    }
+
+    @Override
+    public void createReply(Long userId, MusicalReplyDTO replyDTO) {
+        if(musicalCommentService.existingCheck(replyDTO.getCommentId()) == false)
+            throw new CommonException(ErrorCode.NOT_FOUND_COMMENT);
+
+        MusicalReply newReply = new MusicalReply();
+
+        if(replyDTO.getContent().trim().isEmpty()) {
+            throw new CommonException(ErrorCode.MISSING_REQUIRED_CONTENT);
+        }
+
+        newReply.setContent(replyDTO.getContent());
+        newReply.setCommentId(replyDTO.getCommentId());
+        newReply.setUserId(userId);
+        newReply.setCreatedAt(Timestamp.from(Instant.now()));
+        newReply.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        musicalReplyRepository.save(newReply);
+    }
+
+    @Override
+    public void updateReply(Long userId, MusicalReplyDTO replyDTO) {
+        MusicalReply reply = musicalReplyRepository.findByMusicalReplyIdAndUserIdAndActiveStatus(
+                replyDTO.getMusicalReplyId(), userId, ActiveStatus.ACTIVE)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_REPLY));
+
+        if(replyDTO.getContent().trim().isEmpty()) {
+            throw new CommonException(ErrorCode.MISSING_REQUIRED_CONTENT);
+        }
+        reply.setContent(replyDTO.getContent());
+        reply.setUpdatedAt(Timestamp.from(Instant.now()));
+
+        musicalReplyRepository.save(reply);
+    }
+
+    @Override
+    public void deleteReply(Long userId, MusicalReplyDTO replyDTO) {
+        MusicalReply reply = musicalReplyRepository.findByMusicalReplyIdAndUserIdAndActiveStatus(
+                replyDTO.getMusicalReplyId(), userId, ActiveStatus.ACTIVE)
+                .orElseThrow(() -> new CommonException(ErrorCode.NOT_FOUND_REPLY));
+
+        reply.setActiveStatus(ActiveStatus.INACTIVE);
+        musicalReplyRepository.save(reply);
     }
 
     private String timeConverter(Timestamp date) {

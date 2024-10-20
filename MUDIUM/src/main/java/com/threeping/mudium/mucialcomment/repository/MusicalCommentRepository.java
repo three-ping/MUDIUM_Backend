@@ -15,6 +15,8 @@ public interface MusicalCommentRepository extends JpaRepository<MusicalComment, 
             "FROM MusicalCommentEntity mc WHERE mc.musicalPostId = :musicalPostId")
     List<Object[]> findAllByMusicalPostId(Long musicalPostId);
 
-    Optional<MusicalComment> findMusicalCommentByMusicalBoardCommentIdAndUserIdAndMusicalPostIdAndActiveStatus(
-            Long musicalBoardCommentId, Long userId, Long postId, ActiveStatus activeStatus);
+    Optional<MusicalComment> findMusicalCommentByMusicalBoardCommentIdAndUserIdAndActiveStatus(
+            Long musicalBoardCommentId, Long userId, ActiveStatus activeStatus);
+
+    Optional<MusicalComment> findMusicalCommentByMusicalBoardCommentId(Long musicalBoardCommentId);
 }

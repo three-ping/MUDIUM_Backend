@@ -16,8 +16,9 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -41,6 +42,7 @@ public class APIServiceImpl implements APIService {
     @Override
     public void updateMusicalData() {
         try {
+            log.info("musical data 업데이트 중...");
             List<MusicalItem> musicalItems = musicalAPIClient.fetchMusicalList();
             for (MusicalItem item : musicalItems) {
                 processMusicalItem(item);
@@ -52,15 +54,17 @@ public class APIServiceImpl implements APIService {
 
     private void processMusicalItem(MusicalItem item) {
         try {
-            String OriginTitle = parseTitle(item.getTitle());
+            String OriginTitle = normalizeTitle(item.getTitle());
+            String area = normalizeArea(item.getTitle());
             log.info("제목 파싱 확인: {}", OriginTitle);
+            log.info("지역 파싱 확인: {}", area);
             Musical musical = getOrCreatedMusical(OriginTitle);
             PerformanceItem performanceItem =
                     musicalAPIClient.fetchPerformanceDetail(item.getExternalId());
             log.info("external Id: " + item.getExternalId());
             updateMusicalInfo(musical, performanceItem);
             log.info("업데이트된 뮤지컬 정보 확인: " + musical);
-            Performance performance = getOrCreatedPerformance(musical.getMusicalId(), item.getArea());
+            Performance performance = getOrCreatedPerformance(musical.getMusicalId(), area);
             updatePerformance(performance, performanceItem);
             log.info("업데이트된 공연 정보 확인: " + performance);
 
@@ -74,15 +78,27 @@ public class APIServiceImpl implements APIService {
     }
 
     private void updatePerformance(Performance performance, PerformanceItem performanceItem) {
-        performance.setActorList(performanceItem.getActorList());
-        performance.setTheater(performanceItem.getTheater());
-        performance.setEndDate(timeStampConverter(performanceItem.getEndDate()));
-        performance.setStartDate(timeStampConverter(performanceItem.getStartDate()));
-        performance.setRunTime(performanceItem.getRunTime());
-        performance.setPoster(performanceItem.getPoster());
+        if (performance.getActorList() == null || performance.getActorList().isEmpty())
+            performance.setActorList(performanceItem.getActorList());
+
+        if (performance.getTheater() == null || performance.getTheater().isEmpty())
+            performance.setTheater(performanceItem.getTheater());
+
+        if (performance.getEndDate() == null)
+            performance.setEndDate(timeStampConverter(performanceItem.getEndDate()));
+
+        if (performance.getStartDate() == null)
+            performance.setStartDate(timeStampConverter(performanceItem.getStartDate()));
+
+        if (performance.getRunTime() == null || performance.getRunTime().isEmpty())
+            performance.setRunTime(performanceItem.getRunTime());
+
+        if (performance.getPoster() == null || performance.getPoster().isEmpty())
+            performance.setPoster(performanceItem.getPoster());
     }
 
     private void updateMusicalInfo(Musical musical, PerformanceItem performanceItem) {
+        if(musical.getRating() == null || musical.getRating().isEmpty())
         musical.setRating(performanceItem.getAge());
         if(musical.getPoster() == null)
             musical.setPoster(performanceItem.getPoster());
@@ -105,13 +121,39 @@ public class APIServiceImpl implements APIService {
         return musicalRepository.findMusicalByExactTitle(originTitle).orElseGet(() -> {
            Musical musical = new Musical();
            musical.setTitle(originTitle);
+           musical.setViewCount(0L);
            musicalRepository.save(musical);
+           // 뮤지컬에서 관람등급을 보고 다르다면 또
            return musical;
         });
     }
 
-    private String parseTitle(String title) {
-        return title.replaceAll("\\[.*?\\]", "").trim();
+    private String normalizeTitle(String title) {
+        return title.replaceAll("\\[.*?\\]", "")
+                .replaceAll("\\(.*?\\)", "")
+                .replaceAll("\\s+", "")
+                .toLowerCase()
+                .trim();
+    }
+
+    private String normalizeArea(String title) {
+        // 대괄호 안의 내용을 찾습니다.
+        String areaPattern = "\\[(.*?)]";
+        Pattern pattern = Pattern.compile(areaPattern);
+        Matcher matcher = pattern.matcher(title);
+
+        if (matcher.find()) {
+            String area = matcher.group(1);
+            // 소괄호와 그 내용을 제거합니다.
+            area = area.replaceAll("\\(.*?\\)", "");
+            // 모든 공백을 제거합니다.
+            area = area.replaceAll("\\s+", "");
+            if(area.equals("세종시")) area ="세종";
+            return area;
+        } else {
+            // 대괄호가 없는 경우 "서울"을 반환합니다.
+            return "서울";
+        }
     }
 
     private Timestamp timeStampConverter(String Date) {

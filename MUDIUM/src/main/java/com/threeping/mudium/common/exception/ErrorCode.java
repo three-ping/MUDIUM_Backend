@@ -67,11 +67,13 @@ public enum ErrorCode {
 
     MUSICAL_NOT_FOUND(4041001, HttpStatus.NOT_FOUND, "뮤지컬이 존재하지 않습니다."),
     NOT_FOUND_REVIEW(4041002, HttpStatus.NOT_FOUND, "리뷰가 존재하지 않습니다."),
+    NOT_FOUND_REVIEW_COMMENT(4041003, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
 
     //
     SCOPE_NOT_FOUND(4041003, HttpStatus.NOT_FOUND, "별점이 존재하지 않습니다."),
 
     // Musical
+    JAXB_MANAGER_ERROR(5001300, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB MANAGER 생성에 실패했습니다."),
     JAXB_CONTEXT_ERROR(5001301, HttpStatus.INTERNAL_SERVER_ERROR, "JAXB CONTEXT 생성에 실패했습니다."),
     API_LIST_BAD_REQUEST(4001302, HttpStatus.BAD_REQUEST, "공연리스트 API 통신에 실패했습니다."),
     API_DETAIL_BAD_REQUEST(4001303, HttpStatus.BAD_REQUEST, "상세정보 API 통신에 실패했습니다."),
@@ -82,6 +84,8 @@ public enum ErrorCode {
     NOT_FOUND_MUSICAL(4041308, HttpStatus.NOT_FOUND, "존재하지 않는 뮤지컬입니다."),
     MISSING_REQUIRED_CONTENT(4001308, HttpStatus.BAD_REQUEST, "필수 내용이 누락되었습니다."),
     NOT_FOUND_COMMENT(4001309, HttpStatus.NOT_FOUND, "댓글이 존재하지 않습니다."),
+    NOT_FOUND_REPLY(4001310, HttpStatus.NOT_FOUND, "대댓글이 존재하지 않습니다."),
+    API_RANK_BAD_REQUEST(4001310, HttpStatus.BAD_REQUEST, "공연 순위 API 통신에 실패했습니다.."),
 
 
     //Board
@@ -89,7 +93,13 @@ public enum ErrorCode {
     INVALID_BOARD_USER_ID(4002102,HttpStatus.BAD_REQUEST,"수정 권한이 없는 게시글입니다."),
     //Notice
     INVALID_NOTICE_ID(4002201,HttpStatus.BAD_REQUEST ,"잘못된 공지게시글 번호입니다." ),
-    INVALID_USER_ROLE(4002202,HttpStatus.BAD_REQUEST ,"공지 게시글은 관리자만 관리할 수 있습니다." );
+    INVALID_USER_ROLE(4002202,HttpStatus.BAD_REQUEST ,"공지 게시글은 관리자만 관리할 수 있습니다." ),
+    //Inquiry
+    NOT_FOUND_USER_INQUIRY(4042301,HttpStatus.NOT_FOUND ,"해당 문의를 찾을 수 없습니다." ),
+    //BoardComment
+    NOT_FOUND_BOARD_COMMENT(4042401,HttpStatus.NOT_FOUND,"해당 댓글을 찾을 수 없습니다."),
+    // BoardReply
+    NOT_FOUND_BOARD_REPLY(4042501,HttpStatus.NOT_FOUND,"해당 대댓글을 찾을 수 없습니다.");
 
     private final Integer code;
     private final HttpStatus httpStatus;

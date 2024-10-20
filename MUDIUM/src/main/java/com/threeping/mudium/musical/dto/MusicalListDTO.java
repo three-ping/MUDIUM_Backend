@@ -15,5 +15,4 @@ public class MusicalListDTO {
 
     private String poster;
 
-    private String averageScope;
 }

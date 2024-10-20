@@ -20,4 +20,7 @@ public class ReviewResponseDTO {
     private Long musicalId;
     private Long userId;
     private String userNickname;
+    // 밑에는 추가
+    private String userProfile;
+    private String musicalTitle;
 }

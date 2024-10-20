@@ -1,6 +1,7 @@
 package com.threeping.mudium.customticket.aggregate.entity;
 
 import com.threeping.mudium.musical.aggregate.Musical;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,14 +17,19 @@ public class CustomTicketEntity {
     @Column(name="custom_ticket_id")
     private Long customTicketId;
 
-    @Column(name="ticket_image")
+    @Column(name="ticket_image", columnDefinition="LONGTEXT") // 이미지 Base64를 저장하는 필드
     private String ticketImage;
 
-    @Column(name="theme_name")
-    private String themeName;
+    @Column(name="hologram_color1")
+    private String hologramColor1;
 
-    @ManyToOne(fetch = FetchType.LAZY)  // 다대일 관계 설정
-    @JoinColumn(name="musical_info_id", nullable=false)
-    private Musical musical;
+    @Column(name="hologram_color2")
+    private String hologramColor2;
 
+    @Column(name="comment", length=500)
+    private String comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)  // 사용자와 다대일 관계 설정
+    @JoinColumn(name="user_id", nullable=false)
+    private UserEntity user; // 티켓의 소유자를 나타냄
 }

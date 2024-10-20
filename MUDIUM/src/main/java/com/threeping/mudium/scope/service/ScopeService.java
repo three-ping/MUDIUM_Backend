@@ -1,6 +1,7 @@
 package com.threeping.mudium.scope.service;
 
 import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
+import com.threeping.mudium.scope.dto.AverageScopeDTO;
 import com.threeping.mudium.scope.dto.ScopeDTO;
 import com.threeping.mudium.scope.vo.ScopeVO;
 
@@ -18,5 +19,5 @@ public interface ScopeService {
 
     List<ScopeDTO> findAllScopesByMusicalId(Long musicalId);
 
-    Map<Long, String> calculateAverageScopeBatch(List<Long> musicalIds);
+    AverageScopeDTO calculateAverageScope(Long musicalId);
 }

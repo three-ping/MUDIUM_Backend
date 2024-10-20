@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface PerformanceRepository extends JpaRepository<Performance, Long> {
     Optional<Performance> findPerformanceByPerformanceId(Long performanceId);
-    Optional<Performance> findPerformanceByMusicalIdAndRegion(Long musicalId, String region);
     List<Performance> findAllByMusicalId(Long musicalId);
+    Optional<Performance> findPerformanceByMusicalIdAndRegion(Long musicalId, String region);
 }

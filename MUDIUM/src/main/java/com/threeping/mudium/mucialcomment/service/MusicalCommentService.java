@@ -12,4 +12,6 @@ public interface MusicalCommentService {
     void updateComment(Long userId, MusicalCommentDTO commentDTO);
 
     void deleteComment(Long userId, MusicalCommentDTO commentDTO);
+
+    boolean existingCheck(Long commentId);
 }

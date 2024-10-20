@@ -16,6 +16,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,8 +40,11 @@ public class MusicalAPIClient {
     }
 
     public List<MusicalItem> fetchMusicalList() {
-        String startDate = "20220101";
-        String endDate = "20240930";
+        log.info("Fetching musical list");
+        // test를 위해서 줄입니다..
+        String startDate = "20240101";
+        String endDate = "20241231";
+        log.info("endDate: {}", endDate);
         int cPage = 1;
         List<MusicalItem> allMusicals = new ArrayList<>();
 
@@ -48,10 +54,11 @@ public class MusicalAPIClient {
                     .queryParam("stdate", startDate)
                     .queryParam("eddate", endDate)
                     .queryParam("cpage", cPage + "")
-                    .queryParam("rows", "100")
+                    .queryParam("rows", "200")
                     .queryParam("shcate", "GGGA")
                     .toUriString();
 
+            log.info("요청 url 확인: {}", url);
             String response = restTemplate.getForObject(url, String.class);
             log.info("정보 확인: " + response);
             MusicalListResponse parsedResponse = parseXmlResponse(response);
@@ -96,5 +103,11 @@ public class MusicalAPIClient {
         } catch (JAXBException e) {
             throw new CommonException(ErrorCode.JAXB_CONTEXT_ERROR);
         }
+    }
+
+    private String timeConverter(LocalDateTime now) {
+        DateTimeFormatter sdf = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String format = now.format(sdf);
+        return format;
     }
 }

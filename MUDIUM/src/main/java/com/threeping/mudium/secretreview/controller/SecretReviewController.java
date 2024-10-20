@@ -22,7 +22,7 @@ public class SecretReviewController {
 
     // 비밀리뷰 전체 조회
     @GetMapping("")
-    private ResponseDTO<?> findSecretReviewByUserId(@RequestBody Long userId) {
+    private ResponseDTO<?> findSecretReviewByUserId(@RequestParam Long userId) {
         List<SecretReviewResponseDTO> secretReviewResponseDTO = secretReviewService.findSecretReviewByUserId(userId);
 
         return ResponseDTO.ok(secretReviewResponseDTO);
@@ -31,7 +31,7 @@ public class SecretReviewController {
     // 비밀리뷰 상세 조회
     @GetMapping("/{secretReviewId}")
     private ResponseDTO<?> findSecretReviewByUserIdAndSecretReviewId(@PathVariable Long secretReviewId,
-                                                                     @RequestBody Long userId) {
+                                                                     @RequestParam Long userId) {
         List<SecretReviewResponseDTO> secretReviewResponseDTO =
                 secretReviewService.findSecretReviewByUserIdAndSecretReviewId(userId, secretReviewId);
 
@@ -59,7 +59,7 @@ public class SecretReviewController {
     // 비밀리뷰 삭제
     @DeleteMapping("/{secretReviewId}")
     private ResponseDTO<?> deleteSecretReview(@PathVariable Long secretReviewId,
-                                              @RequestBody Long userId) {
+                                              @RequestParam Long userId) {
         secretReviewService.deleteSecretReview(secretReviewId, userId);
 
         return ResponseDTO.ok("비밀리뷰 삭제 성공!!!");
