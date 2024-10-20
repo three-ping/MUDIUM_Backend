@@ -54,10 +54,11 @@ public class MusicalAPIClient {
                     .queryParam("stdate", startDate)
                     .queryParam("eddate", endDate)
                     .queryParam("cpage", cPage + "")
-                    .queryParam("rows", "100")
+                    .queryParam("rows", "200")
                     .queryParam("shcate", "GGGA")
                     .toUriString();
 
+            log.info("요청 url 확인: {}", url);
             String response = restTemplate.getForObject(url, String.class);
             log.info("정보 확인: " + response);
             MusicalListResponse parsedResponse = parseXmlResponse(response);
