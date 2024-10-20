@@ -1,5 +1,6 @@
 package com.threeping.mudium.bookmark.service;
 
+import com.threeping.mudium.bookmark.dto.BookmarkAndMusicalVO;
 import com.threeping.mudium.bookmark.dto.BookmarkRequestDTO;
 import com.threeping.mudium.bookmark.dto.BookmarkResponseDTO;
 import com.threeping.mudium.bookmark.entity.Bookmark;
@@ -15,4 +16,5 @@ public interface BookmarkService {
     public List<BookmarkResponseDTO> findBookmarkByUserId ( Long userId );
 
 
+    List<BookmarkAndMusicalVO> findBookmarksWithMusicalInfoByUserId(Long userId);
 }

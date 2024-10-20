@@ -37,6 +37,8 @@ public class EmailVerificationService {
 
     // 인증 코드 생성 및 Redis에 저장 (5분 TTL)
     public String sendVerificationCode(String email) {
+        
+
         String code = generateVerificationCode();
         ValueOperations<String, String> ops = redisTemplate.opsForValue();
         ops.set(email, code, Duration.ofMinutes(5));  // 5분 동안 유효

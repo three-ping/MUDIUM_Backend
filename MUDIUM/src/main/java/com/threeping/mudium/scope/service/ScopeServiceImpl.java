@@ -125,4 +125,8 @@
                 scopeRepository.deleteScopeByMusicalIdAndUserId(musicalId, userId);
             }
 
+        @Override
+        public List<ScopeEntity> findScopesByUserId(Long userId) {
+            return scopeRepository.findByUserId(userId);
+        }
     }

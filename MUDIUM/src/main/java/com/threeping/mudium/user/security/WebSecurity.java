@@ -64,6 +64,8 @@ WebSecurity {
 //                                .requestMatchers(new AntPathRequestMatcher("/api/users/**", "DELETE")).hasRole("MEMBER")
                                 .anyRequest().authenticated()
                 )
+
+
                 /* 설명. authenticationManager 등록(UserDetails를 상속받는 Service 계층 + BCrypt 암호화) */
                 .authenticationManager(authenticationManager)
 
@@ -74,12 +76,14 @@ WebSecurity {
                 .addFilterBefore(new JwtFilter(userService, jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
+
                 return http.build();
     }
 
     /* 설명. 인증(Authentication)용 메소드(인증 필터 반환) */
     private AuthenticationFilter getAuthenticationFilter(AuthenticationManager authenticationManager) {
         AuthenticationFilter authenticationFilter = new AuthenticationFilter(authenticationManager, userService, env, bCryptPasswordEncoder);
+        authenticationFilter.setFilterProcessesUrl("/api/users/login");
         authenticationFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
         return authenticationFilter;
     }

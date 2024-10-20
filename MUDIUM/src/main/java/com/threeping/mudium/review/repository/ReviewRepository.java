@@ -30,4 +30,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     // 리뷰 userId로 조회
     List<Review> findAllByUser_UserIdAndActiveStatus(Long userId, ActiveStatus activeStatus);
+
 }
