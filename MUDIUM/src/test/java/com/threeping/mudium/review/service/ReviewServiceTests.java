@@ -128,7 +128,7 @@ class ReviewServiceTests {
 
 
     @Test
-    @DisplayName("유저 ID로 리뷰와 별점 조회")
+    @DisplayName("유저 ID로 리뷰와 별점 및 뮤지컬 정보 조회")
     void testFindReviewAndScopeByUserId(){
 
         // given
