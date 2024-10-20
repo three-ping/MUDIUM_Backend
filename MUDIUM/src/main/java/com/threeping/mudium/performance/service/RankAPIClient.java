@@ -87,7 +87,7 @@ public class RankAPIClient {
     }
 
     private String timeConverter(LocalDateTime time) {
-        LocalDateTime previousDay = time.minusDays(2);
+        LocalDateTime previousDay = time.minusDays(1);
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
         String date = previousDay.format(formatter);

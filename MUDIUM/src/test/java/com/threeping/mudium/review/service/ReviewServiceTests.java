@@ -64,6 +64,23 @@ class ReviewServiceTests {
         assertEquals(reviewId, review.getReviewId());
     }
 
+    @DisplayName("userId를 통한 리뷰 조회를 한다.")
+    @Test
+    void findReviewByUser_UserIdAndActiveStatusTest() {
+        // Given
+        Long userId = 1L;
+
+        // When
+        List<ReviewWithScopeDTO> reviewWithScopeDTO = reviewService.findReviewByUserId(userId);
+
+        // Then
+        assertNotNull(reviewWithScopeDTO);
+        assertFalse(reviewWithScopeDTO.isEmpty());
+
+        ReviewWithScopeDTO review = reviewWithScopeDTO.get(0);
+        assertEquals(userId, review.getUserId());
+    }
+
     @DisplayName("리뷰 작성을 한다.")
     @Test
     void createReviewTest() {

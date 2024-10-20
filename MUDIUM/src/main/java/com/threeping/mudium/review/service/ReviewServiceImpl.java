@@ -15,7 +15,6 @@ import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -96,6 +95,19 @@ public class ReviewServiceImpl implements ReviewService {
                 .collect(Collectors.toList());
 
         return reviewResponseDTO;
+    }
+
+    // 리뷰 userId로 조회
+    @Override
+    public List<ReviewWithScopeDTO> findReviewByUserId(Long userId) {
+
+        List<Review> reviews = reviewRepository.findAllByUser_UserIdAndActiveStatus(userId, ActiveStatus.ACTIVE);
+
+        List<ReviewWithScopeDTO> reviewWithScopeDTO = reviews.stream()
+                .map(review -> modelMapper.map(review, ReviewWithScopeDTO.class))
+                .collect(Collectors.toList());
+
+        return reviewWithScopeDTO;
     }
 
     // 리뷰 작성

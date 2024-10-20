@@ -25,4 +25,7 @@ public interface ReviewService {
     List<ReviewWithScopeDTO> findReviewsWithRatingsByMusicalId(Long musicalId);
 
     boolean existingCheck(Long reviewId);
+
+    // 리뷰 userId로 조회
+    List<ReviewWithScopeDTO> findReviewByUserId(Long userId);
 }

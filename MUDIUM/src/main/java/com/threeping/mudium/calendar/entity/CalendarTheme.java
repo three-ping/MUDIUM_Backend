@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity
+@Entity(name = "CalendarThemeEntity")
 @Table(name = "TBL_CALENDAR_THEME")
 public class CalendarTheme {
 
