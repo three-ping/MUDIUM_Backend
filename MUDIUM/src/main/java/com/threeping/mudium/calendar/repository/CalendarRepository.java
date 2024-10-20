@@ -1,6 +1,6 @@
 package com.threeping.mudium.calendar.repository;
 
-import com.threeping.mudium.calendar.entity.CalendarTheme;
+import com.threeping.mudium.calendar.aggregate.entity.CalendarTheme;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
