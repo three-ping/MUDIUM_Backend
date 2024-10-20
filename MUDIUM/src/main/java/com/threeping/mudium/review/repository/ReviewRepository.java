@@ -27,4 +27,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<ReviewWithScopeDTO> findReviewsWithRatingsByMusicalId(@Param("musicalId") Long musicalId);
 
     Optional<Review> findReviewByReviewIdAndActiveStatus(Long reviewId, ActiveStatus activeStatus);
+
+    // 리뷰 userId로 조회
+    List<Review> findAllByUser_UserIdAndActiveStatus(Long userId, ActiveStatus activeStatus);
 }
