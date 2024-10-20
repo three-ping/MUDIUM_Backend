@@ -9,6 +9,7 @@ import com.threeping.mudium.notice.dto.NoticeDetailDTO;
 import com.threeping.mudium.notice.dto.NoticeListDTO;
 import com.threeping.mudium.notice.dto.UpdateNoticeDTO;
 import com.threeping.mudium.notice.repository.NoticeRepository;
+import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.aggregate.entity.UserRole;
 import com.threeping.mudium.user.repository.UserRepository;
 import org.modelmapper.ModelMapper;
@@ -84,9 +85,14 @@ public class NoticeServiceImpl implements NoticeService {
     public void createNotice(CreateNoticeDTO createNoticeDTO) {
         Long userId = createNoticeDTO.getUserId();
         checkAdminRole(userId);
+        UserEntity user = new UserEntity();
+        user.setUserId(createNoticeDTO.getUserId());
 
-        createNoticeDTO.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        Notice notice = modelMapper.map(createNoticeDTO,Notice.class);
+        Notice notice = new Notice();
+        notice.setTitle(createNoticeDTO.getTitle());
+        notice.setContent(createNoticeDTO.getContent());
+        notice.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        notice.setUser(user);
         notice.setViewCount(0L);
         noticeRepository.save(notice);
     }

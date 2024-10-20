@@ -169,10 +169,13 @@ public class BoardServiceImpl implements BoardService {
     private BoardListDTO convertToDTO(Board board) {
         BoardListDTO boardListDTO = new BoardListDTO();
         boardListDTO.setTitle(board.getTitle());
-        boardListDTO.setId(board.getBoardId());
+        boardListDTO.setBoardId(board.getBoardId());
         boardListDTO.setCreatedAt(board.getCreatedAt());
         boardListDTO.setNickname(board.getUser().getNickname());
         boardListDTO.setUserId(board.getUser().getUserId());
+        boardListDTO.setComments(board.getComments());
+        boardListDTO.setBoardLike(board.getBoardLike());
+        boardListDTO.setViewCount(board.getViewCount());
         return boardListDTO;
     }
 }

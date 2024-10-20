@@ -32,7 +32,20 @@ public class BoardReplyServiceImpl implements BoardReplyService{
         List<BoardReply> boardReplyList = boardReplyRepository
                 .findByBoardCommentIdAndActiveStatus(boardCommentId,ActiveStatus.ACTIVE);
         List<BoardReplyDTO> boardReplyDTOS = boardReplyList.stream()
-                .map(boardReply -> modelMapper.map(boardReply,BoardReplyDTO.class)).toList();
+                .map(
+                        boardReply -> {
+                            BoardReplyDTO boardReplyDTO = new BoardReplyDTO();
+                            boardReplyDTO.setContent(boardReply.getContent());
+                            boardReplyDTO.setBoardReplyId(boardReply.getBoardReplyId());
+                            boardReplyDTO.setUserId(boardReply.getUser().getUserId());
+                            boardReplyDTO.setNickname(boardReply.getUser().getNickname());
+                            boardReplyDTO.setCreatedAt(boardReply.getCreatedAt());
+                            boardReplyDTO.setUpdatedAt(boardReply.getUpdatedAt());
+                            boardReplyDTO.setBoardCommentId(boardReply.getBoardCommentId());
+                            return boardReplyDTO;
+                        }
+                )
+                .toList();
 
         return boardReplyDTOS;
     }
