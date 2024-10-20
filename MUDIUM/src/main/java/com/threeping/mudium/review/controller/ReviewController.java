@@ -38,6 +38,15 @@ public class ReviewController {
         return ResponseDTO.ok(reviewResponseDTO);
     }
 
+    // userId로 리뷰 조회
+    @GetMapping("")
+    private ResponseDTO<?> findReviewByUserId(@RequestParam Long userId) {
+
+        List<ReviewWithScopeDTO> reviewResponseDTO = reviewService.findReviewByUserId(userId);
+
+        return ResponseDTO.ok(reviewResponseDTO);
+    }
+
     // 리뷰 작성
     @PostMapping("/{musicalId}")
     private ResponseDTO<?> createReview(@PathVariable Long musicalId,
