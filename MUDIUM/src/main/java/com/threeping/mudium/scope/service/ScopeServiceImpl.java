@@ -27,6 +27,17 @@
         }
 
         @Override
+        public ScopeDTO findMyScope(Long musicalId, Long userId) {
+            ScopeEntity entity = scopeRepository.findScopeByMusicalIdAndUserId(musicalId, userId)
+                    .orElseGet(null);
+            ScopeDTO scopeDTO = new ScopeDTO();
+            scopeDTO.setScope(entity.getScope());
+            scopeDTO.setUserId(userId);
+            scopeDTO.setMusicalId(musicalId);
+            return scopeDTO;
+        }
+
+        @Override
         @Transactional
         public List<ScopeDTO> findAllScopesByMusicalId(Long musicalId) {
             List<ScopeEntity> entityList = scopeRepository.findAllScopeByMusicalId(musicalId);
