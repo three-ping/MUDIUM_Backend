@@ -1,8 +1,10 @@
 package com.threeping.mudium.review.service;
 
+import com.threeping.mudium.review.aggregate.vo.ReviewAndScopeVO;
 import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -79,6 +81,8 @@ class ReviewServiceTests {
 
         ReviewWithScopeDTO review = reviewWithScopeDTO.get(0);
         assertEquals(userId, review.getUserId());
+        reviewWithScopeDTO.forEach(x->log.info(x.toString()));
+        log.info("userId: {}", userId);
     }
 
     @DisplayName("리뷰 작성을 한다.")
@@ -120,5 +124,22 @@ class ReviewServiceTests {
 
         // When
         assertDoesNotThrow(() -> reviewService.deleteReview(musicalId, reviewId, userId));
+    }
+
+
+    @Test
+    @DisplayName("유저 ID로 리뷰와 별점 및 뮤지컬 정보 조회")
+    void testFindReviewAndScopeByUserId(){
+
+        // given
+        Long userId = 1L;
+
+
+        // when
+        List<ReviewAndScopeVO> reviewAndScopeVOList = reviewService.findReviewAndScopeByUserId(userId);
+
+        // then
+        assertNotNull(reviewAndScopeVOList);
+        reviewAndScopeVOList.forEach(x->log.info(x.toString()));
     }
 }

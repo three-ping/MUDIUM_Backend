@@ -207,7 +207,6 @@ public class ReviewServiceImpl implements ReviewService {
 
         return reviewRepository.findReviewByReviewIdAndActiveStatus(reviewId, ActiveStatus.ACTIVE).isPresent();
     }
-
     @Override
     public List<ReviewAndScopeVO> findReviewAndScopeByUserId(Long userId) {
         List<Review> reviews = reviewRepository.findAllByUser_UserIdAndActiveStatus(userId, ActiveStatus.ACTIVE);
@@ -225,15 +224,55 @@ public class ReviewServiceImpl implements ReviewService {
                         scope -> scope
                 ));
 
-        return Stream.concat(reviewMap.keySet().stream(), scopeMap.keySet().stream())
+        // Fetch all relevant musicals
+        List<Long> allMusicalIds = Stream.concat(reviewMap.keySet().stream(), scopeMap.keySet().stream())
                 .distinct()
+                .collect(Collectors.toList());
+        Map<Long, Musical> musicalMap = musicalRepository.findAllById(allMusicalIds).stream()
+                .collect(Collectors.toMap(
+                        Musical::getMusicalId,
+                        musical -> musical
+                ));
+
+        return allMusicalIds.stream()
                 .map(musicalId -> {
-                    ScopeEntity scope = scopeMap.get(musicalId);
+                    ReviewAndScopeVO vo = new ReviewAndScopeVO();
+                    Musical musical = musicalMap.get(musicalId);
                     Review review = reviewMap.get(musicalId);
-                    return ReviewAndScopeVO.from(scope, review);
+                    ScopeEntity scope = scopeMap.get(musicalId);
+
+                    // Set Musical information
+                    if (musical != null) {
+                        vo.setMusicalId(musical.getMusicalId());
+                        vo.setMusicalTitle(musical.getTitle());
+                        vo.setMusicalRating(musical.getRating());
+                        vo.setReviewVideo(musical.getReviewVideo());
+                        vo.setPoster(musical.getPoster());
+                        vo.setViewCount(musical.getViewCount());
+                        vo.setProduction(musical.getProduction());
+                        vo.setSynopsis(musical.getSynopsys());
+                    }
+
+                    // Set Review information
+                    if (review != null) {
+                        vo.setReviewId(review.getReviewId());
+                        vo.setReviewContent(review.getContent());
+                        vo.setReviewCreatedAt(review.getCreatedAt());
+                        vo.setReviewLikes(review.getLike());
+                    }
+
+                    // Set Scope information
+                    if (scope != null) {
+                        vo.setUserId(scope.getUserId());
+                        vo.setScope(scope.getScope());
+                        vo.setUserNickname(scope.getUserNickname());
+                    } else if (review != null) {
+                        vo.setUserId(review.getUser().getUserId());
+                        vo.setUserNickname(review.getUser().getNickname());
+                    }
+
+                    return vo;
                 })
                 .collect(Collectors.toList());
     }
-
-    }
-
+}
