@@ -69,8 +69,8 @@ class BoardReplyServiceImplTests {
         boardCommentService.createBoardComment(boardCommentDTO);
 
         BoardComment boardComment = boardCommentRepository
-                .findByBoardIdAndActiveStatus(
-                        savedBoard.getBoardId(), ActiveStatus.ACTIVE,
+                .findByBoardId(
+                        savedBoard.getBoardId(),
                         PageRequest.of(0,
                                 10,
                                 Sort.by("createdAt").descending())).getContent().get(0);
@@ -111,8 +111,8 @@ class BoardReplyServiceImplTests {
         boardCommentService.createBoardComment(boardCommentDTO);
 
         BoardComment boardComment = boardCommentRepository
-                .findByBoardIdAndActiveStatus(
-                        savedBoard.getBoardId(), ActiveStatus.ACTIVE,
+                .findByBoardId(
+                        savedBoard.getBoardId(),
                         PageRequest.of(0,
                                 10,
                                 Sort.by("createdAt").descending())).getContent().get(0);
@@ -152,8 +152,8 @@ class BoardReplyServiceImplTests {
         boardCommentService.createBoardComment(boardCommentDTO);
 
         BoardComment boardComment = boardCommentRepository
-                .findByBoardIdAndActiveStatus(
-                        savedBoard.getBoardId(), ActiveStatus.ACTIVE,
+                .findByBoardId(
+                        savedBoard.getBoardId(),
                         PageRequest.of(0,
                                 10,
                                 Sort.by("createdAt").descending())).getContent().get(0);
@@ -199,8 +199,8 @@ class BoardReplyServiceImplTests {
         boardCommentService.createBoardComment(boardCommentDTO);
 
         BoardComment boardComment = boardCommentRepository
-                .findByBoardIdAndActiveStatus(
-                        savedBoard.getBoardId(), ActiveStatus.ACTIVE,
+                .findByBoardId(
+                        savedBoard.getBoardId(),
                         PageRequest.of(0,
                                 10,
                                 Sort.by("createdAt").descending())).getContent().get(0);
