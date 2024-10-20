@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface PerformanceRankRepository extends JpaRepository<PerformanceRank, Long> {
     @Query("SELECT new com.threeping.mudium.performance.dto.PerformanceRankDTO(" +
-            "pr.musicalId, m.title, m.poster, p.region, pr.rank) " +
+            "pr.musicalId, m.title, p.poster, p.region, pr.rank) " +
             "FROM rankEntity pr " +
             "JOIN MusicalEntity m ON pr.musicalId = m.musicalId " +
             "JOIN TBL_PERFORMANCE p ON pr.performanceId = p.performanceId " +

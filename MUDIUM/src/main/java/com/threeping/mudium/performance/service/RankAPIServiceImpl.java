@@ -44,7 +44,7 @@ public class RankAPIServiceImpl implements RankAPIService {
     }
 
 //    @Scheduled(cron = "0 0 1 * * ?") 새벽 1시마다 db 자동 업데이트
-    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
+//    @Scheduled(initialDelay = 5000, fixedDelay = 300000000)
     @Transactional
     @Override
     public void updateMonthData() {
@@ -160,7 +160,6 @@ public class RankAPIServiceImpl implements RankAPIService {
             // 모든 공백을 제거합니다.
             area = area.replaceAll("\\s+", "");
             if(area.equals("세종시")) area ="세종";
-            if(area.equals("인천청라")) area = "인천";
             return area;
         } else {
             // 대괄호가 없는 경우 "서울"을 반환합니다.

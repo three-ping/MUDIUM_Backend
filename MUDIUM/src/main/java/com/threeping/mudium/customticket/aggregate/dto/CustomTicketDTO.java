@@ -11,6 +11,8 @@ public class CustomTicketDTO {
 
     private Long customTicketId;
     private String ticketImage;
-    private String themeName;
-    private Long musicalId;
+    private String hologramColor1;
+    private String hologramColor2;
+    private String comment;
+    private Long userId;
 }

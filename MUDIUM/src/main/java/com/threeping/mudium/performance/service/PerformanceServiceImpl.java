@@ -46,6 +46,8 @@ public class PerformanceServiceImpl implements PerformanceService {
                 .map(performance -> {
                     PerformanceDTO dto = new PerformanceDTO();
                     dto.setPerformanceId(performance.getPerformanceId());
+                    dto.setActors(performance.getActorList());
+                    dto.setPoster(performance.getPoster());
                     dto.setRegion(performance.getRegion());
                     dto.setTheater(performance.getTheater());
                     dto.setEndDate(performance.getEndDate());
@@ -63,6 +65,8 @@ public class PerformanceServiceImpl implements PerformanceService {
 
         PerformanceDTO dto = new PerformanceDTO();
         dto.setPerformanceId(performance.getPerformanceId());
+        dto.setPoster(performance.getPoster());
+        dto.setActors(performance.getActorList());
         dto.setMusicalId(performance.getMusicalId());
         dto.setRegion(region);
         dto.setTheater(performance.getTheater());
