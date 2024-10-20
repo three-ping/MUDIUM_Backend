@@ -95,7 +95,7 @@ public class PerformanceServiceImpl implements PerformanceService {
 
     private Timestamp getTodayTimestamp() {
         LocalDateTime now = LocalDateTime.now();
-        now = now.minusDays(1);
+        now = now.minusDays(2);
         LocalDate today = now.toLocalDate();
         return Timestamp.valueOf(today.atStartOfDay());
     }
