@@ -29,10 +29,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
     @Override
     public Bookmark addBookmark (Long userId, Long musicalId ) {
-        Bookmark bookmark = new Bookmark ();
-        bookmark.setUserId ( userId);    // * userId 입력 강제성
-        bookmark.setMusicalId (musicalId);
-
+        Bookmark bookmark = new Bookmark (userId, musicalId);
         return bookmarkRepository.save (bookmark);
     }
 
@@ -52,14 +49,14 @@ public class BookmarkServiceImpl implements BookmarkService {
                 .collect( Collectors.toList());
     }
 
-    @Override
+    @Transactional(readOnly = true)
     public List<BookmarkAndMusicalVO> findBookmarksWithMusicalInfoByUserId(Long userId) {
         List<Bookmark> bookmarks = bookmarkRepository.findByUserId(userId);
         return bookmarks.stream().map(bookmark -> {
             Musical musical = bookmark.getMusical();
             return new BookmarkAndMusicalVO(
                     bookmark.getUserId(),
-                    musical.getMusicalId(),
+                    bookmark.getMusicalId(),
                     musical.getTitle(),
                     musical.getRating(),
                     musical.getReviewVideo(),
@@ -70,4 +67,6 @@ public class BookmarkServiceImpl implements BookmarkService {
             );
         }).collect(Collectors.toList());
     }
+
+
 }
