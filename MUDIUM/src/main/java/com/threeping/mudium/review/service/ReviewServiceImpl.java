@@ -227,13 +227,7 @@ public class ReviewServiceImpl implements ReviewService {
 
         return Stream.concat(reviewMap.keySet().stream(), scopeMap.keySet().stream())
                 .distinct()
-                .map(musicalId -> {
-                    ScopeEntity scope = scopeMap.get(musicalId);
-                    Review review = reviewMap.get(musicalId);
-                    return ReviewAndScopeVO.from(scope, review);
-                })
+                .map(musicalId -> ReviewAndScopeVO.from(scopeMap.get(musicalId), reviewMap.get(musicalId)))
                 .collect(Collectors.toList());
     }
-
-    }
-
+}

@@ -7,6 +7,8 @@ import lombok.*;
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewAndScopeVO {
     private Long musicalId;
     private Long userId;
@@ -17,20 +19,26 @@ public class ReviewAndScopeVO {
     private Timestamp reviewCreatedAt;
     private Long reviewLikes;
 
-    public ReviewAndScopeVO(Long musicalId, Long userId, Double scope, String userNickname, Long aLong, String s, Timestamp timestamp, Long aLong1) {
-    }
-
     public static ReviewAndScopeVO from(ScopeEntity scope, Review review) {
-        return new ReviewAndScopeVO(
-                scope != null ? scope.getMusicalId() : (review != null ? review.getMusical().getMusicalId() : null),
-                scope != null ? scope.getUserId() : (review != null ? review.getUser().getUserId() : null),
-                scope != null ? scope.getScope() : null,
-                scope != null ? scope.getUserNickname() : null,
-                review != null ? review.getReviewId() : null,
-                review != null ? review.getContent() : null,
-                review != null ? review.getCreatedAt() : null,
-                review != null ? review.getLike() : null
-        );
-    }
-    }
+        ReviewAndScopeVO vo = new ReviewAndScopeVO();
 
+        if (scope != null) {
+            vo.setMusicalId(scope.getMusicalId());
+            vo.setUserId(scope.getUserId());
+            vo.setScope(scope.getScope());
+            vo.setUserNickname(scope.getUserNickname());
+        }
+
+        if (review != null) {
+            vo.setMusicalId(vo.getMusicalId() != null ? vo.getMusicalId() : review.getMusical().getMusicalId());
+            vo.setUserId(vo.getUserId() != null ? vo.getUserId() : review.getUser().getUserId());
+            vo.setUserNickname(vo.getUserNickname() != null ? vo.getUserNickname() : review.getUser().getNickname());
+            vo.setReviewId(review.getReviewId());
+            vo.setReviewContent(review.getContent());
+            vo.setReviewCreatedAt(review.getCreatedAt());
+            vo.setReviewLikes(review.getLike());
+        }
+
+        return vo;
+    }
+}
