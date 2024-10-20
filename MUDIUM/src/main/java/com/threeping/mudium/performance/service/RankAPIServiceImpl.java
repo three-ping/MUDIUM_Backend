@@ -160,7 +160,6 @@ public class RankAPIServiceImpl implements RankAPIService {
             // 모든 공백을 제거합니다.
             area = area.replaceAll("\\s+", "");
             if(area.equals("세종시")) area ="세종";
-            if(area.equals("인천청라")) area = "인천";
             return area;
         } else {
             // 대괄호가 없는 경우 "서울"을 반환합니다.
