@@ -75,4 +75,10 @@ public class ReviewController {
 
         return ResponseDTO.ok("리뷰 삭제 성공!!!");
     }
+
+    /* userId로 리뷰 조회 */
+    @GetMapping("/users/{userId}")
+    public ResponseDTO<?> findReviewAndScopesByUserId(@PathVariable Long userId) {
+        return ResponseDTO.ok(reviewService.findReviewAndScopeByUserId(userId));
+    }
 }
