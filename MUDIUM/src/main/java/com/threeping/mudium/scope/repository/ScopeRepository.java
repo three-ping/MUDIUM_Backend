@@ -17,6 +17,12 @@ public interface ScopeRepository extends JpaRepository<ScopeEntity, ScopeId> {
 
     List<ScopeEntity> findAllScopeByMusicalId(Long musicalId);
 
+    /* Query methods to use in ReviewAndScopeVO  */
+    List<ScopeEntity> findByMusicalId(Long musicalId);
+    List<ScopeEntity> findByUserId(Long userId);
+    Optional<ScopeEntity> findByMusicalIdAndUserId(Long musicalId, Long userId);
+
+
     @Query("SELECT s.musicalId, COALESCE(AVG(s.scope), 0.0) FROM ScopeEntity s WHERE s.musicalId IN :musicalIds GROUP BY s.musicalId")
     List<Object[]> findAverageScopesByMusicalIds(@Param("musicalIds") List<Long> musicalIds);
 

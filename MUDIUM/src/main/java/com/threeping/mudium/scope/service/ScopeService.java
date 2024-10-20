@@ -6,7 +6,6 @@ import com.threeping.mudium.scope.dto.ScopeDTO;
 import com.threeping.mudium.scope.vo.ScopeVO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface ScopeService {
 
@@ -20,4 +19,6 @@ public interface ScopeService {
     List<ScopeDTO> findAllScopesByMusicalId(Long musicalId);
 
     AverageScopeDTO calculateAverageScope(Long musicalId);
+
+    List<ScopeEntity> findScopesByUserId(Long userId);
 }
