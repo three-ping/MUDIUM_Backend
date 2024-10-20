@@ -17,6 +17,8 @@ public class ReviewWithScopeDTO {
 
     private Long userId;
 
+    private String nickName;
+
     private Long musicalId;
 
 }

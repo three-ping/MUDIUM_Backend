@@ -42,7 +42,7 @@ public class APIServiceImpl implements APIService {
     @Override
     public void updateMusicalData() {
         try {
-            log.info("Updating musical data...");
+            log.info("musical data 업데이트 중...");
             List<MusicalItem> musicalItems = musicalAPIClient.fetchMusicalList();
             for (MusicalItem item : musicalItems) {
                 processMusicalItem(item);
@@ -57,6 +57,7 @@ public class APIServiceImpl implements APIService {
             String OriginTitle = normalizeTitle(item.getTitle());
             String area = normalizeArea(item.getTitle());
             log.info("제목 파싱 확인: {}", OriginTitle);
+            log.info("지역 파싱 확인: {}", area);
             Musical musical = getOrCreatedMusical(OriginTitle);
             PerformanceItem performanceItem =
                     musicalAPIClient.fetchPerformanceDetail(item.getExternalId());
@@ -120,17 +121,19 @@ public class APIServiceImpl implements APIService {
         return musicalRepository.findMusicalByExactTitle(originTitle).orElseGet(() -> {
            Musical musical = new Musical();
            musical.setTitle(originTitle);
+           musical.setViewCount(0L);
            musicalRepository.save(musical);
+           // 뮤지컬에서 관람등급을 보고 다르다면 또
            return musical;
         });
     }
 
     private String normalizeTitle(String title) {
-        return title.replaceAll("\\[.*?\\]", "")  // 대괄호와 그 내용 제거 (지역 정보)
-                .replaceAll("\\(.*?\\)", "")  // 소괄호와 그 내용 제거
-                .replaceAll("\\s+", "")       // 모든 공백 제거
-                .toLowerCase()                // 소문자로 변환
-                .trim();               // 소문자로 변환
+        return title.replaceAll("\\[.*?\\]", "")
+                .replaceAll("\\(.*?\\)", "")
+                .replaceAll("\\s+", "")
+                .toLowerCase()
+                .trim();
     }
 
     private String normalizeArea(String title) {
@@ -146,7 +149,6 @@ public class APIServiceImpl implements APIService {
             // 모든 공백을 제거합니다.
             area = area.replaceAll("\\s+", "");
             if(area.equals("세종시")) area ="세종";
-            if(area.equals("인천청라")) area = "인천";
             return area;
         } else {
             // 대괄호가 없는 경우 "서울"을 반환합니다.

@@ -37,6 +37,11 @@ public class PerformanceController {
         return responseDTO;
     }
 
+//    @GetMapping("/{musicalId}/{performanceId}")
+//    public ResponseDTO<?> findPerformance(@PathVariable Long musicalId, @PathVariable Long performanceId) {
+//        PerformanceDTO dto = 
+//    }
+
     // 메인 페이지에서 월간 랭킹을 주기 위한 핸들러 메서드
     @GetMapping("/rank/month")
     public ResponseDTO<?> findMonthPerformancesRank() {

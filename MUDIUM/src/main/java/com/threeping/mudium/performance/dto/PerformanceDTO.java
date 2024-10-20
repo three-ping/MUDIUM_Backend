@@ -17,6 +17,10 @@ public class PerformanceDTO {
 
     private String region;
 
+    private String poster;
+
+    private String actors;
+
     private Timestamp startDate;
 
     private Timestamp endDate;
