@@ -34,16 +34,6 @@ public class CustomTicketController {
         return ResponseDTO.ok(customTicketService.updateCustomTicket(ticketId, customTicketDTO, customTicketDTO.getUserId()));
     }
 
-
-//    // 커스텀 티켓 삭제
-//    @DeleteMapping("/delete/{ticketId}")
-//    public ResponseDTO<?> deleteCustomTicket(@PathVariable Long ticketId,
-//                                             @RequestBody CustomTicketDTO customTicketDTO) {
-//        System.out.println("userId: " + customTicketDTO.getUserId());
-//        customTicketService.deleteCustomTicket(ticketId, customTicketDTO.getUserId());
-//        return ResponseDTO.ok(null);
-//    }
-
     @DeleteMapping("/delete/{ticketId}/{userId}")
     public ResponseDTO<?> deleteCustomTicket(@PathVariable Long ticketId,
                                              @PathVariable Long userId) {
