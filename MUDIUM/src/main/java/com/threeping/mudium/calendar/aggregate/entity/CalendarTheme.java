@@ -1,4 +1,4 @@
-package com.threeping.mudium.calendar.entity;
+package com.threeping.mudium.calendar.aggregate.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-@Entity(name = "CalendarThemeEntity")
+@Entity
 @Table(name = "TBL_CALENDAR_THEME")
 public class CalendarTheme {
 
@@ -25,8 +25,8 @@ public class CalendarTheme {
     @Column(name = "user_id")
     private Long userId;
 
-//    @Column(name = "musical_info_id")
-//    private Long musicalInfoId;
+    @Column(name = "musical_info_id")
+    private Long musicalInfoId;
 
 
 
