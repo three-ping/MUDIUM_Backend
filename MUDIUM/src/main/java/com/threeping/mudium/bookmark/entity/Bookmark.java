@@ -2,6 +2,7 @@ package com.threeping.mudium.bookmark.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.threeping.mudium.musical.aggregate.Musical;
 
 import java.io.Serializable;
 
@@ -10,16 +11,23 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Entity
 @Table(name = "TBL_BOOKMARK")
-@IdClass ( BookmarkPK.class )
+@IdClass(BookmarkPK.class)
 public class Bookmark implements Serializable {
 
-    // 회원-북마크 1:N
     @Id
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    // 북마크-뮤지컬정보 N:1
     @Id
     @Column(name = "musical_info_id", nullable = false)
     private Long musicalId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "musical_info_id", insertable = false, updatable = false)
+    private Musical musical;
+
+    public Bookmark(Long userId, Long musicalId) {
+        this.userId = userId;
+        this.musicalId = musicalId;
+    }
 }

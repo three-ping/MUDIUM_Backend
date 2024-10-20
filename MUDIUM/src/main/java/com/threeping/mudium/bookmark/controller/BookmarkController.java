@@ -1,5 +1,6 @@
 package com.threeping.mudium.bookmark.controller;
 
+import com.threeping.mudium.bookmark.dto.BookmarkAndMusicalVO;
 import com.threeping.mudium.bookmark.dto.BookmarkRequestDTO;
 import com.threeping.mudium.bookmark.dto.BookmarkResponseDTO;
 import com.threeping.mudium.bookmark.entity.Bookmark;
@@ -42,5 +43,11 @@ public class BookmarkController {
     public ResponseDTO<List<BookmarkResponseDTO>> findBookmarkByUserId(@PathVariable Long userId) {
         List<BookmarkResponseDTO> bookmarks = bookmarkService.findBookmarkByUserId ( userId );
         return ResponseDTO.ok ( bookmarks);  // 삭제 후 목록 반환
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseDTO<List<BookmarkAndMusicalVO>> findBookmarksWithMusicalInfoByUserId(@PathVariable Long userId) {
+        List<BookmarkAndMusicalVO> bookmarksWithMusicalInfo = bookmarkService.findBookmarksWithMusicalInfoByUserId(userId);
+        return ResponseDTO.ok(bookmarksWithMusicalInfo);
     }
 }

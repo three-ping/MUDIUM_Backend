@@ -1,10 +1,12 @@
 package com.threeping.mudium.bookmark.service;
 
+import com.threeping.mudium.bookmark.dto.BookmarkAndMusicalVO;
 import com.threeping.mudium.bookmark.dto.BookmarkResponseDTO;
 import com.threeping.mudium.bookmark.entity.Bookmark;
 import com.threeping.mudium.bookmark.entity.BookmarkPK;
 import com.threeping.mudium.bookmark.repository.BookmarkRepository;
 
+import com.threeping.mudium.musical.aggregate.Musical;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class BookmarkServiceImpl implements BookmarkService {
     public Bookmark addBookmark (Long userId, Long musicalId ) {
         Bookmark bookmark = new Bookmark ();
         bookmark.setUserId ( userId);    // * userId 입력 강제성
-        bookmark.setMusicalId ( musicalId);
+        bookmark.setMusicalId (musicalId);
 
         return bookmarkRepository.save (bookmark);
     }
@@ -48,5 +50,24 @@ public class BookmarkServiceImpl implements BookmarkService {
                         bookmark.getUserId (),
                         bookmark.getMusicalId ()))
                 .collect( Collectors.toList());
+    }
+
+    @Override
+    public List<BookmarkAndMusicalVO> findBookmarksWithMusicalInfoByUserId(Long userId) {
+        List<Bookmark> bookmarks = bookmarkRepository.findByUserId(userId);
+        return bookmarks.stream().map(bookmark -> {
+            Musical musical = bookmark.getMusical();
+            return new BookmarkAndMusicalVO(
+                    bookmark.getUserId(),
+                    musical.getMusicalId(),
+                    musical.getTitle(),
+                    musical.getRating(),
+                    musical.getReviewVideo(),
+                    musical.getPoster(),
+                    musical.getViewCount(),
+                    musical.getProduction(),
+                    musical.getSynopsys()
+            );
+        }).collect(Collectors.toList());
     }
 }
