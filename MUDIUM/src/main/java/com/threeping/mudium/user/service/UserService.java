@@ -13,4 +13,8 @@ public interface UserService extends UserDetailsService {
     UserEntity findByUserIdentifier(String userIdentifier);
 
     UserDTO findByUserId(Long userId);
+
+    boolean checkUniqueNickname(String nickname);
+
+    boolean checkIfEmailAlreadyUsed(String email);
 }

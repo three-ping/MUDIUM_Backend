@@ -1,5 +1,6 @@
 package com.threeping.mudium.review.service;
 
+import com.threeping.mudium.review.aggregate.vo.ReviewAndScopeVO;
 import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
@@ -28,4 +29,7 @@ public interface ReviewService {
 
     // 리뷰 userId로 조회
     List<ReviewWithScopeDTO> findReviewByUserId(Long userId);
+
+    /* find ReviewAndScopeVO with userId */
+    List<ReviewAndScopeVO> findReviewAndScopeByUserId(Long userId);
 }

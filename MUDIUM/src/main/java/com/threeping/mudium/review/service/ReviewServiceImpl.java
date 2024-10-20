@@ -4,12 +4,14 @@ import com.threeping.mudium.common.exception.CommonException;
 import com.threeping.mudium.common.exception.ErrorCode;
 import com.threeping.mudium.musical.aggregate.Musical;
 import com.threeping.mudium.musical.repository.MusicalRepository;
+import com.threeping.mudium.review.aggregate.vo.ReviewAndScopeVO;
 import com.threeping.mudium.review.dto.ReviewRequestDTO;
 import com.threeping.mudium.review.dto.ReviewResponseDTO;
 import com.threeping.mudium.review.aggregate.entity.ActiveStatus;
 import com.threeping.mudium.review.aggregate.entity.Review;
 import com.threeping.mudium.review.dto.ReviewWithScopeDTO;
 import com.threeping.mudium.review.repository.ReviewRepository;
+import com.threeping.mudium.scope.aggregate.entity.ScopeEntity;
 import com.threeping.mudium.scope.service.ScopeService;
 import com.threeping.mudium.user.aggregate.entity.UserEntity;
 import com.threeping.mudium.user.repository.UserRepository;
@@ -21,7 +23,9 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -203,4 +207,33 @@ public class ReviewServiceImpl implements ReviewService {
 
         return reviewRepository.findReviewByReviewIdAndActiveStatus(reviewId, ActiveStatus.ACTIVE).isPresent();
     }
-}
+
+    @Override
+    public List<ReviewAndScopeVO> findReviewAndScopeByUserId(Long userId) {
+        List<Review> reviews = reviewRepository.findAllByUser_UserIdAndActiveStatus(userId, ActiveStatus.ACTIVE);
+        List<ScopeEntity> scopes = scopeService.findScopesByUserId(userId);
+
+        Map<Long, Review> reviewMap = reviews.stream()
+                .collect(Collectors.toMap(
+                        review -> review.getMusical().getMusicalId(),
+                        review -> review
+                ));
+
+        Map<Long, ScopeEntity> scopeMap = scopes.stream()
+                .collect(Collectors.toMap(
+                        ScopeEntity::getMusicalId,
+                        scope -> scope
+                ));
+
+        return Stream.concat(reviewMap.keySet().stream(), scopeMap.keySet().stream())
+                .distinct()
+                .map(musicalId -> {
+                    ScopeEntity scope = scopeMap.get(musicalId);
+                    Review review = reviewMap.get(musicalId);
+                    return ReviewAndScopeVO.from(scope, review);
+                })
+                .collect(Collectors.toList());
+    }
+
+    }
+
