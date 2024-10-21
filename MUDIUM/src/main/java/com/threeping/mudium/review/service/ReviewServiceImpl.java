@@ -89,13 +89,25 @@ public class ReviewServiceImpl implements ReviewService {
 
     // 리뷰 상세 조회
     @Override
-    public List<ReviewResponseDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId) {
+    public List<ReviewWithScopeDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId) {
 
         List<Review> reviews = reviewRepository.findByMusical_MusicalIdAndReviewIdAndActiveStatus(
                 musicalId, reviewId, ActiveStatus.ACTIVE);
 
-        List<ReviewResponseDTO> reviewResponseDTO = reviews.stream()
-                .map(review -> modelMapper.map(review, ReviewResponseDTO.class))
+        List<ReviewWithScopeDTO> reviewResponseDTO = reviews.stream()
+                .map(review -> {
+                    ReviewWithScopeDTO dto = new ReviewWithScopeDTO();
+                    dto.setContent(review.getContent());
+                    dto.setMusicalId(musicalId);
+                    dto.setNickName(review.getUser().getNickname());
+                    dto.setReviewId(reviewId);
+                    dto.setCreatedAt(review.getCreatedAt());
+                    dto.setUpdatedAt(review.getUpdatedAt());
+                    dto.setLike(review.getLike());
+                    dto.setUserId(review.getUser().getUserId());
+                    dto.setMusicalTitle(review.getMusical().getTitle());
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
         return reviewResponseDTO;
@@ -141,6 +153,7 @@ public class ReviewServiceImpl implements ReviewService {
         newReview.setMusical(musical);
         newReview.setCreatedAt(Timestamp.from(Instant.now()));
         newReview.setLike(0L);
+        newReview.setComments(0L);
 
         reviewRepository.save(newReview);
     }

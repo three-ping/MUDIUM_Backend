@@ -2,6 +2,8 @@ package com.threeping.mudium.review.dto;
 
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,5 +22,15 @@ public class ReviewWithScopeDTO {
     private String nickName;
 
     private Long musicalId;
+
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    private Long like;
+
+    private Long comments;
+
+    private String musicalTitle;
 
 }
