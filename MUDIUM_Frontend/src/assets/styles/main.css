@@ -1,0 +1,7 @@
+/* Import other CSS files */
+@import "variable.css";
+@import "layout.css";
+@import "button.css";
+@import "component.css";
+@import "semantic.css";
+@import "typography.css";

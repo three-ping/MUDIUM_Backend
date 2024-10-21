@@ -1,0 +1,29 @@
+DELIMITER $$
+
+CREATE TRIGGER trg_after_insert_reply
+    AFTER INSERT ON `TBL_BOARD_REPLY`
+    FOR EACH ROW
+BEGIN
+    -- 대댓글이 추가될 때, TBL_BOARD의 comments 값을 1 증가
+    UPDATE `TBL_BOARD`
+    SET `comments` = `comments` + 1
+    WHERE `board_id` = (SELECT `board_id` FROM `TBL_BOARD_COMMENT` WHERE `board_comment_id` = NEW.board_comment_id);
+END $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+CREATE TRIGGER trg_after_update_reply_inactive
+    AFTER UPDATE ON `TBL_BOARD_REPLY`
+    FOR EACH ROW
+BEGIN
+    -- 대댓글이 INACTIVE로 변경될 때, TBL_BOARD의 comments 값을 1 감소
+    IF NEW.active_status = 'INACTIVE' AND OLD.active_status != 'INACTIVE' THEN
+        UPDATE `TBL_BOARD`
+        SET `comments` = `comments` - 1
+        WHERE `board_id` = (SELECT `board_id` FROM `TBL_BOARD_COMMENT` WHERE `board_comment_id` = NEW.board_comment_id);
+    END IF;
+END $$
+
+DELIMITER ;

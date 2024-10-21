@@ -1,0 +1,12 @@
+INSERT INTO TBL_REVIEW_COMMENT (content, created_at, updated_at, active_status, user_id, review_id)
+VALUES
+    ('정말 좋은 리뷰네요! 저도 꼭 보러 가야겠어요.', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('와우, 상세한 설명 감사합니다. 많은 도움이 되었어요.', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('저는 조금 다른 의견이에요. 하지만 잘 읽었습니다.', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('이 리뷰 덕분에 티켓 예매했어요!', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('공연장 분위기도 자세히 설명해주셔서 좋네요.', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('배우들의 연기가 정말 인상 깊었나 보네요.', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('음악에 대한 설명도 더 들어보고 싶어요.', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('다음에 후기 올려주실 때는 영상도 함께 올려주세요!', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('이 뮤지컬, 가족들과 함께 보기 좋을까요?', NOW(), NOW(), 'ACTIVE', FLOOR(1 + RAND() * 6), 1),
+    ('리뷰를 읽고 나니 꼭 봐야할 것 같아요. 감사합니다!', NOW(), NOW(), 'INACTIVE', FLOOR(1 + RAND() * 6), 1);

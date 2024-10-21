@@ -1,0 +1,25 @@
+DELIMITER $$
+
+-- 댓글이 추가되면 comments 증가 트리거
+CREATE TRIGGER trg_after_insert_inquiry_comment
+    AFTER INSERT ON `TBL_INQUIRY_COMMENT`
+    FOR EACH ROW
+BEGIN
+    -- 댓글이 추가될 때, TBL_BOARD의 comments 값을 1 증가
+    UPDATE `TBL_INQUIRY`
+    SET `comments` = `comments` + 1
+    WHERE `inquiry_id` = NEW.inquiry_id;
+END $$
+
+-- 댓글이 삭제될 때 comments 값을 감소시키는 트리거
+CREATE TRIGGER trg_after_delete_inquiry_comment
+    AFTER DELETE ON `TBL_INQUIRY_COMMENT`
+    FOR EACH ROW
+BEGIN
+    -- 댓글이 삭제될 때, TBL_INQUIRY의 comments 값을 1 감소
+    UPDATE `TBL_INQUIRY`
+    SET `comments` = `comments` - 1
+    WHERE `inquiry_id` = OLD.inquiry_id;
+END $$
+
+DELIMITER ;

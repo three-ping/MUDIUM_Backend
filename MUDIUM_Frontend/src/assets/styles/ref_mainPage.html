@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <title>MainPage</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul,
+      li,
+      dl,
+      dt,
+      dd,
+      p,
+      span {
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      *,
+      :after,
+      :before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      :root {
+        font-size: 10px;
+        font-family: "Noto Sans";
+        color: #202020;
+      }
+
+      .root-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+      }
+
+      .top-nav {
+        position: fixed;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 9rem;
+        background-color: #ffffff;
+        border-bottom: 1px solid #8c8c8c;
+      }
+
+      .top-left-menu-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        margin-left: 3.4rem;
+        cursor: pointer;
+      }
+
+      .top-left-menu-container img {
+        height: 100%;
+        width: 10.25rem;
+      }
+
+      .top-left-menu-container span {
+        color: #a1b872;
+        font-size: 3.5rem;
+        font-weight: 700;
+      }
+
+      .top-right-menu-container {
+        display: flex;
+        gap: 4rem;
+        margin-right: 5rem;
+      }
+
+      .search-bar {
+        display: flex;
+        align-items: center;
+        height: 4.8rem;
+        width: 29rem;
+        background-color: #e3e4e5;
+        border-radius: 10px;
+        color: #888888;
+        font-size: 2.4rem;
+        font-weight: 500;
+        gap: 1rem;
+        cursor: pointer;
+      }
+
+      .search-bar i {
+        margin-left: 1rem;
+      }
+
+      .main {
+        display: flex;
+        justify-content: center;
+        width: calc(100% - 42rem);
+        height: 100%;
+        margin-top: 9rem;
+        margin-left: 42rem;
+      }
+
+      .main-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 70%;
+        background-color: #ffffff;
+      }
+
+      .side-nav {
+        position: fixed;
+        left: 0px;
+        bottom: 0px;
+        display: flex;
+        flex-direction: column;
+        width: 42rem;
+        height: calc(100% - 9rem);
+        background-color: #ffffff;
+        border-right: 1px solid #8c8c8c;
+      }
+
+      .menu-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 5rem;
+      }
+
+      .menu {
+        display: flex;
+        height: 7.6rem;
+        width: 38rem;
+        align-items: center;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #a6a6a6;
+        border-radius: 0 1.5rem 1.5rem 0;
+        cursor: pointer;
+      }
+
+      .menu span {
+        padding-left: 3rem;
+      }
+
+      .menu:hover:not(.now) {
+        background-color: #f1f1f1;
+      }
+
+      .now {
+        background-color: #a1b872;
+        color: #202020;
+      }
+
+      .btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #a1b872;
+        border: none;
+        border-radius: 1rem;
+        font-size: 2.4rem;
+        font-weight: 600;
+        color: #ffffff;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        box-shadow: 0rem 0.1rem 0.2rem #a6a6a6;
+      }
+
+      .login-btn-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 4rem;
+      }
+
+      .login-btn-wrapper::before {
+        font-size: 2.4rem;
+        color: #a6a6a6;
+        content: "|";
+      }
+
+      .login-btn {
+        height: 4.8rem;
+        width: 10rem;
+      }
+
+      /* 기본스타일 제거, 버튼 모양 재설정 */
+      input[type="radio"] {
+        flex-shrink: 0;
+        -webkit-appearance: none; /* 웹킷 브라우저에서 기본 스타일 제거*/
+        -moz-appearance: none; /* 모질라 브라우저에서 기본 스타일 제거*/
+        appearance: none; /*기본 브라우저에서 기본 스타일 제거*/
+        width: 3.6rem;
+        height: 3.6rem;
+        border: 1px solid #8c8c8c; /*체크되지 않았을 때의 테두리 색상*/
+        border-radius: 50%;
+        outline: none; /*focus 시에 나타나는 기본 스타일 제거*/
+        cursor: pointer;
+        margin-top: 0.9rem;
+      }
+
+      /* 체크 시 버튼 모양 스타일*/
+      input[type="radio"]:checked {
+        background-color: #a1b872; /*체크 시 내부 원 색상*/
+        border: none;
+      }
+
+      .hide-text {
+        text-indent: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+
+      /* 노트북 */
+      @media screen and (max-width: 1683px) {
+        :root {
+          font-size: 8px;
+        }
+      }
+
+      @media screen and (max-width: 1439px) {
+        :root {
+          font-size: 7px;
+        }
+      }
+
+      /* 태블릿 */
+      @media screen and (max-width: 1023px) {
+        :root {
+          font-size: 6px;
+        }
+      }
+
+      /* 모바일 */
+      @media screen and (max-width: 767px) {
+        :root {
+          font-size: 4.5px;
+        }
+      }
+
+      @media screen and (max-width: 600px) {
+        :root {
+          font-size: 3.2px;
+        }
+      }
+
+      @media screen and (max-width: 424px) {
+        :root {
+          font-size: 2.5px;
+        }
+      }
+
+      @media screen and (max-width: 374px) {
+        :root {
+          font-size: 2px;
+        }
+      }
+
+      @media screen and (max-width: 319px) {
+        :root {
+          font-size: 1.8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" class="root-container">
+      <header class="top-nav">
+        <div class="top-left-menu-container">
+          <img class="logo hide-text" src="logo.svg" alt="logo" />
+          <span>SGMA</span>
+        </div>
+        <div class="top-right-menu-container">
+          <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <span>스터디 그룹 찾아보기</span>
+          </div>
+          <div class="login-btn-wrapper">
+            <button type="button" id="login-btn" class="btn login-btn">로그인</button>
+          </div>
+        </div>
+      </header>
+      <aside class="side-nav">
+        <div class="menu-container">
+          <div class="menu now"><span>홈</span></div>
+          <div class="menu"><span>스터디 그룹 찾기</span></div>
+          <div class="menu"><span>스터디 그룹 만들기</span></div>
+          <div class="menu"><span>마이페이지</span></div>
+        </div>
+      </aside>
+      <main class="main">
+        <section class="main-content"></section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+.root-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+}
+.container,
+.container-fluid {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: var(--spacing);
+  padding-left: var(--spacing);
+}
+
+/* Modal */
+.dialog {
+  display: flex;
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  align-items: center;
+  justify-content: center;
+  width: inherit;
+  min-width: 100vh;
+  height: inherit;
+  min-height: 100vh;
+  padding: 0;
+  border: 0;
+  -webkit-backdrop-filter: var(--modal-overlay-backdrop-filter);
+  backdrop-filter: var(--modal-overlay-backdrop-filter);
+  background-color: var(--modal-overlay-background-color);
+  color: var(--text-color);
+}
+
+.dialog .article {
+  width: 60vw;
+  max-height: 60vh;
+  min-height: 50vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+  justify-content: space-between;
+  border-radius: var(--border-radius);
+  background: var(--card-background-color);
+  box-shadow: var(--card-box-shadow);
+}
+
+.article > header,
+.article > section,
+.article > footer {
+  width: 100%;
+  display: block;
+  flex-shrink: 0;
+  left: 0;
+  right: 0;
+  /* padding: 1rem; */
+}
+
+.article > header {
+  top: 0;
+  height: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--background-color);
+  border-bottom: var(--border-width) solid var(--card-border-color);
+}
+
+.article > header img {
+  height: 80%;
+  margin: 0;
+}
+
+.article > section {
+  max-height: 30vh;
+  overflow-y: scroll;
+}
+
+.article > footer {
+  background-color: var(--background-color);
+  border-top: var(--border-width) solid var(--card-border-color);
+  text-align: center;
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid var(--card-border-color);
+  margin: 0;
+}
+
+/* Cards */
+
+/* cards.css */
+.card {
+  width: var(--card-width);
+  height: var(--card-height);
+  background-color: white;
+  border-radius: var(--button-border-radius);
+  box-shadow: var(--box-shadow);
+  margin: var(--spacing-sm);
+}
+
+.card img {
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+}
+
+.card-title {
+  font-size: var(--font-size-body);
+  color: var(--text-color);
+  text-align: center;
+  padding: var(--spacing-xs);
+}

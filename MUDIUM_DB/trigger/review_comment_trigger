@@ -1,0 +1,25 @@
+DELIMITER $$
+
+-- 댓글이 추가되면 comments 증가 트리거
+CREATE TRIGGER trg_after_insert_review_comment
+    AFTER INSERT ON `TBL_REVIEW_COMMENT`
+    FOR EACH ROW
+BEGIN
+    -- 댓글이 추가될 때, TBL_BOARD의 comments 값을 1 증가
+    UPDATE `TBL_REVIEW`
+    SET `comments` = `comments` + 1
+    WHERE `review_id` = NEW.review_id;
+END $$
+
+-- 댓글의 활성화 상태가 ACTIVE에서 INACTIVE로 변경될 때 comments 값을 감소시키는 트리거
+CREATE TRIGGER trg_after_update_review_comment_status
+    AFTER UPDATE ON `TBL_REVIEW_COMMENT`
+    FOR EACH ROW
+BEGIN
+    -- 댓글이 ACTIVE에서 INACTIVE로 변경되면 comments 값을 1 감소
+    IF OLD.active_status = 'ACTIVE' AND NEW.active_status = 'INACTIVE' THEN
+        UPDATE `TBL_REVIEW`
+        SET `comments` = `comments` - 1
+        WHERE `review_id` = NEW.review_id;
+    END IF;
+END $$

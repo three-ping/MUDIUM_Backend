@@ -1,0 +1,23 @@
+DELIMITER $$
+
+CREATE TRIGGER trg_update_board_like
+AFTER INSERT ON TBL_BOARD_LIKE
+FOR EACH ROW
+BEGIN
+    -- 게시물에 대한 좋아요가 추가될 때, TBL_BOARD 테이블의 board_like 값을 +1 증가
+    UPDATE TBL_BOARD 
+    SET board_like = board_like + 1 
+    WHERE board_id = NEW.board_id;
+END $$
+
+CREATE TRIGGER trg_delete_board_like
+AFTER DELETE ON TBL_BOARD_LIKE
+FOR EACH ROW
+BEGIN
+    -- 게시물에 대한 좋아요가 삭제될 때, TBL_BOARD 테이블의 board_like 값을 -1 감소
+    UPDATE TBL_BOARD 
+    SET board_like = board_like - 1 
+    WHERE board_id = OLD.board_id;
+END $$
+
+DELIMITER ;
