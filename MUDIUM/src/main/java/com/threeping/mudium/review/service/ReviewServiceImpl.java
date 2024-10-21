@@ -105,6 +105,7 @@ public class ReviewServiceImpl implements ReviewService {
                     dto.setUpdatedAt(review.getUpdatedAt());
                     dto.setLike(review.getLike());
                     dto.setUserId(review.getUser().getUserId());
+                    dto.setMusicalTitle(review.getMusical().getTitle());
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -152,6 +153,7 @@ public class ReviewServiceImpl implements ReviewService {
         newReview.setMusical(musical);
         newReview.setCreatedAt(Timestamp.from(Instant.now()));
         newReview.setLike(0L);
+        newReview.setComments(0L);
 
         reviewRepository.save(newReview);
     }

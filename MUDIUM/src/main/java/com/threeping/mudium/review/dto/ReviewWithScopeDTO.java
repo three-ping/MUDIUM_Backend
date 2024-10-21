@@ -31,4 +31,6 @@ public class ReviewWithScopeDTO {
 
     private Long comments;
 
+    private String musicalTitle;
+
 }
