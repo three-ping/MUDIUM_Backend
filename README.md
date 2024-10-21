@@ -698,7 +698,12 @@
 
 
 ## 🍀9. CI/CD 테스트 결과
-![파이프라인](./docs/gif/pipeline.gif)
+<details>
+   <summary>결과</summary>
+   
+   ![파이프라인](./docs/gif/pipeline.gif)
+
+</details>
 
 ---
 
