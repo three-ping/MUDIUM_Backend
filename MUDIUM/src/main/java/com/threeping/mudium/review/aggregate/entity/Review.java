@@ -37,6 +37,9 @@ public class Review {
     @Column(name = "active_status", nullable = false)
     private ActiveStatus activeStatus = ActiveStatus.ACTIVE;
 
+    @Column(name = "comments")
+    private  Long comments;
+
     // 외래 키 매핑 (ManyToOne)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "musical_id")  // FK 컬럼을 명시

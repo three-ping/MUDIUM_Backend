@@ -12,7 +12,7 @@ public interface ReviewService {
     List<ReviewResponseDTO> findReviewByMusicalId(Long musicalId);
 
     // 리뷰 상세 조회
-    List<ReviewResponseDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId);
+    List<ReviewWithScopeDTO> findReviewByMusicalIdAndReviewId(Long musicalId, Long reviewId);
 
     // 리뷰 작성
     void createReview(Long musicalId, ReviewRequestDTO reviewRequestDTO);

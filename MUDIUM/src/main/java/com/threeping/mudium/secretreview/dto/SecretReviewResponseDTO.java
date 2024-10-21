@@ -21,4 +21,5 @@ public class SecretReviewResponseDTO {
     private String userNickname;
     private String userProfile;
     private String musicalTitle;
+    private String musicalProfile;
 }

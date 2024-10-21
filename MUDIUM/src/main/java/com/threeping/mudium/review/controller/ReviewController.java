@@ -33,7 +33,7 @@ public class ReviewController {
     @GetMapping("/{musicalId}/{reviewId}")
     private ResponseDTO<?> findReviewByMusicalIdAndReviewId(@PathVariable Long musicalId,
                                                             @PathVariable Long reviewId) {
-        List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
+        List<ReviewWithScopeDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
 
         return ResponseDTO.ok(reviewResponseDTO);
     }

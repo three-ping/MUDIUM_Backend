@@ -20,7 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     // 리뷰 상세 조회
     List<Review> findByMusical_MusicalIdAndReviewIdAndActiveStatus(Long musicalId, Long reviewId, ActiveStatus activeStatus);
 
-    @Query("SELECT new com.threeping.mudium.review.dto.ReviewWithScopeDTO(r.reviewId, r.content, sc.scope, r.user.userId, r.user.nickname, r.musical.musicalId) " +
+    @Query("SELECT new com.threeping.mudium.review.dto.ReviewWithScopeDTO(r.reviewId, r.content, sc.scope, r.user.userId, r.user.nickname, r.musical.musicalId, r.createdAt, r.updatedAt, r.like, r.comments) " +
             "FROM Review r " +
             "LEFT OUTER JOIN ScopeEntity sc ON r.user.userId = sc.userId AND r.musical.musicalId = sc.musicalId " +
             "WHERE r.musical.musicalId = :musicalId AND r.activeStatus = 'ACTIVE'")

@@ -53,13 +53,13 @@ class ReviewServiceTests {
         Long reviewId = 11L;
 
         // When
-        List<ReviewResponseDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
+        List<ReviewWithScopeDTO> reviewResponseDTO = reviewService.findReviewByMusicalIdAndReviewId(musicalId, reviewId);
 
         // Then
         assertNotNull(reviewResponseDTO);
         assertFalse(reviewResponseDTO.isEmpty());
 
-        ReviewResponseDTO review = reviewResponseDTO.get(0);
+        ReviewWithScopeDTO review = reviewResponseDTO.get(0);
         assertEquals(musicalId, review.getMusicalId());
         assertEquals(reviewId, review.getReviewId());
     }
