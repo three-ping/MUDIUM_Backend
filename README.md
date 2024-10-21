@@ -1,12 +1,12 @@
 # MUDIUM
 
-![로고](./docs/img/로고.png)
+   <img src="docs/img/로고.png" width="400" height="250" alt="로고이미지">
 
 | 뮤지컬 커뮤니티
 
 
 ## 🤝TEAM
-| <img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/이효진.png" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160"> |
+| <img src="docs/img/profile/김시.jpg" width="200" height = "160">|<img src="docs/img/profile/이효진.png" width="200" height = "160">|<img src="docs/img/profile/이효진.jpg" width="200" height = "160">|<img src="docs/img/profile/이우진.jpg" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/김정모.jpg" width="200" height = "160"> |
 | :------------------------------------: | :-----------------------------------: | :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :------------------------------------------: |
 | [김시우](https://github.com/siu98) | [이효진](https://github.com/jinjin0528) | [김서현](https://github.com/1etterh) | [이우진](https://github.com/Vorschlag-bit) | [김동혁](https://github.com/dongkh9) | [김정모](https://github.com/mojeeeeong) |
 
@@ -150,6 +150,7 @@
 ---
 
 ## 🍀7. CI/CD 파이프라인
+![파이프라인](./docs/img/아키텍처.png)
 <details>
 <summary>jenkins script code</summary>
    
