@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 public class BoardListDTO {
-    private Long id;
+    private Long boardId;
     private String title;
     private String nickname;
     private Long userId;

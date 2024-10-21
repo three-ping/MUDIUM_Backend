@@ -16,4 +16,5 @@ public class BoardReplyDTO {
     private Timestamp updatedAt;
     private Long boardCommentId;
     private Long userId;
+    private String nickname;
 }

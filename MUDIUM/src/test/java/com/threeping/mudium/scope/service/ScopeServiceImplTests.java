@@ -53,11 +53,11 @@ class ScopeServiceImplTests {
         scopeRepository.save(existingScope);
 
         // 기존 별점을 5로 수정
-        ScopeEntity result = scopeService.createOrUpdateScope(1L, 1L, new ScopeVO(4D));
+        ScopeEntity result = scopeService.createOrUpdateScope(1L, 1L, new ScopeVO(5D));
 
         // 별점이 정상적으로 수정되었는지 확인
         assertNotNull(result);
-        assertEquals(5, result.getScope());
+        assertEquals(5.0, result.getScope());
         assertNotNull(result.getUpdatedAt());
     }
 
