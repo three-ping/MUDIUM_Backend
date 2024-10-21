@@ -1,6 +1,6 @@
 # MUDIUM
 
-![로고](.docs/img/로고.png)
+![로고](./docs/img/로고.png)
 
 | 뮤지컬 커뮤니티
 
