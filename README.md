@@ -6,7 +6,7 @@
 
 
 ## 🤝TEAM
-| <img src="docs/img/profile/김시.jpg" width="200" height = "160">|<img src="docs/img/profile/이효진.png" width="200" height = "160">|<img src="docs/img/profile/이효진.jpg" width="200" height = "160">|<img src="docs/img/profile/이우진.jpg" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/김정모.jpg" width="200" height = "160"> |
+| <img src="docs/img/profile/김시우.png" width="200" height = "160">|<img src="docs/img/profile/이효진.png" width="200" height = "160">|<img src="docs/img/profile/이효진.png" width="200" height = "160">|<img src="docs/img/profile/이우진.jpeg" width="200" height = "160">|<img src="docs/img/profile/김동혁.jpg" width="200" height = "160">|<img src="docs/img/profile/김정모.jpg" width="200" height = "160"> |
 | :------------------------------------: | :-----------------------------------: | :-----------------------------------: | :--------------------------------------: | :-----------------------------------: | :------------------------------------------: |
 | [김시우](https://github.com/siu98) | [이효진](https://github.com/jinjin0528) | [김서현](https://github.com/1etterh) | [이우진](https://github.com/Vorschlag-bit) | [김동혁](https://github.com/dongkh9) | [김정모](https://github.com/mojeeeeong) |
 
